@@ -4,10 +4,19 @@
  */
 package dades;
 
+import java.util.List;
+
 /**
  *
  * @author ngall
  */
-public interface DAOinterface {
+public interface DAOinterface<T> {
     
+    public void afegir(T entitat);
+    
+    List <T> obtenirEntitats();
+    
+    public void actualitzar(T entitat);
+    
+    public void eliminar (T entitat);
 }
