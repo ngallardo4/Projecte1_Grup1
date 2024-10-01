@@ -28,6 +28,63 @@ public class Proveidor {
         this.Descompte = Descompte;
         this.Data_Alt = Data_Alt;
         this.Qualificacio = Qualificacio;
-        }
-
     }
+
+    public String getCIF() {
+        return CIF;
+    }
+
+    public void setCIF(String CIF) {
+        this.CIF = CIF;
+    }
+
+    public String getNom() {
+        return Nom;
+    }
+
+    public void setNom(String Nom) {
+        this.Nom = Nom;
+    }
+
+    public String getMotiuInactiu() {
+        return MotiuInactiu;
+    }
+
+    public void setMotiuInactiu(String MotiuInactiu) {
+        this.MotiuInactiu = MotiuInactiu;
+    }
+
+    public String getTelefon() {
+        return Telefon;
+    }
+
+    public void setTelefon(String Telefon) {
+        this.Telefon = Telefon;
+    }
+
+    public float getDescompte() {
+        return Descompte;
+    }
+
+    public void setDescompte(float Descompte) {
+        this.Descompte = Descompte;
+    }
+
+    public LocalDate getData_Alt() {
+        return Data_Alt;
+    }
+
+    public void setData_Alt(LocalDate Data_Alt) {
+        this.Data_Alt = Data_Alt;
+    }
+
+    public int getQualificacio() {
+        return Qualificacio;
+    }
+
+    public void setQualificacio(int Qualificacio) {
+        this.Qualificacio = Qualificacio;
+    }
+    
+    
+}
