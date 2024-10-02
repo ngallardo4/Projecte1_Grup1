@@ -10,8 +10,9 @@ import java.time.LocalDate;
  *
  * @author ngall
  */
-public class Proveidor {
-        public String CIF;
+public class Proveidor{
+    
+    public String CIF;
     public String Nom;
     public String MotiuInactiu;
     public String Telefon;
@@ -85,6 +86,5 @@ public class Proveidor {
     public void setQualificacio(int Qualificacio) {
         this.Qualificacio = Qualificacio;
     }
-    
     
 }
