@@ -31,10 +31,10 @@ public class DAOusuari {
                 if(!linea.isEmpty() && linea.contains(";")){
                     String[] parts = linea.split(";");
                     if(parts.length == 2){
-                        String username = parts[0].trim();
+                        String email = parts[0].trim();
                         String password = parts[1].trim();
                         
-                        usuaris.put(username, password);
+                        usuaris.put(email, password);
                     }
                 }
             }
@@ -43,8 +43,8 @@ public class DAOusuari {
         }
     }
     
-    public boolean verificarUsuari(String username, String password){
-        return usuaris.containsKey(username) && usuaris.get(username).equals(password);
+    public boolean verificarUsuari(String email, String password){
+        return usuaris.containsKey(email) && usuaris.get(email).equals(password);
     }
     
 }
