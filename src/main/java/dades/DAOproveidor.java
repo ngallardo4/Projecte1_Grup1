@@ -24,19 +24,19 @@ public class DAOproveidor implements DAOinterface<Proveidor> {
     @Override
     public void afegir(Proveidor proveidor) {
 
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/projecte1?useUnicode=true&serverTimezone=Europe/Madrid", "root", "123456")) {
+        try (Connection conn = MyDataSource.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO proveidor (CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio) VALUES " + "(?, ?, ?, ?, ?, ?, ?)\";");
 
-            stmt.setString(1, proveidor.CIF);
-            stmt.setString(2, proveidor.Nom);
+            stmt.setString(1, proveidor.getCIF());
+            stmt.setString(2, proveidor.getNom());
             stmt.setString(3, proveidor.getEstat().name());
-            stmt.setString(4, proveidor.MotiuInactiu);
-            stmt.setString(5, proveidor.Telefon);
-            stmt.setFloat(6, proveidor.Descompte);
-            stmt.setDate(7, java.sql.Date.valueOf(proveidor.getData_Alt()));
-            stmt.setInt(8, proveidor.Qualificacio);
+            stmt.setString(4, proveidor.getMotiuInactiu());
+            stmt.setString(5, proveidor.getTelefon());
+            stmt.setFloat (6, proveidor.getDescompte());
+            stmt.setDate  (7, java.sql.Date.valueOf(proveidor.getData_Alt()));
+            stmt.setInt   (8, proveidor.getQualificacio());
 
-            System.out.println("Donat d'alta.");
+            stmt.executeUpdate();
 
         } catch (Exception e) {
         }
@@ -46,7 +46,8 @@ public class DAOproveidor implements DAOinterface<Proveidor> {
     public List<Proveidor> obtenirEntitats() {
 
         List<Proveidor> proveidors = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/projecte1?useUnicode=true&serverTimezone=Europe/Madrid", "root", "123456")) {
+        try (Connection conn = MyDataSource.getConnection()) {
+            
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM proveidor");
             ResultSet rs = stmt.executeQuery();
 
@@ -73,17 +74,18 @@ public class DAOproveidor implements DAOinterface<Proveidor> {
 
     @Override
     public void actualitzar(Proveidor proveidor) {
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/projecte1?useUnicode=true&serverTimezone=Europe/Madrid", "root", "123456")) {
+        
+        try (Connection conn = MyDataSource.getConnection()){
             PreparedStatement stmt = conn.prepareStatement("UPDATE proveidor SET Nom = ?, MotiuInactiu = ?, Telefon = ?, Descompte = ?, Data_Alt = ?, Qualificacio = ? WHERE CIF = ?");
 
-            stmt.setString(1, proveidor.CIF);
-            stmt.setString(2, proveidor.Nom);
+            stmt.setString(1, proveidor.getCIF());
+            stmt.setString(2, proveidor.getNom());
             stmt.setString(3, proveidor.getEstat().name());
-            stmt.setString(4, proveidor.MotiuInactiu);
-            stmt.setString(5, proveidor.Telefon);
-            stmt.setFloat(6, proveidor.Descompte);
-            stmt.setDate(7, java.sql.Date.valueOf(proveidor.getData_Alt()));
-            stmt.setInt(8, proveidor.Qualificacio);
+            stmt.setString(4, proveidor.getMotiuInactiu());
+            stmt.setString(5, proveidor.getTelefon());
+            stmt.setFloat (6, proveidor.getDescompte());
+            stmt.setDate  (7, java.sql.Date.valueOf(proveidor.getData_Alt()));
+            stmt.setInt   (8, proveidor.getQualificacio());
 
             if (stmt.executeUpdate() > 0) {
                 System.out.println("Dades modificades.");
@@ -95,13 +97,12 @@ public class DAOproveidor implements DAOinterface<Proveidor> {
 
     @Override
     public void eliminar(Proveidor proveidor) {
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/projecte1?useUnicode=true&serverTimezone=Europe/Madrid", "root", "123456")) {
+        
+        try (Connection conn = MyDataSource.getConnection()){
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO proveidor (CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio) VALUES " + "(?, ?, ?, ?, ?, ?, ?)\";");
 
             stmt.setString(1, proveidor.CIF);
-            if (stmt.executeUpdate() > 0) {
-                System.out.println("Donat de baixa.");
-            }
+            stmt.executeUpdate();
 
         } catch (Exception e) {
             e.printStackTrace();
