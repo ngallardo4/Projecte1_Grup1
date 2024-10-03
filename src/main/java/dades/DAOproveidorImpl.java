@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author danie
  */
-public class DAOproveidor implements DAOinterface<Proveidor> {
+public class DAOproveidorImpl implements DAOinterface<Proveidor> {
 
     @Override
     public void afegir(Proveidor proveidor) {

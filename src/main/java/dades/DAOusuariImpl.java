@@ -14,11 +14,11 @@ import java.util.Map;
  *
  * @author ngall
  */
-public class DAOusuari {
+public class DAOusuariImpl {
     private Map<String, String> usuaris;
     private String rutaArxiu;
     
-    public DAOusuari(String rutaArxiu){
+    public DAOusuariImpl(String rutaArxiu){
         this.rutaArxiu = rutaArxiu;
         usuaris = new HashMap<>();
         carregarUsuaris();
