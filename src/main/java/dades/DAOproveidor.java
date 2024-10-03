@@ -39,6 +39,7 @@ public class DAOproveidor implements DAOinterface<Proveidor> {
             stmt.executeUpdate();
 
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
