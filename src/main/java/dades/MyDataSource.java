@@ -14,7 +14,7 @@ import java.sql.SQLException;
  * @author ngall
  */
 public class MyDataSource {
-     private static final HikariConfig config = new HikariConfig(); // objecte que ens permetrà configurar el pool
+    private static final HikariConfig config = new HikariConfig(); // objecte que ens permetrà configurar el pool
     private static HikariDataSource dataSource; //és el pool de connexions
 
     static {  //per poder inicialitzar els dos objectes privats ABANS que es cridi el únic mètode públic getConnection
