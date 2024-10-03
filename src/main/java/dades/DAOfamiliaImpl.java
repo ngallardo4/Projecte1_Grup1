@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Yaiza
  */
-public class DAOfamilia implements DAOinterface<Familia> {
+public class DAOfamiliaImpl implements DAOinterface<Familia> {
 
     @Override
     public void afegir(Familia familia) {
