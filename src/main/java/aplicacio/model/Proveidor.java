@@ -4,6 +4,7 @@
  */
 package aplicacio.model;
 
+import enums.EstatProveidor;
 import java.time.LocalDate;
 
 /**
@@ -11,18 +12,20 @@ import java.time.LocalDate;
  * @author ngall
  */
 public class Proveidor {
-        public String CIF;
+    public String CIF;
     public String Nom;
+    public EstatProveidor Estat;
     public String MotiuInactiu;
     public String Telefon;
     public float Descompte;
     public LocalDate Data_Alt;
     public int Qualificacio;
 
-    public Proveidor(String CIF, String Nom, String MotiuInactiu, String Telefon, 
+    public Proveidor(String CIF, String Nom,EstatProveidor Estat, String MotiuInactiu, String Telefon, 
                      float Descompte, LocalDate Data_Alt, int Qualificacio) {
         this.CIF = CIF;
         this.Nom = Nom;
+        this.Estat = Estat;
         this.MotiuInactiu = MotiuInactiu;
         this.Telefon = Telefon;
         this.Descompte = Descompte;
@@ -46,6 +49,14 @@ public class Proveidor {
         this.Nom = Nom;
     }
 
+    public EstatProveidor getEstat() {
+        return Estat;
+    }
+
+    public void setEstat(EstatProveidor Estat) {
+        this.Estat = Estat;
+    }
+    
     public String getMotiuInactiu() {
         return MotiuInactiu;
     }
@@ -85,6 +96,5 @@ public class Proveidor {
     public void setQualificacio(int Qualificacio) {
         this.Qualificacio = Qualificacio;
     }
-    
     
 }

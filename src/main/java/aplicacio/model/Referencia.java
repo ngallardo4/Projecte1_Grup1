@@ -4,23 +4,24 @@
  */
 package aplicacio.model;
 
+import enums.UnitatMesura;
 import java.time.LocalDate;
 
 /**
  *
  * @author Héctor Vico
  */
-public class Referencia {
+public class Referencia{
 
     private int id;
     private String nom;
-    private String uom;
+    private UnitatMesura uom;
     private int id_familia;
     private String cif_proveidor;
     private LocalDate data_alta;
     private int quantitat;
 
-    public Referencia(int id, String nom, String uom, int id_familia, String cif_proveidor, LocalDate data_alta, int quantitat) {
+    public Referencia(int id, String nom, UnitatMesura uom, int id_familia, String cif_proveidor, LocalDate data_alta, int quantitat) {
         this.id = id;
         this.nom = nom;
         this.uom = uom;
@@ -29,7 +30,7 @@ public class Referencia {
         this.data_alta = data_alta;
         this.quantitat = quantitat;
     }
-    
+
     public int getId() {
         return id;
     }
@@ -46,11 +47,11 @@ public class Referencia {
         this.nom = nom;
     }
 
-    public String getUom() {
+    public UnitatMesura getUom() {
         return uom;
     }
 
-    public void setUom(String uom) {
+    public void setUom(UnitatMesura uom) {
         this.uom = uom;
     }
 
