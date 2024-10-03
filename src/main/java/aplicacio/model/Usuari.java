@@ -15,14 +15,16 @@ public class Usuari {
     private String nom;
     private Float descompte_treballador;
     private LocalDate data_alta;
+    private boolean rol; //True = Responsable Magatzem , False = Venedor
 
-    public Usuari(int idUsuari, String email, String password, String nom, Float descompte_treballador, LocalDate data_alta) {
+    public Usuari(int idUsuari, String email, String password, String nom, Float descompte_treballador, LocalDate data_alta, boolean rol) {
         this.idUsuari = idUsuari;
         this.email = email;
         this.password = password;
         this.nom = nom;
         this.descompte_treballador = descompte_treballador;
         this.data_alta = data_alta;
+        this.rol = rol;
     }
 
     //Getters
@@ -50,6 +52,10 @@ public class Usuari {
     public LocalDate getData_alta() {
         return data_alta;
     }
+
+    public boolean isRol() {
+        return rol;
+    }
     
     //Setters
 
@@ -76,5 +82,8 @@ public class Usuari {
     public void setData_alta(LocalDate data_alta) {
         this.data_alta = data_alta;
     }
-    
+
+    public void setRol(boolean rol) {
+        this.rol = rol;
+    }
 }

@@ -4,7 +4,7 @@
  */
 package aplicacio;
 
-import dades.DAOusuari;
+import dades.DAOusuariImpl;
 
 /**
  *
@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
         String rutaArxiu = "uspass.txt";
         
-        DAOusuari usuariDAO = new DAOusuari(rutaArxiu);
+        DAOusuariImpl usuariDAO = new DAOusuariImpl(rutaArxiu);
     }
     
 }

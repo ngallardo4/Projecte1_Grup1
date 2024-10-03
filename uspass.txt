@@ -1,2 +1,2 @@
-nacho;123456
-yaiza;654321
+nacho@gmail.com;123456
+yaiza@gmail.com;654321
