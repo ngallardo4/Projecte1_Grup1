@@ -75,6 +75,4 @@ public class Familia {
     public void setObservacions(String observacions) {
         this.observacions = observacions;
     }
-    
-    
 }
