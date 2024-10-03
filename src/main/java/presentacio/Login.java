@@ -4,7 +4,7 @@
  */
 package presentacio;
 
-import dades.DAOusuari;
+import dades.DAOusuariImpl;
 import javafx.stage.Stage;
 
 /**
@@ -13,12 +13,12 @@ import javafx.stage.Stage;
  */
 public class Login {
     
-    private DAOusuari usuariDAO;
+    private DAOusuariImpl usuariDAO;
     private Stage escenari;
 
     public Login(Stage escenari, String rutaArxiu) {
         this.escenari = escenari;
-        this.usuariDAO = new DAOusuari(rutaArxiu);       
+        this.usuariDAO = new DAOusuariImpl(rutaArxiu);       
     }
     
     public void mostrar(){
