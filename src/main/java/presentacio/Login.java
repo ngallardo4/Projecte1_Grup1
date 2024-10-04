@@ -4,7 +4,10 @@
  */
 package presentacio;
 
+import aplicacio.App;
 import dades.DAOusuariImpl;
+import java.io.IOException;
+import javafx.event.ActionEvent;
 import logica.UsuariLogica;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -35,6 +38,7 @@ public class Login {
         //Acció que realitzarà el botó Confirmar
         confirmarButton.setOnAction(e -> verificarLogin());
     }
+    
     private void verificarLogin(){
         String email = correuField.getText();
         String password = contrasenyaField.getText();
@@ -67,5 +71,9 @@ public class Login {
         alert.setHeaderText(null);
         alert.setContentText(missatge);
         alert.showAndWait();
+    }
+    @FXML
+    void handleLogin(ActionEvent event) throws IOException {
+        App.setRoot("menuPrincipal");
     }
 }
