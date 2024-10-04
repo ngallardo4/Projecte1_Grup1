@@ -4,9 +4,11 @@
  */
 package dades;
 
+import aplicacio.model.Usuari;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +17,7 @@ import java.util.Map;
  * @author ngall
  */
 public class DAOusuariImpl {
-    private Map<String, String> usuaris;
+    private Map<String, Usuari> usuaris;
     private String rutaArxiu;
     
     public DAOusuariImpl(String rutaArxiu){
@@ -30,11 +32,16 @@ public class DAOusuariImpl {
             while ((linea = lec.readLine()) != null){
                 if(!linea.isEmpty() && linea.contains(";")){
                     String[] parts = linea.split(";");
-                    if(parts.length == 2){
+                    if(parts.length == 3){
                         String email = parts[0].trim();
                         String password = parts[1].trim();
+                        boolean rol = Boolean.parseBoolean(parts[2].trim());
                         
-                        usuaris.put(email, password);
+                        
+                        //Crear l'usuari
+                        Usuari usuari = new Usuari(0, email, password, "",5.5f, LocalDate.now(), rol);
+                        //Guardar l'usuari al mapa
+                        usuaris.put(email, usuari); 
                     }
                 }
             }
@@ -44,7 +51,14 @@ public class DAOusuariImpl {
     }
     
     public boolean verificarUsuari(String email, String password){
-        return usuaris.containsKey(email) && usuaris.get(email).equals(password);
+        if(usuaris.containsKey(email)){
+            Usuari usuari = usuaris.get(email);
+            return usuari.getPassword().equals(password);
+        }
+        return false;
     }
     
+    public Usuari getUsuari(String email){
+        return usuaris.get(email);
+    }
 }
