@@ -1,5 +1,6 @@
-package cat.copernic.projecte1_equip1;
+package presentacio;
 
+import aplicacio.App;
 import java.io.IOException;
 import javafx.fxml.FXML;
 
