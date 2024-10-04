@@ -6,7 +6,7 @@ package presentacio;
 
 import java.util.Scanner;
 import dades.DAOproveidorImpl;
-import dades.DAOfamilia;
+import dades.DAOfamiliaImpl;
 import dades.DAOreferencia;
 import aplicacio.model.Proveidor;
 import aplicacio.model.Familia;
@@ -20,18 +20,10 @@ import java.time.LocalDate;
  */
 public class MenuPrincipal {
     
-    private Scanner sc;
-    private DAOproveidorImpl proveidorDAO;
-    private DAOfamilia familiaDAO;
-    private DAOreferencia referenciaDAO;
-    
-
-    public MenuPrincipal() {
-        sc = new Scanner(System.in);
-        proveidorDAO = new DAOproveidorImpl();
-        familiaDAO = new DAOfamilia();
-        referenciaDAO = new DAOreferencia();        
-    }
+    Scanner sc = new Scanner(System.in);
+    DAOproveidorImpl proveidorDAO = new DAOproveidorImpl();
+    DAOfamiliaImpl familiaDAO = new DAOfamiliaImpl();
+    DAOreferencia referenciaDAO = new DAOreferencia();
     
     public void mostrarMenu(){
         while(true){
@@ -76,12 +68,12 @@ public class MenuPrincipal {
             
             switch(opcio){
                 case 1:
-                    afegir();
+                    altaProveidor();
                     break;
             }
         }
     }
-    private void anadirProveedor() {
+    private void altaProveidor() {
         System.out.print("Introdueix el CIF: ");
         String CIF = sc.nextLine();
         
@@ -114,16 +106,19 @@ public class MenuPrincipal {
     }
     
     private EstatProveidor seleccionarEstat(){
-        System.out.println("Estat del proveidor [ACTIU][INACTIU]: ");
-        String Estat = sc.nextLine();
         
-        if(Estat == "ACTIU")
-            return EstatProveidor.ACTIU;
-        else if(Estat == "INACTIU")
-            return EstatProveidor.INACTIU;
-        else {
-            System.out.println("Opción incorrecta. Por defecto se selecciona ACTIU.");
-            return EstatProveidor.ACTIU;
+        while(true){
+        
+            System.out.println("Estat del proveidor [ACTIU][INACTIU]: ");
+            String Estat = sc.nextLine();
+        
+            if(Estat.equalsIgnoreCase("ACTIU"))
+                return EstatProveidor.ACTIU;
+            else if(Estat.equalsIgnoreCase("INACTIU"))
+                return EstatProveidor.INACTIU;
+            else {
+                System.out.println("Opción incorrecta. Por favor, selecciona una opció vàlida.");
+            }
         }
     } 
 }
