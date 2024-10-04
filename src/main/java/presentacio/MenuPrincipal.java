@@ -13,6 +13,7 @@ import aplicacio.model.Familia;
 import aplicacio.model.Referencia;
 import enums.EstatProveidor;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -26,7 +27,9 @@ public class MenuPrincipal {
     DAOreferencia referenciaDAO = new DAOreferencia();
     
     public void mostrarMenu(){
+        
         while(true){
+            
             System.out.println("=== Menú Principal ===");
             System.out.println("1.- Llistar Proveidor.");
             System.out.println("2.- Llistar Familia.");
@@ -39,6 +42,7 @@ public class MenuPrincipal {
             
             switch(opcio){
                 case 1:
+                    llistarProveidors();
                     break;
                 case 2:
                     break;
@@ -54,7 +58,9 @@ public class MenuPrincipal {
     }
     
     public void llistarProveidors(){
+        
         while(true){
+            
             System.out.println("=== Menú Principal ===");
             System.out.println("1.- Alta de proveidor.");
             System.out.println("2.- Baixa de proveidor.");
@@ -70,10 +76,23 @@ public class MenuPrincipal {
                 case 1:
                     altaProveidor();
                     break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 0:
+                    System.out.println("Sortir.");
+                    return;
+                default:
+                    System.out.println("Opcio invalida.");
             }
         }
     }
+    
     private void altaProveidor() {
+        
         System.out.print("Introdueix el CIF: ");
         String CIF = sc.nextLine();
         
@@ -91,8 +110,6 @@ public class MenuPrincipal {
         System.out.print("Introdueix el descompte: ");
         float Descompte = sc.nextFloat();
         
-        sc.nextLine(); // Consumir el salto de línea
-        
         System.out.print("Introdueix la fecha d'alta (YYYY-MM-DD): ");
         LocalDate Data_Alta = LocalDate.parse(sc.nextLine());
         
@@ -104,6 +121,70 @@ public class MenuPrincipal {
 
         System.out.println("Proveedor afegit exitosament.");
     }
+    private void baixaProveidor(){
+    
+        System.out.print("CIF del Proveidor a donar de baixa: ");
+        String cif = sc.nextLine();
+      
+        List<Proveidor> proveidors = proveidorDAO.obtenirEntitats();
+
+        Proveidor proveidor = null;
+        for (Proveidor p : proveidors) {
+            if (p.getCIF().equals(cif)) {
+                proveidor = p;
+                break;
+            }
+        }
+
+        // Confirmar la baja del proveedor
+        System.out.print("Estàs segur que vols donar de baixa el proveidor " + proveidor.getNom() + "? (S/N): ");
+        String confirmacio = sc.nextLine();
+
+        if (confirmacio.equalsIgnoreCase("S")) {
+            proveidorDAO.eliminar(proveidor);
+            System.out.println("Proveidor donat de baixa correctament.");
+        } else {
+            System.out.println("Operació cancel·lada. El proveidor no ha estat donat de baixa.");
+        }
+    }
+
+    private void modificarProveidor() {
+
+        System.out.print("CIF del Proveidor a modificar: ");
+        String cif = sc.nextLine();
+
+        // Obtener la lista completa de proveedores
+        List<Proveidor> proveidors = proveidorDAO.obtenirEntitats();
+
+        // Buscar el proveedor por su CIF
+        Proveidor proveidor = null;
+        for (Proveidor p : proveidors) {
+            if (p.getCIF().equals(cif)) {
+                proveidor = p;
+                break;
+            }
+        }
+
+        if (proveidor == null) {
+            System.out.println("Proveidor no trobat.");
+            return;
+        }
+
+        // Modificar los datos del proveedor
+        System.out.print("Nom actual: " + proveidor.getNom() + ". Nou nom: ");
+        String nouNom = sc.nextLine();
+        proveidor.setNom(nouNom);
+
+        // Permitimos al usuario modificar el estado
+        EstatProveidor Estat = seleccionarEstat();
+        proveidor.setEstat(Estat);
+
+        // Llamamos al DAO para actualizarlo
+        proveidorDAO.actualitzar(proveidor);
+
+        System.out.println("Proveidor modificat correctament.");
+    }   
+
     
     private EstatProveidor seleccionarEstat(){
         
