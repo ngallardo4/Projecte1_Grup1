@@ -7,7 +7,7 @@ package presentacio;
 import java.util.Scanner;
 import dades.DAOproveidorImpl;
 import dades.DAOfamiliaImpl;
-import dades.DAOreferencia;
+import dades.DAOreferenciaImpl;
 import aplicacio.model.Proveidor;
 import aplicacio.model.Familia;
 import aplicacio.model.Referencia;
@@ -24,7 +24,7 @@ public class MenuPrincipal {
     Scanner sc = new Scanner(System.in);
     DAOproveidorImpl proveidorDAO = new DAOproveidorImpl();
     DAOfamiliaImpl familiaDAO = new DAOfamiliaImpl();
-    DAOreferencia referenciaDAO = new DAOreferencia();
+    DAOreferenciaImpl referenciaDAO = new DAOreferenciaImpl();
     
     public void mostrarMenu(){
         
