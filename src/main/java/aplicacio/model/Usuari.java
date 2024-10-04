@@ -86,4 +86,6 @@ public class Usuari {
     public void setRol(boolean rol) {
         this.rol = rol;
     }
+    
+    //Falta Override del toString
 }
