@@ -4,13 +4,15 @@
  */
 package dades;
 
+import aplicacio.model.Referencia;
 import java.util.List;
 
 /**
  *
  * @author Héctor Vico
  */
-public interface DAOreferencia {
+public interface DAOreferencia<T> {
     
-    List<DAOreferenciaImpl> filtrarReferenciesSenseEstoc();
+    List<T> obtenirReferenciesSenseEstoc();
+
 }

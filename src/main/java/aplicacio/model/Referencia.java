@@ -20,6 +20,7 @@ public class Referencia{
     private String cif_proveidor;
     private LocalDate data_alta;
     private int quantitat;
+    private Proveidor proveidor;
 
     public Referencia(int id, String nom, UnitatMesura uom, int id_familia, String cif_proveidor, LocalDate data_alta, int quantitat) {
         this.id = id;
@@ -86,4 +87,13 @@ public class Referencia{
     public void setQuantitat(int quantitat) {
         this.quantitat = quantitat;
     }
+
+    public Proveidor getProveidor() {
+        return proveidor;
+    }
+
+    public void setProveidor(Proveidor proveidor) {
+        this.proveidor = proveidor;
+    }
+
 }

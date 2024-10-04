@@ -16,7 +16,7 @@ import dades.MyDataSource;
  *
  * @author Héctor Vico
  */
-public class DAOreferenciaImpl implements DAOinterface<Referencia> {
+public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferencia<Referencia> {
 
     @Override
     public void afegir(Referencia referencia) {
@@ -97,17 +97,24 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia> {
     public List<Referencia> obtenirReferenciesSenseEstoc() {
         List<Referencia> referenciesSenseEstoc = new ArrayList<>();
 
-        String sql = "SELECT r.*, p.nom AS nom_proveidor, p.contacte AS contacte_proveidor "
+        // SQL que també agafa informació del proveïdor associat
+        String sql = "SELECT r.*, p.nom as nom_proveidor, p.cif as cif_proveidor "
                 + "FROM referencia r "
                 + "JOIN proveidor p ON r.cif_proveidor = p.cif "
                 + "WHERE r.quantitat = 0";
 
-        try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            ResultSet rs = stmt.executeQuery();
+        try (Connection conn = MyDataSource.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                UnitatMesura uom = UnitatMesura.valueOf(rs.getString("UOM"));  // Convertim el String a enum
+                UnitatMesura uom = UnitatMesura.valueOf(rs.getString("UOM"));
+
+                // Crear l'objecte Proveidor amb la informació que hem obtingut
+                Proveidor proveidor = new Proveidor(
+                        rs.getString("cif_proveidor"),
+                        rs.getString("nom_proveidor")
+                );
+
+                // Crear l'objecte Referencia amb la informació de la referència i del proveïdor
                 Referencia ref = new Referencia(
                         rs.getInt("id"),
                         rs.getString("nom"),
@@ -118,11 +125,7 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia> {
                         rs.getInt("quantitat")
                 );
 
-                // Afegir informació del proveïdor
-                Proveidor proveidor = new Proveidor();
-                proveidor.setNom(rs.getString("nom_proveidor"));
-                proveidor.setContacte(rs.getString("contacte_proveidor"));
-
+                // Associar el proveïdor a la referència
                 ref.setProveidor(proveidor);
 
                 referenciesSenseEstoc.add(ref);
