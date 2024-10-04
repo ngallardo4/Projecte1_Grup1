@@ -17,8 +17,9 @@ import java.util.Map;
  * @author ngall
  */
 public class DAOusuariImpl {
+    
     private Map<String, Usuari> usuaris;
-    private String rutaArxiu;
+    private String rutaArxiu = "uspass.txt";
     
     public DAOusuariImpl(String rutaArxiu){
         this.rutaArxiu = rutaArxiu;

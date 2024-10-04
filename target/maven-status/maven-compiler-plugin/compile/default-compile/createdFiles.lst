@@ -1,17 +1,16 @@
+presentacio\PrimaryController.class
 dades\DAOfamiliaImpl.class
-cat\copernic\projecte1_equip1\App.class
-cat\copernic\projecte1_equip1\SecondaryController.class
 dades\DAOproveidorImpl.class
 dades\DAOusuariImpl.class
 aplicacio\model\Referencia.class
+presentacio\SecondaryController.class
 aplicacio\ejemplo.class
 logica\ReferenciaLogica.class
 enums\EstatProveidor.class
 dades\MyDataSource.class
-cat\copernic\projecte1_equip1\PrimaryController.class
+presentacio\MenuPrincipal.class
 dades\DAOreferencia.class
 aplicacio\model\Proveidor.class
-presentacio\PantallaInici.class
 presentacio\Login.class
 aplicacio\model\Familia.class
 aplicacio\model\Usuari.class
@@ -19,4 +18,6 @@ aplicacio\Main.class
 dades\DAOreferenciaImpl.class
 logica\UsuariLogica.class
 enums\UnitatMesura.class
+aplicacio\App.class
+presentacio\PantallaReferencia.class
 dades\DAOinterface.class
