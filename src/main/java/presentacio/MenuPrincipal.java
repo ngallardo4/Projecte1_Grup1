@@ -5,9 +5,8 @@
 package presentacio;
 
 import java.util.Scanner;
-import dades.DAOproveidorImpl;
-import dades.DAOfamiliaImpl;
-import dades.DAOreferenciaImpl;
+import logica.ProveidorLogica;
+import logica.ReferenciaLogica;
 import aplicacio.model.Proveidor;
 import aplicacio.model.Familia;
 import aplicacio.model.Referencia;
@@ -22,9 +21,9 @@ import java.util.List;
 public class MenuPrincipal {
 
     Scanner sc = new Scanner(System.in);
-    DAOproveidorImpl proveidorDAO = new DAOproveidorImpl();
-    DAOfamiliaImpl familiaDAO = new DAOfamiliaImpl();
-    DAOreferenciaImpl referenciaDAO = new DAOreferenciaImpl();
+    ProveidorLogica proveidor = new ProveidorLogica();
+    Familia familia = new DAOfamiliaImpl();
+    ReferenciaLogica referencia = new ReferenciaLogica();
     
     public void mostrarMenu(){
         
@@ -96,97 +95,94 @@ public class MenuPrincipal {
 
     private void altaProveidor() {
 
-        System.out.print("Introdueix el CIF: ");
-        String CIF = sc.nextLine();
+        try {
+            System.out.print("Introdueix el CIF: ");
+            String CIF = sc.nextLine();
 
-        System.out.print("Introdueix el nom: ");
-        String Nom = sc.nextLine();
+            System.out.print("Introdueix el nom: ");
+            String Nom = sc.nextLine();
 
-        EstatProveidor Estat = seleccionarEstat();
+            EstatProveidor Estat = seleccionarEstat();
 
-        System.out.print("Introduce el motiu inactiu: ");
-        String MotivoInactivo = sc.nextLine();
+            System.out.print("Introduce el motiu inactiu: ");
+            String MotiuInactiu = sc.nextLine();
 
-        System.out.print("Introdueix el telefon: ");
-        String Telefon = sc.nextLine();
+            System.out.print("Introdueix el telefon: ");
+            String Telefon = sc.nextLine();
 
-        System.out.print("Introdueix el descompte: ");
-        float Descompte = sc.nextFloat();
+            System.out.print("Introdueix el descompte: ");
+            float Descompte = sc.nextFloat();
+            sc.nextLine();  // Consumir nueva línea
 
-        System.out.print("Introdueix la fecha d'alta (YYYY-MM-DD): ");
-        LocalDate Data_Alta = LocalDate.parse(sc.nextLine());
+            System.out.print("Introdueix la fecha d'alta (YYYY-MM-DD): ");
+            LocalDate Data_Alta = LocalDate.parse(sc.nextLine());
 
-        System.out.print("Introdueix la qualificacio: ");
-        int Qualificacio = sc.nextInt();
+            System.out.print("Introdueix la qualificacio: ");
+            int Qualificacio = sc.nextInt();
+            sc.nextLine();  // Consumir nueva línea
 
-        Proveidor nouProveidor = new Proveidor(CIF, Nom, Estat, MotivoInactivo, Telefon, Descompte, Data_Alta, Qualificacio);
-        proveidorDAO.afegir(nouProveidor);
-
-        System.out.println("Proveedor afegit exitosament.");
+            // Llamamos al método de la lógica
+            proveidor.afegirProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
+            System.out.println("Proveidor afegit exitosament.");
+        } catch (Exception e) {
+            System.out.println("Error al afegir el proveidor: " + e.getMessage());
+        }
     }
 
     private void baixaProveidor() {
 
-        System.out.print("CIF del Proveidor a donar de baixa: ");
-        String CIF = sc.nextLine();
+        try {
+            System.out.print("CIF del Proveidor a donar de baixa: ");
+            String CIF = sc.nextLine();
 
-        List<Proveidor> proveidors = proveidorDAO.obtenirEntitats();
+            // Confirmar la baja del proveedor
+            System.out.print("Estàs segur que vols donar de baixa el proveidor? (S/N): ");
+            String confirmacio = sc.nextLine();
 
-        Proveidor proveidor = null;
-        for (Proveidor p : proveidors) {
-            if (p.getCIF().equals(CIF)) {
-                proveidor = p;
-                break;
+            if (confirmacio.equalsIgnoreCase("S")) {
+                proveidor.eliminarProveidor(CIF);
+                System.out.println("Proveidor donat de baixa correctament.");
+            } else {
+                System.out.println("Operació cancel·lada. El proveidor no ha estat donat de baixa.");
             }
-        }
-
-        // Confirmar la baja del proveedor
-        System.out.print("Estàs segur que vols donar de baixa el proveidor " + proveidor.getNom() + "? (S/N): ");
-        String confirmacio = sc.nextLine();
-
-        if (confirmacio.equalsIgnoreCase("S")) {
-            proveidorDAO.eliminar(proveidor);
-            System.out.println("Proveidor donat de baixa correctament.");
-        } else {
-            System.out.println("Operació cancel·lada. El proveidor no ha estat donat de baixa.");
+        } catch (Exception e) {
+            System.out.println("Error al donar de baixa el proveidor: " + e.getMessage());
         }
     }
 
     private void modificarProveidor() {
 
-        System.out.print("CIF del Proveidor a modificar: ");
-        String CIF = sc.nextLine();
+        try {
+            System.out.print("CIF del Proveidor a modificar: ");
+            String CIF = sc.nextLine();
 
-        // Obtener la lista completa de proveedores
-        List<Proveidor> proveidors = proveidorDAO.obtenirEntitats();
+            System.out.print("Nou nom del proveidor: ");
+            String Nom = sc.nextLine();
 
-        // Buscar el proveedor por su CIF
-        Proveidor proveidor = null;
-        for (Proveidor p : proveidors) {
-            if (p.getCIF().equals(CIF)) {
-                proveidor = p;
-                break;
-            }
+            EstatProveidor Estat = seleccionarEstat();
+
+            System.out.print("Introduce el motiu inactiu (o deja vacío si no aplica): ");
+            String MotiuInactiu = sc.nextLine();
+
+            System.out.print("Nou telefon del proveidor: ");
+            String Telefon = sc.nextLine();
+
+            System.out.print("Nou descompte: ");
+            float Descompte = sc.nextFloat();
+            sc.nextLine();  // Consumir nueva línea
+
+            System.out.print("Nova data d'alta (YYYY-MM-DD): ");
+            LocalDate Data_Alta = LocalDate.parse(sc.nextLine());
+
+            System.out.print("Nova qualificació del proveidor: ");
+            int Qualificacio = sc.nextInt();
+            sc.nextLine();  
+
+            proveidor.modificarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
+            System.out.println("Proveidor modificat correctament.");
+        } catch (Exception e) {
+            System.out.println("Error al modificar el proveidor: " + e.getMessage());
         }
-
-        if (proveidor == null) {
-            System.out.println("Proveidor no trobat.");
-            return;
-        }
-
-        // Modificar los datos del proveedor
-        System.out.print("Nom actual: " + proveidor.getNom() + ". Nou nom: ");
-        String nouNom = sc.nextLine();
-        proveidor.setNom(nouNom);
-
-        // Permitimos al usuario modificar el estado
-        EstatProveidor Estat = seleccionarEstat();
-        proveidor.setEstat(Estat);
-
-        // Llamamos al DAO para actualizarlo
-        proveidorDAO.actualitzar(proveidor);
-
-        System.out.println("Proveidor modificat correctament.");
     }
 
     private void consultarProveidor(){
@@ -194,7 +190,7 @@ public class MenuPrincipal {
         System.out.print("CIF del Proveidor a modificar: ");
         String CIF = sc.nextLine();
 
-        List<Proveidor> proveidors = proveidorDAO.obtenirEntitats();
+        List<Proveidor> proveidors = proveidor.obtenirTotsElsProveidors();
 
         Proveidor proveidor = null;
         for (Proveidor p : proveidors) {
