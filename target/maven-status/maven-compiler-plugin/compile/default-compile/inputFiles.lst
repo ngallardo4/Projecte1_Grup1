@@ -1,22 +1,23 @@
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\aplicacio\ejemplo.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\dades\DAOinterface.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\dades\DAOusuariImpl.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\enums\UnitatMesura.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\logica\ReferenciaLogica.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\logica\UsuariLogica.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\cat\copernic\projecte1_equip1\SecondaryController.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\dades\DAOproveidorImpl.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\aplicacio\model\Referencia.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\aplicacio\model\Usuari.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\aplicacio\model\Familia.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\dades\DAOreferencia.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\presentacio\Login.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\cat\copernic\projecte1_equip1\App.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\presentacio\PantallaInici.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\aplicacio\Main.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\enums\EstatProveidor.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\aplicacio\model\Proveidor.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\dades\DAOfamiliaImpl.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\dades\MyDataSource.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\cat\copernic\projecte1_equip1\PrimaryController.java
-C:\Users\Héctor Vico\Documents\NetBeansProjects\projecte1_equip1\src\main\java\dades\DAOreferenciaImpl.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\dades\DAOfamiliaImpl.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\aplicacio\model\Proveidor.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\presentacio\MenuPrincipal.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\dades\DAOusuariImpl.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\aplicacio\ejemplo.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\dades\DAOproveidorImpl.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\presentacio\SecondaryController.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\aplicacio\model\Referencia.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\aplicacio\model\Familia.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\aplicacio\model\Usuari.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\dades\DAOinterface.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\enums\EstatProveidor.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\aplicacio\Main.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\presentacio\Login.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\dades\MyDataSource.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\aplicacio\App.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\dades\DAOreferencia.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\enums\UnitatMesura.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\dades\DAOreferenciaImpl.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\logica\UsuariLogica.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\presentacio\PrimaryController.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\logica\ReferenciaLogica.java
+C:\Users\ngall\Documents\NetBeansProjects\Projecte1_equip1\src\main\java\presentacio\PantallaReferencia.java

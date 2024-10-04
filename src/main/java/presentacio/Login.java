@@ -36,10 +36,10 @@ public class Login {
         usuariDAO = new DAOusuariImpl(rutaArxiu);
         
         //Acció que realitzarà el botó Confirmar
-        confirmarButton.setOnAction(e -> verificarLogin());
+        confirmarButton.setOnAction(e -> verificarLogin(e));
     }
     
-    private void verificarLogin(){
+    private void verificarLogin(ActionEvent event){
         String email = correuField.getText();
         String password = contrasenyaField.getText();
         
@@ -52,6 +52,7 @@ public class Login {
         //Verificar l'usuari amb DAOusuariImpl
         if(usuariDAO.verificarUsuari(email, password)){
             mostrarMissatge("Login correcte. ", "Benvingut!");
+            handleLogin(event);
         }else{
             mostrarMissatgeError("Login incorrecte", "Nom d'usuari o contrasenya incorrectes.");
         }
@@ -73,7 +74,12 @@ public class Login {
         alert.showAndWait();
     }
     @FXML
-    void handleLogin(ActionEvent event) throws IOException {
-        App.setRoot("menuPrincipal");
+    void handleLogin(ActionEvent event) {
+        try{
+            App.setRoot("menuPrincipal");
+        } catch (IOException e){
+            mostrarMissatgeError("Error", "No s'ha pogut obrir el menú principal.");
+        }
+        
     }
 }
