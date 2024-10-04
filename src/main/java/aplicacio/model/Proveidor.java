@@ -21,8 +21,7 @@ public class Proveidor {
     public LocalDate Data_Alt;
     public int Qualificacio;
 
-    public Proveidor(String CIF, String Nom,EstatProveidor Estat, String MotiuInactiu, String Telefon, 
-                     float Descompte, LocalDate Data_Alt, int Qualificacio) {
+    public Proveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu, String Telefon, float Descompte, LocalDate Data_Alt, int Qualificacio) {
         this.CIF = CIF;
         this.Nom = Nom;
         this.Estat = Estat;
@@ -32,7 +31,12 @@ public class Proveidor {
         this.Data_Alt = Data_Alt;
         this.Qualificacio = Qualificacio;
     }
-
+    
+    public Proveidor(String CIF, String Nom) {
+        this.CIF = CIF;
+        this.Nom = Nom;
+    }
+    
     public String getCIF() {
         return CIF;
     }
