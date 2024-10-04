@@ -16,6 +16,7 @@ public class Main {
         String rutaArxiu = "uspass.txt";
         
         DAOusuariImpl usuariDAO = new DAOusuariImpl(rutaArxiu);
+        System.out.println("");
     }
     
 }
