@@ -8,6 +8,6 @@ package presentacio;
  *
  * @author ngall
  */
-public class PantallaInici {
+public class PantallaReferencia {
     
 }

@@ -19,17 +19,31 @@ public class Referencia{
     private int id_familia;
     private String cif_proveidor;
     private LocalDate data_alta;
+    private float pes;
+    private LocalDate data_caducitat; 
     private int quantitat;
+    private float preu;
     private Proveidor proveidor;
 
-    public Referencia(int id, String nom, UnitatMesura uom, int id_familia, String cif_proveidor, LocalDate data_alta, int quantitat) {
+    public Referencia(int id, String nom, UnitatMesura uom, int id_familia, String cif_proveidor, LocalDate data_alta, float pes, LocalDate data_caducitat, int quantitat, float preu) {
         this.id = id;
         this.nom = nom;
         this.uom = uom;
         this.id_familia = id_familia;
         this.cif_proveidor = cif_proveidor;
         this.data_alta = data_alta;
+        this.pes = pes;
+        this.data_caducitat = data_caducitat; 
         this.quantitat = quantitat;
+        this.preu = preu;
+    }
+
+    public LocalDate getData_caducitat() {
+        return data_caducitat;
+    }
+
+    public void setData_caducitat(LocalDate data_caducitat) {
+        this.data_caducitat = data_caducitat;
     }
 
     public int getId() {
@@ -80,12 +94,28 @@ public class Referencia{
         this.data_alta = data_alta;
     }
 
+    public float getPes() {
+        return pes;
+    }
+
+    public void setPes(float pes) {
+        this.pes = pes;
+    }
+
     public int getQuantitat() {
         return quantitat;
     }
 
     public void setQuantitat(int quantitat) {
         this.quantitat = quantitat;
+    }
+
+    public float getPreu() {
+        return preu;
+    }
+
+    public void setPreu(float preu) {
+        this.preu = preu;
     }
 
     public Proveidor getProveidor() {
@@ -95,5 +125,5 @@ public class Referencia{
     public void setProveidor(Proveidor proveidor) {
         this.proveidor = proveidor;
     }
-
 }
+

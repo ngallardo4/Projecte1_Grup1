@@ -20,7 +20,8 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
 
     @Override
     public void afegir(Referencia referencia) {
-        String sql = "INSERT INTO referencia (nom, UOM, id_familia, cif_proveidor, data_alta, quantitat) VALUES (?, ?, ?, ?, ?, ?)";
+        // Añadir "data_caducitat" a la sentencia SQL
+        String sql = "INSERT INTO referencia (nom, UOM, id_familia, cif_proveidor, data_alta, pes, data_caducitat, quantitat, preu) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, referencia.getNom());
@@ -28,7 +29,10 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
             stmt.setInt(3, referencia.getId_familia());
             stmt.setString(4, referencia.getCif_proveidor());
             stmt.setDate(5, Date.valueOf(referencia.getData_alta()));
-            stmt.setInt(6, referencia.getQuantitat());
+            stmt.setFloat(6, referencia.getPes());
+            stmt.setDate(7, referencia.getData_caducitat() != null ? Date.valueOf(referencia.getData_caducitat()) : null); // Añadir data_caducitat
+            stmt.setInt(8, referencia.getQuantitat());
+            stmt.setFloat(9, referencia.getPreu());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -51,7 +55,10 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
                         rs.getInt("id_familia"),
                         rs.getString("cif_proveidor"),
                         rs.getDate("data_alta").toLocalDate(),
-                        rs.getInt("quantitat")
+                        rs.getFloat("pes"),
+                        rs.getDate("data_caducitat") != null ? rs.getDate("data_caducitat").toLocalDate() : null, // Recuperar data_caducitat
+                        rs.getInt("quantitat"),
+                        rs.getFloat("preu")
                 );
                 referencies.add(ref);
             }
@@ -63,7 +70,8 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
 
     @Override
     public void actualitzar(Referencia referencia) {
-        String sql = "UPDATE referencia SET nom = ?, UOM = ?, id_familia = ?, cif_proveidor = ?, data_alta = ?, quantitat = ? WHERE id = ?";
+        // Añadir "data_caducitat" a la sentencia SQL
+        String sql = "UPDATE referencia SET nom = ?, UOM = ?, id_familia = ?, cif_proveidor = ?, data_alta = ?, pes = ?, data_caducitat = ?, quantitat = ?, preu = ? WHERE id = ?";
         try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, referencia.getNom());
@@ -71,8 +79,11 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
             stmt.setInt(3, referencia.getId_familia());
             stmt.setString(4, referencia.getCif_proveidor());
             stmt.setDate(5, Date.valueOf(referencia.getData_alta()));
-            stmt.setInt(6, referencia.getQuantitat());
-            stmt.setInt(7, referencia.getId());
+            stmt.setFloat(6, referencia.getPes());
+            stmt.setDate(7, referencia.getData_caducitat() != null ? Date.valueOf(referencia.getData_caducitat()) : null); // Actualizar data_caducitat
+            stmt.setInt(8, referencia.getQuantitat());
+            stmt.setFloat(9, referencia.getPreu());
+            stmt.setInt(10, referencia.getId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -108,13 +119,11 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
             while (rs.next()) {
                 UnitatMesura uom = UnitatMesura.valueOf(rs.getString("UOM"));
 
-                // Crear l'objecte Proveidor amb la informació que hem obtingut
                 Proveidor proveidor = new Proveidor(
                         rs.getString("cif_proveidor"),
                         rs.getString("nom_proveidor")
                 );
 
-                // Crear l'objecte Referencia amb la informació de la referència i del proveïdor
                 Referencia ref = new Referencia(
                         rs.getInt("id"),
                         rs.getString("nom"),
@@ -122,10 +131,12 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
                         rs.getInt("id_familia"),
                         rs.getString("cif_proveidor"),
                         rs.getDate("data_alta").toLocalDate(),
-                        rs.getInt("quantitat")
+                        rs.getFloat("pes"),
+                        rs.getDate("data_caducitat") != null ? rs.getDate("data_caducitat").toLocalDate() : null, // Recuperar data_caducitat
+                        rs.getInt("quantitat"),
+                        rs.getFloat("preu")
                 );
 
-                // Associar el proveïdor a la referència
                 ref.setProveidor(proveidor);
 
                 referenciesSenseEstoc.add(ref);
@@ -138,3 +149,4 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
     }
 
 }
+
