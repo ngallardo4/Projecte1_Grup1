@@ -7,6 +7,7 @@ package presentacio;
 import java.util.Scanner;
 import logica.ProveidorLogica;
 import logica.ReferenciaLogica;
+import logica.FamiliaLogica;
 import aplicacio.model.Proveidor;
 import aplicacio.model.Familia;
 import aplicacio.model.Referencia;
@@ -22,7 +23,7 @@ public class MenuPrincipal {
 
     Scanner sc = new Scanner(System.in);
     ProveidorLogica proveidor = new ProveidorLogica();
-    Familia familia = new DAOfamiliaImpl();
+    FamiliaLogica familia = new FamiliaLogica();
     ReferenciaLogica referencia = new ReferenciaLogica();
     
     public void mostrarMenu(){
@@ -270,30 +271,52 @@ public class MenuPrincipal {
     }
     
     private void altaFamilia() {
-        
-        System.out.print("Introdueix el Id: ");
-        int id = sc.nextInt();
+        try {
+            System.out.println("Introdueix el id de la família: ");
+            int id = sc.nextInt(); 
+            
+            System.out.print("Introdueix el nom de la família: ");
+            String nom = sc.nextLine();
 
-        System.out.print("Introdueix el nom de la familia: ");
-        String nom = sc.nextLine();
+            System.out.print("Introdueix una descripció: ");
+            String descripcio = sc.nextLine();
 
-        System.out.print("Introdueix una descripció: ");
-        String descripcio = sc.nextLine();
+            System.out.print("Introdueix la data d'alta (YYYY-MM-DD): ");
+            LocalDate data_alta = LocalDate.parse(sc.nextLine());
 
-        System.out.print("Introdueix la data d'alta (YYYY-MM-DD): ");
-        LocalDate data_alta = LocalDate.parse(sc.nextLine());
+            System.out.print("Introdueix el proveïdor per defecte: ");
+            String prov_defecte = sc.nextLine();
 
-        System.out.print("Introdueix el proveïdor per defecte: ");
-        String prov_defecte = sc.nextLine();
+            System.out.print("Introdueix observacions: ");
+            String observacions = sc.nextLine();
 
-        System.out.print("Introdueix observacions: ");
-        String observacions = sc.nextLine();
+            familia.afegirFamilia(id, nom, descripcio, data_alta, prov_defecte, observacions);
 
-        Familia novaFamilia = new Familia(id,nom, descripcio, data_alta, prov_defecte, observacions);
-
-        familiaDAO.afegir(novaFamilia);
-
-        System.out.println("Familia afegida correctament.");
+            System.out.println("Família afegida correctament.");
+        } catch (Exception e) {
+            System.out.println("Error al afegir la família: " + e.getMessage());
+        }
     }
+    
+    private void baixaFamilia() {
+        try {
+            System.out.print("Id de Familia a donar de baixa: ");
+            int id = sc.nextInt();
+
+            // Confirmar la baja del proveedor
+            System.out.print("Estàs segur que vols donar de baixa la familia? (S/N): ");
+            String confirmacio = sc.nextLine();
+
+            if (confirmacio.equalsIgnoreCase("S")) {
+                familia.eliminarFamilia(id);
+                System.out.println("Familia donat de baixa correctament.");
+            } else {
+                System.out.println("Operació cancel·lada. La familia no ha estat donat de baixa.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al donar de baixa la familia: " + e.getMessage());
+        }
+    }
+
 
 }
