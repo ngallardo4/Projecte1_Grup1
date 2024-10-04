@@ -4,7 +4,10 @@
  */
 package presentacio;
 
+import aplicacio.App;
 import dades.DAOusuariImpl;
+import java.io.IOException;
+import javafx.event.ActionEvent;
 import logica.UsuariLogica;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -33,9 +36,10 @@ public class Login {
         usuariDAO = new DAOusuariImpl(rutaArxiu);
         
         //Acció que realitzarà el botó Confirmar
-        confirmarButton.setOnAction(e -> verificarLogin());
+        confirmarButton.setOnAction(e -> verificarLogin(e));
     }
-    private void verificarLogin(){
+    
+    private void verificarLogin(ActionEvent event){
         String email = correuField.getText();
         String password = contrasenyaField.getText();
         
@@ -48,6 +52,7 @@ public class Login {
         //Verificar l'usuari amb DAOusuariImpl
         if(usuariDAO.verificarUsuari(email, password)){
             mostrarMissatge("Login correcte. ", "Benvingut!");
+            handleLogin(event);
         }else{
             mostrarMissatgeError("Login incorrecte", "Nom d'usuari o contrasenya incorrectes.");
         }
@@ -67,5 +72,14 @@ public class Login {
         alert.setHeaderText(null);
         alert.setContentText(missatge);
         alert.showAndWait();
+    }
+    @FXML
+    void handleLogin(ActionEvent event) {
+        try{
+            App.setRoot("menuPrincipal");
+        } catch (IOException e){
+            mostrarMissatgeError("Error", "No s'ha pogut obrir el menú principal.");
+        }
+        
     }
 }
