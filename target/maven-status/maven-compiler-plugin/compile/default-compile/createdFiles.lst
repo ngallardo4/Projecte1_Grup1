@@ -1,0 +1,12 @@
+presentacio\PantallaInici.class
+cat\copernic\projecte1_equip1\App.class
+cat\copernic\projecte1_equip1\SecondaryController.class
+aplicacio\model\Familia.class
+aplicacio\model\Referencia.class
+aplicacio\ejemplo.class
+enums\UnitatMesura.class
+dades\MyDataSource.class
+cat\copernic\projecte1_equip1\PrimaryController.class
+dades\DAOreferencia.class
+aplicacio\model\Proveidor.class
+dades\DAOinterface.class
