@@ -46,8 +46,7 @@ public class Proveidor {
      * @param CIF El CIF del proveedor.
      * @param Nom El nombre del proveedor.
      */
-    public Proveidor(String CIF, String Nom) {
-        this.CIF = CIF;
+    public Proveidor(String Nom) {
         this.Nom = Nom;
     }
     
