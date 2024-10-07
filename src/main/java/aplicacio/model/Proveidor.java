@@ -43,7 +43,7 @@ public class Proveidor {
     /**
      * Constructor para crear un nuevo proveedor con solo CIF y nombre.
      *
-     * @param CIF El CIF del proveedor.
+     * 
      * @param Nom El nombre del proveedor.
      */
     public Proveidor(String Nom) {

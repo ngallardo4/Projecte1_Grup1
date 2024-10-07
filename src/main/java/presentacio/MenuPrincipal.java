@@ -637,9 +637,10 @@ public class MenuPrincipal {
                 System.out.println("ID Família: " + referencia.getId_familia());
                 System.out.println("CIF Proveïdor: " + referencia.getCif_proveidor());
                 System.out.println("Data d'Alta: " + referencia.getData_alta());
+                System.out.println("Pes total: " + referencia.getPes_total());
                 System.out.println("Data de Caducitat: " + referencia.getData_caducitat());
-                System.out.println("Quantitat: " + referencia.getQuantitat());
-                System.out.println("Preu: " + referencia.getPreu());
+                System.out.println("Quantitat: " + referencia.getQuantitat_total());
+                System.out.println("Preu: " + referencia.getPreu_total());
             }
         }
     }

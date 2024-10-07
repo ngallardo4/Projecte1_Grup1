@@ -13,11 +13,20 @@ import java.util.List;
 import dades.MyDataSource;
 
 /**
- *
- * @author Héctor Vico
+ * Implementación de la interfaz DAOreferencia para manejar operaciones CRUD sobre la entidad {@code Referencia}.
+ * Proporciona métodos para obtener, agregar, actualizar y eliminar referencias en la base de datos.
+ * 
+ * @autor Héctor Vico
  */
 public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferencia<Referencia> {
 
+    /**
+    * Implementación de la interfaz DAOreferencia para manejar operaciones CRUD sobre la entidad {@code Referencia}.
+    * Proporciona métodos para obtener, agregar, actualizar y eliminar referencias en la base de datos.
+    * 
+    * @autor Héctor Vico
+    */
+    
     @Override
     public List<Referencia> obtenirEntitats() {
         List<Referencia> referencies = new ArrayList<>();
@@ -45,6 +54,12 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
         }
         return referencies;
     }
+    
+    /**
+     * Agrega una nueva referencia a la base de datos.
+     * 
+     * @param referencia la {@code Referencia} que se va a agregar.
+     */
 
     @Override
     public void afegir(Referencia referencia) {
@@ -75,6 +90,12 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
         }
     }
 
+    /**
+     * Actualiza una referencia existente en la base de datos.
+     * 
+     * @param referencia la {@code Referencia} que contiene los datos actualizados.
+     */
+    
     @Override
     public void actualitzar(Referencia referencia) {
         String sql = "UPDATE referencia SET nom = ?, UOM = ?, id_familia = ?, cif_proveidor = ?, data_alta = ?, pes_total = ?, data_caducitat = ?, quantitat_total = ?, preu_total = ? WHERE id = ?";
@@ -97,6 +118,13 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
         }
     }
 
+    
+    /**
+     * Elimina una referencia de la base de datos.
+     * 
+     * @param referencia la {@code Referencia} que se va a eliminar.
+     */
+    
     @Override
     public void eliminar(Referencia referencia) {
         String sql = "DELETE FROM referencia WHERE id = ?";
@@ -110,6 +138,12 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
         }
     }
 
+    /**
+     * Obtiene todas las referencias que no tienen stock.
+     * 
+     * @return una lista de {@code Referencia} que no tienen cantidad disponible.
+     */
+    
     @Override
     public List<Referencia> obtenirReferenciesSenseEstoc() {
         List<Referencia> referenciesSenseEstoc = new ArrayList<>();

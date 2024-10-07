@@ -8,7 +8,10 @@ import enums.UnitatMesura;
 import java.time.LocalDate;
 
 /**
- *
+ * La clase {@code Referencia} representa un producto o ítem en el sistema.
+ * Contiene información sobre el producto, incluyendo su identificador, nombre, unidad de medida,
+ * proveedor, fechas relevantes, peso, cantidad y precio.
+ * 
  * @author Héctor Vico
  */
 public class Referencia{
@@ -25,6 +28,10 @@ public class Referencia{
     private float preu_total;
     private Proveidor proveidor;
 
+     /**
+     * Crea una nueva instancia de {@code Referencia}.
+     *
+     */
     public Referencia(int id, String nom, UnitatMesura uom, int id_familia, String cif_proveidor, LocalDate data_alta, float pes_total, LocalDate data_caducitat, int quantitat_total, float preu_total) {
         this.id = id;
         this.nom = nom;
