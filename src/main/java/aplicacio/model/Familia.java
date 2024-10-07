@@ -7,7 +7,9 @@ package aplicacio.model;
 import java.time.LocalDate;
 
 /**
- *
+ * Clase que representa una familia en el sistema.
+ * Proporciona información sobre la familia, incluyendo su nombre, descripción y otras propiedades.
+ * 
  * @author Yaiza
  */
 public class Familia {
@@ -19,6 +21,10 @@ public class Familia {
     private String prov_defecte;
     private String observacions;
 
+    /**
+     * Constructor de la clase {@code Familia}.
+     * 
+     */
     public Familia(int id, String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) {
         this.id = id;
         this.nom = nom;
