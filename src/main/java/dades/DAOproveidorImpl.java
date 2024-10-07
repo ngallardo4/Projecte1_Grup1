@@ -16,11 +16,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Implementación del DAO (Data Access Object) para la entidad Proveidor.
+ * Esta clase gestiona las operaciones CRUD (Crear, Leer, Actualizar, Eliminar)
+ * para los proveedores en la base de datos.
  *
  * @author danie
  */
 public class DAOproveidorImpl implements DAOinterface<Proveidor> {
-
+    
+    /**
+     * Añade un nuevo proveedor a la base de datos.
+     *
+     * @param proveidor El objeto Proveidor que se desea añadir.
+     */
     @Override
     public void afegir(Proveidor proveidor) {
 
@@ -42,7 +50,12 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor> {
             e.printStackTrace();
         }
     }
-
+    
+    /**
+     * Obtiene todos los proveedores de la base de datos.
+     *
+     * @return Una lista de objetos Proveidor que representan todos los proveedores.
+     */
     @Override
     public List<Proveidor> obtenirEntitats() {
 
@@ -72,7 +85,12 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor> {
         }
         return proveidors;
     }
-
+    
+    /**
+     * Actualiza la información de un proveedor existente en la base de datos.
+     *
+     * @param proveidor El objeto Proveidor que contiene la información actualizada.
+     */ 
     @Override
     public void actualitzar(Proveidor proveidor) {
         
@@ -95,7 +113,12 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor> {
             e.printStackTrace();
         }
     }
-
+    
+    /**
+     * Elimina un proveedor de la base de datos.
+     *
+     * @param proveidor El objeto Proveidor que se desea eliminar.
+     */
     @Override
     public void eliminar(Proveidor proveidor) {
         
