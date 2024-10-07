@@ -12,6 +12,7 @@ import aplicacio.model.Proveidor;
 import aplicacio.model.Familia;
 import aplicacio.model.Referencia;
 import enums.EstatProveidor;
+import enums.UnitatMesura;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -188,7 +189,7 @@ public class MenuPrincipal {
 
     private void consultarProveidor(){
         
-        System.out.print("CIF del Proveidor a modificar: ");
+        System.out.print("CIF del Proveidor a consultar: ");
         String CIF = sc.nextLine();
 
         List<Proveidor> proveidors = proveidor.obtenirTotsElsProveidors();
@@ -250,16 +251,16 @@ public class MenuPrincipal {
             
             switch (opcio) {
                 case 1:
-                    
+                    altaFamilia();
                     break;
                 case 2:
-                    
+                    baixaFamilia();
                     break;
                 case 3:
-                    
+                    modificarFamilia();
                     break;
                 case 4:
-                    
+                    consultarFamilia();
                     break;
                 case 0:
                     System.out.println("Sortir.");
@@ -318,5 +319,244 @@ public class MenuPrincipal {
         }
     }
 
+    private void modificarFamilia(){
+        try {
+            System.out.print("Id de la Familia a modificar: ");
+            int id = sc.nextInt();
 
+            System.out.print("Nou nom de la familia: ");
+            String Nom = sc.nextLine();
+
+            System.out.print("Nova descripcio de la familia: ");
+            String descripcio = sc.nextLine();
+
+            System.out.print("Nova data d'alta (YYYY-MM-DD): ");
+            LocalDate Data_Alta = LocalDate.parse(sc.nextLine());
+
+            System.out.print("Nova prova de defecte de la familia: ");
+            String prov_defecte = sc.nextLine();
+
+            System.out.print("Nova Observacions de la familia: ");
+            String observacions = sc.nextLine();
+            
+            familia.modificarFamilia(id, Nom, descripcio, Data_Alta, prov_defecte, observacions);
+            System.out.println("Proveidor modificat correctament.");
+            
+        } catch (Exception e) {
+            System.out.println("Error al modificar el proveidor: " + e.getMessage());
+        }
+    }
+    
+    private void consultarFamilia(){
+        System.out.print("ID de la Família a consultar: ");
+        int id = sc.nextInt();
+        sc.nextLine(); // Consumir la nueva línea que queda tras nextInt()
+
+        // Obtener todas las familias
+        List<Familia> families = familia.obtenirTotesLesFamilies();
+
+        // Buscar la familia con el ID proporcionado
+        Familia familia = null;
+        for (Familia f : families) {
+            if (f.getId() == id) {
+                familia = f;
+                break;
+            }
+        }
+
+        if (familia == null) {
+            System.out.println("Família no trobada.");
+        } else {
+            // Mostrar los detalles de la familia
+            System.out.println("=== Detalls de la Família ===");
+            System.out.println("ID: " + familia.getId());
+            System.out.println("Nom: " + familia.getNom());
+            System.out.println("Descripció: " + familia.getDescripcio());
+            System.out.println("Data d'alta: " + familia.getData_alta());
+            System.out.println("Proveïdor per defecte: " + familia.getProv_defecte());
+            System.out.println("Observacions: " + familia.getObservacions());
+        }
+    }
+    
+    private void llistarReferencia(){
+        
+        while(true){
+            System.out.println("=== Menú Principal ===");
+            System.out.println("1.- Alta de referencia.");
+            System.out.println("2.- Baixa de referencia.");
+            System.out.println("3.- Modificar referencia.");
+            System.out.println("4.- Consultar referencia.");
+            System.out.println("0.- Sortir.");
+
+            System.out.println("Selecciona una opcio: ");
+            int opcio = sc.nextInt();
+            sc.nextLine();
+            
+            switch (opcio) {
+                case 1:
+                    altaReferencia();
+                    break;
+                case 2:
+                    baixaReferencia();
+                    break;
+                case 3:
+                    modificarReferencia();
+                    break;
+                case 4:
+                    consultarFamilia();
+                    break;
+                case 0:
+                    System.out.println("Sortir.");
+                    return;
+                default:
+                    System.out.println("Opcio invalida.");
+            }
+        }
+    }
+    
+    private void altaReferencia() {
+        try {
+            
+            System.out.print("Introdueix el nom de la referencia: ");
+            String nom = sc.nextLine();
+
+            UnitatMesura uomStr = seleccionarUOM();
+            
+            System.out.print("Introdueix l'ID de la família: ");
+            int idFamilia = sc.nextInt();
+
+            System.out.print("Introdueix el CIF del proveïdor: ");
+            String cifProveidor = sc.nextLine();
+
+            System.out.print("Introdueix la data d'alta (YYYY-MM-DD): ");
+            LocalDate dataAlta = LocalDate.parse(sc.nextLine());
+
+            System.out.print("Introdueix la data de caducitat (YYYY-MM-DD): ");
+            LocalDate dataCaducitat = LocalDate.parse(sc.nextLine());
+
+            System.out.print("Introdueix la quantitat: ");
+            int quantitat = sc.nextInt();
+
+            System.out.print("Introdueix el preu: ");
+            float preu = sc.nextFloat();
+
+            // Llamamos al método de la lógica
+            referencia.afegirReferencia(nom, uomStr.toString(), idFamilia, cifProveidor, dataAlta, dataCaducitat, quantitat, preu);
+            System.out.println("Proveidor afegit exitosament.");
+        } catch (Exception e) {
+            System.out.println("Error al afegir el proveidor: " + e.getMessage());
+        }
+    }
+    
+    private void baixaReferencia() {
+        try {
+            System.out.print("Id de Referencia a donar de baixa: ");
+            int id = sc.nextInt();
+
+            // Confirmar la baja del proveedor
+            System.out.print("Estàs segur que vols donar de baixa la referencia? (S/N): ");
+            String confirmacio = sc.nextLine();
+
+            if (confirmacio.equalsIgnoreCase("S")) {
+                referencia.eliminarReferencia(id);
+                System.out.println("Referencia donat de baixa correctament.");
+            } else {
+                System.out.println("Operació cancel·lada. La referencia no ha estat donat de baixa.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al donar de baixa la referencia: " + e.getMessage());
+        }
+    }
+    
+    private void modificarReferencia(){
+        try {
+            System.out.print("ID de la referència a modificar: ");
+            int id = sc.nextInt();
+            
+            System.out.print("Nou nom de la referència: ");
+            String nom = sc.nextLine();
+
+            UnitatMesura uomStr = seleccionarUOM();
+            
+            System.out.print("Introdueix l'ID de la família: ");
+            int idFamilia = sc.nextInt();
+
+            System.out.print("Introdueix el CIF del proveïdor: ");
+            String cifProveidor = sc.nextLine();
+
+            System.out.print("Introdueix la data d'alta (YYYY-MM-DD): ");
+            LocalDate dataAlta = LocalDate.parse(sc.nextLine());
+
+            System.out.print("Introdueix la data de caducitat (YYYY-MM-DD): ");
+            LocalDate dataCaducitat = LocalDate.parse(sc.nextLine());
+
+            System.out.print("Introdueix la quantitat: ");
+            int quantitat = sc.nextInt();
+
+            System.out.print("Introdueix el preu: ");
+            float preu = sc.nextFloat();
+
+            referencia.modificarReferencia(id, nom, uomStr.toString(), idFamilia, cifProveidor, dataAlta, dataCaducitat, quantitat, preu);
+            System.out.println("Referència modificada correctament.");
+        } catch (Exception e) {
+            System.out.println("Error al modificar la referència: " + e.getMessage());
+        }
+    }
+    
+    private void consultarReferencies() {
+    
+        System.out.println("Vols veure (1) Totes les referències o (2) Referències sense estoc?");
+        int opcio = sc.nextInt();
+
+        if (opcio == 1) {
+            // Obtener todas las referencias
+            List<Referencia> referencies = referencia.obtenirTotesLesReferencies();
+            mostrarReferencies(referencies, "Totes les Referències");
+        } else if (opcio == 2) {
+            // Obtener referencias sin stock
+            List<Referencia> referenciesSenseEstoc = referencia.obtenirReferenciesSenseEstoc();
+            mostrarReferencies(referenciesSenseEstoc, "Referències Sense Estoc");
+        } else {
+            System.out.println("Opció no vàlida.");
+        }
+    }
+
+    private void mostrarReferencies(List<Referencia> referencies, String titol) {
+        
+        if (referencies.isEmpty()) {
+            System.out.println("No hi ha " + titol.toLowerCase() + ".");
+        } else {
+            System.out.println("=== " + titol + " ===");
+            for (Referencia referencia : referencies) {
+                System.out.println("ID: " + referencia.getId());
+                System.out.println("Nom: " + referencia.getNom());
+                System.out.println("Unitat de Mesura: " + referencia.getUom());
+                System.out.println("ID Família: " + referencia.getId_familia());
+                System.out.println("CIF Proveïdor: " + referencia.getCif_proveidor());
+                System.out.println("Data d'Alta: " + referencia.getData_alta());
+                System.out.println("Data de Caducitat: " + referencia.getData_caducitat());
+                System.out.println("Quantitat: " + referencia.getQuantitat());
+                System.out.println("Preu: " + referencia.getPreu());
+            }
+        }
+    }
+    
+    private UnitatMesura seleccionarUOM() {
+
+        while (true) {
+
+            System.out.println("Unitats de mesura [KG][L][PACKS]: ");
+            String uomStr = sc.nextLine();
+
+            if (uomStr.equalsIgnoreCase("KG"))
+                return UnitatMesura.KG;
+            else if (uomStr.equalsIgnoreCase("L"))
+                return UnitatMesura.L;
+            else if (uomStr.equalsIgnoreCase("PACKS"))
+                return UnitatMesura.PACKS;
+            else {
+                System.out.println("Opción incorrecta. Por favor, selecciona una opció vàlida.");
+            }
+        }
+    }
 }
