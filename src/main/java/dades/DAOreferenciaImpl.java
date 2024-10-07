@@ -13,20 +13,21 @@ import java.util.List;
 import dades.MyDataSource;
 
 /**
- * Implementación de la interfaz DAOreferencia para manejar operaciones CRUD sobre la entidad {@code Referencia}.
- * Proporciona métodos para obtener, agregar, actualizar y eliminar referencias en la base de datos.
- * 
+ * Implementación de la interfaz DAOreferencia para manejar operaciones CRUD
+ * sobre la entidad {@code Referencia}. Proporciona métodos para obtener,
+ * agregar, actualizar y eliminar referencias en la base de datos.
+ *
  * @autor Héctor Vico
  */
 public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferencia<Referencia> {
 
     /**
-    * Implementación de la interfaz DAOreferencia para manejar operaciones CRUD sobre la entidad {@code Referencia}.
-    * Proporciona métodos para obtener, agregar, actualizar y eliminar referencias en la base de datos.
-    * 
-    * @autor Héctor Vico
-    */
-    
+     * Implementación de la interfaz DAOreferencia para manejar operaciones CRUD
+     * sobre la entidad {@code Referencia}. Proporciona métodos para obtener,
+     * agregar, actualizar y eliminar referencias en la base de datos.
+     *
+     * @autor Héctor Vico
+     */
     @Override
     public List<Referencia> obtenirEntitats() {
         List<Referencia> referencies = new ArrayList<>();
@@ -54,18 +55,19 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
         }
         return referencies;
     }
-    
+
     /**
      * Agrega una nueva referencia a la base de datos.
-     * 
+     *
      * @param referencia la {@code Referencia} que se va a agregar.
      */
-
     @Override
     public void afegir(Referencia referencia) {
         String sql = "INSERT INTO referencia (nom, UOM, id_familia, cif_proveidor, data_alta, pes_total, data_caducitat, quantitat_total, preu_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = MyDataSource.getConnection(); // Cambiar el PreparedStatement para que devuelva las claves generadas
+                 PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
+            // Configurar los parámetros de la sentencia SQL
             stmt.setString(1, referencia.getNom());
             stmt.setString(2, referencia.getUom().name());
             stmt.setInt(3, referencia.getId_familia());
@@ -76,15 +78,22 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
             stmt.setInt(8, referencia.getQuantitat_total());
             stmt.setFloat(9, referencia.getPreu_total());
 
+            // Ejecutar la inserción
             int result = stmt.executeUpdate();
             System.out.println("Resultado de la inserción: " + result);
 
+            // Obtener las claves generadas (el ID)
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    referencia.setId(generatedKeys.getInt(1)); // Asignar el ID generado
-                    System.out.println("ID generado: " + referencia.getId());
+                    // Asignar el ID generado al objeto referencia
+                    int generatedId = generatedKeys.getInt(1);
+                    referencia.setId(generatedId);
+                    System.out.println("ID generado: " + generatedId);  // Imprime el ID generado
+                } else {
+                    throw new SQLException("No se ha generado un ID para la referencia.");
                 }
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -92,10 +101,10 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
 
     /**
      * Actualiza una referencia existente en la base de datos.
-     * 
-     * @param referencia la {@code Referencia} que contiene los datos actualizados.
+     *
+     * @param referencia la {@code Referencia} que contiene los datos
+     * actualizados.
      */
-    
     @Override
     public void actualitzar(Referencia referencia) {
         String sql = "UPDATE referencia SET nom = ?, UOM = ?, id_familia = ?, cif_proveidor = ?, data_alta = ?, pes_total = ?, data_caducitat = ?, quantitat_total = ?, preu_total = ? WHERE id = ?";
@@ -118,13 +127,11 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
         }
     }
 
-    
     /**
      * Elimina una referencia de la base de datos.
-     * 
+     *
      * @param referencia la {@code Referencia} que se va a eliminar.
      */
-    
     @Override
     public void eliminar(Referencia referencia) {
         String sql = "DELETE FROM referencia WHERE id = ?";
@@ -140,15 +147,15 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
 
     /**
      * Obtiene todas las referencias que no tienen stock.
-     * 
-     * @return una lista de {@code Referencia} que no tienen cantidad disponible.
+     *
+     * @return una lista de {@code Referencia} que no tienen cantidad
+     * disponible.
      */
-    
     @Override
     public List<Referencia> obtenirReferenciesSenseEstoc() {
         List<Referencia> referenciesSenseEstoc = new ArrayList<>();
 
-        String sql = "SELECT r.*, p.nom as nom_proveidor, p.cif as cif_proveidor "
+        String sql = "SELECT r.*, p.nom as nom_proveidor "
                 + "FROM referencia r "
                 + "JOIN proveidor p ON r.cif_proveidor = p.cif "
                 + "WHERE r.quantitat_total = 0"; // Asegúrate de usar `quantitat_total`

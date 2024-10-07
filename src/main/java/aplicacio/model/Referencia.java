@@ -44,7 +44,7 @@ public class Referencia{
         this.quantitat_total = quantitat_total;
         this.preu_total = preu_total;
     }
-
+    
     public int getId() {
         return id;
     }
