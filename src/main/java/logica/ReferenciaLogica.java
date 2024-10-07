@@ -6,7 +6,7 @@ package logica;
 
 /**
  *
- * @author ngall
+ * @author Héctor Vico
  */
 import aplicacio.model.Referencia;
 import dades.DAOreferenciaImpl;
@@ -25,16 +25,16 @@ public class ReferenciaLogica {
     }
 
     // Añadir una nueva referencia
-    public void afegirReferencia(String nom, String uomStr, int idFamilia, String cifProveidor, LocalDate dataAlta, LocalDate dataCaducitat, int quantitat, float preu) throws Exception {
+    public void afegirReferencia(String nom, String uomStr, int idFamilia, String cifProveidor, LocalDate dataAlta, LocalDate dataCaducitat, int quantitat_total, float preu_total) throws Exception {
         try {
             // Validar datos
-            validarReferencia(nom, uomStr, idFamilia, cifProveidor, dataAlta, dataCaducitat, quantitat, preu);
+            validarReferencia(nom, uomStr, idFamilia, cifProveidor, dataAlta, dataCaducitat, quantitat_total, preu_total);
 
             // Convertir el String a UnitatMesura (enum)
             UnitatMesura uom = UnitatMesura.valueOf(uomStr);
 
             // Crear la referencia
-            Referencia novaReferencia = new Referencia(0, nom, uom, idFamilia, cifProveidor, dataAlta, 0.0f, dataCaducitat, quantitat, preu);
+            Referencia novaReferencia = new Referencia(0, nom, uom, idFamilia, cifProveidor, dataAlta, 0.0f, dataCaducitat, quantitat_total, preu_total);
 
             // Llamamos al DAO para añadir la referencia
             daoReferencia.afegir(novaReferencia);
@@ -44,16 +44,16 @@ public class ReferenciaLogica {
     }
 
     // Modificar una referencia existente
-    public void modificarReferencia(int id, String nom, String uomStr, int idFamilia, String cifProveidor, LocalDate dataAlta, LocalDate dataCaducitat, int quantitat, float preu) throws Exception {
+    public void modificarReferencia(int id, String nom, String uomStr, int idFamilia, String cifProveidor, LocalDate dataAlta, LocalDate dataCaducitat, int quantitat_total, float preu_total) throws Exception {
         try {
             // Validar datos
-            validarReferencia(nom, uomStr, idFamilia, cifProveidor, dataAlta, dataCaducitat, quantitat, preu);
+            validarReferencia(nom, uomStr, idFamilia, cifProveidor, dataAlta, dataCaducitat, quantitat_total, preu_total);
 
             // Convertir el String a UnitatMesura (enum)
             UnitatMesura uom = UnitatMesura.valueOf(uomStr);
 
             // Crear la referencia con los nuevos datos
-            Referencia referenciaModificada = new Referencia(id, nom, uom, idFamilia, cifProveidor, dataAlta, 0.0f, dataCaducitat, quantitat, preu);
+            Referencia referenciaModificada = new Referencia(id, nom, uom, idFamilia, cifProveidor, dataAlta, 0.0f, dataCaducitat, quantitat_total, preu_total);
 
             // Llamamos al DAO para modificar la referencia
             daoReferencia.actualitzar(referenciaModificada);
@@ -86,7 +86,7 @@ public class ReferenciaLogica {
     }
 
     // Validar datos de referencia
-    private void validarReferencia(String nom, String uomStr, int idFamilia, String cifProveidor, LocalDate dataAlta, LocalDate dataCaducitat, int quantitat, float preu) throws Exception {
+    private void validarReferencia(String nom, String uomStr, int idFamilia, String cifProveidor, LocalDate dataAlta, LocalDate dataCaducitat, int quantitat_total, float preu_total) throws Exception {
         if (nom == null || nom.trim().isEmpty()) {
             throw new Exception("El nom no pot estar buit.");
         }
@@ -105,13 +105,11 @@ public class ReferenciaLogica {
         if (dataCaducitat != null && dataCaducitat.isBefore(dataAlta)) {
             throw new Exception("La data de caducitat no pot ser anterior a la data d'alta.");
         }
-        if (quantitat < 0) {
+        if (quantitat_total < 0) {
             throw new Exception("La quantitat no pot ser negativa.");
         }
-        if (preu < 0) {
+        if (preu_total < 0) {
             throw new Exception("El preu no pot ser negatiu.");
         }
     }
 }
-
-
