@@ -163,7 +163,7 @@
             <children>
                 <VBox alignment="TOP_RIGHT" prefHeight="98.0" prefWidth="231.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Button fx:id="btnSortirFam" mnemonicParsing="false" onAction="#btnSortirFam_action" prefHeight="41.0" prefWidth="136.0" text="&lt;&lt; Sortir">
+                        <Button fx:id="btnSortir" mnemonicParsing="false" onAction="#btnSortir_action" prefHeight="41.0" prefWidth="136.0" text="&lt;&lt; Sortir">
                             <VBox.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>
@@ -172,12 +172,12 @@
                 </VBox>
                 <VBox alignment="TOP_CENTER" prefHeight="98.0" prefWidth="231.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Button fx:id="btnNovaFam" mnemonicParsing="false" onAction="#btnNovaFam_action" prefHeight="41.0" prefWidth="136.0" text="Nova">
+                        <Button fx:id="btnAfegir" mnemonicParsing="false" onAction="#btnAfegir_action" prefHeight="41.0" prefWidth="136.0" text="Nova">
                             <VBox.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>
                         </Button>
-                        <Button fx:id="btnModFam" mnemonicParsing="false" onAction="#btnModFam_action" prefHeight="41.0" prefWidth="136.0" text="Modificar">
+                        <Button fx:id="btnModificar" mnemonicParsing="false" onAction="#btnModificar_action" prefHeight="41.0" prefWidth="136.0" text="Modificar">
                             <VBox.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>
@@ -186,12 +186,12 @@
                 </VBox>
                 <VBox prefHeight="98.0" prefWidth="231.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Button fx:id="btnDelFam" mnemonicParsing="false" onAction="#btnDelFam_action" prefHeight="41.0" prefWidth="136.0" text="Eliminar">
+                        <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#btnEliminar_action" prefHeight="41.0" prefWidth="136.0" text="Eliminar">
                             <VBox.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>
                         </Button>
-                        <Button fx:id="btnProdFam" mnemonicParsing="false" onAction="#btnProdFam_action" prefHeight="41.0" prefWidth="136.0" text="Productes &gt;&gt;">
+                        <Button fx:id="btnProducte" mnemonicParsing="false" onAction="#btnProducte_action" prefHeight="41.0" prefWidth="136.0" text="Productes &gt;&gt;">
                             <VBox.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>

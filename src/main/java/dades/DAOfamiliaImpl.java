@@ -98,19 +98,24 @@ public class DAOfamiliaImpl implements DAOinterface<Familia> {
     @Override
     public void actualitzar(Familia familia) {
         String updateSQL = "UPDATE familia SET nom = ?, descripcio = ?, prov_defecte = ?, observacions = ? WHERE id = ?";
-        try (Connection conn = MyDataSource.getConnection()) {
-            try (PreparedStatement stmt = conn.prepareStatement(updateSQL)) {
-                stmt.setString(1, familia.getNom());
-                stmt.setString(2, familia.getDescripcio());
-                stmt.setString(3, familia.getProv_defecte());
-                stmt.setString(4, familia.getObservacions());
-                stmt.setInt(5, familia.getId());
-                stmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
+        try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(updateSQL)) {
+
+            stmt.setString(1, familia.getNom());
+            stmt.setString(2, familia.getDescripcio());
+            stmt.setString(3, familia.getProv_defecte());
+            stmt.setString(4, familia.getObservacions());
+            stmt.setInt(5, familia.getId());
+
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Familia modificada correctamente en la base de datos.");
+            } else {
+                System.out.println("No se encontró ninguna familia con el ID proporcionado.");
             }
-        } catch (SQLException ex) {
-            ex.getMessage();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al actualizar la familia en la base de datos.");
         }
     }
 
