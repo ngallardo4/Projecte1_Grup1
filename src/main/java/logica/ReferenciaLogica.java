@@ -5,8 +5,10 @@
 package logica;
 
 /**
- *
- * @author ngall
+ * Clase para la lógica de negocio de las referencias.
+ * Proporciona métodos para agregar, modificar, eliminar y obtener referencias.
+ * 
+ * @author Héctor Vico
  */
 import aplicacio.model.Referencia;
 import dades.DAOreferenciaImpl;
@@ -19,22 +21,30 @@ public class ReferenciaLogica {
 
     private final DAOreferenciaImpl daoReferencia;
 
+    
+    /**
+     * Constructor de la clase {@code ReferenciaLogica}.
+     * Inicializa el DAO para realizar operaciones sobre referencias.
+     */
     public ReferenciaLogica() {
         // Inicializamos el DAO
         daoReferencia = new DAOreferenciaImpl();
     }
-
-    // Añadir una nueva referencia
-    public void afegirReferencia(String nom, String uomStr, int idFamilia, String cifProveidor, LocalDate dataAlta, LocalDate dataCaducitat, int quantitat, float preu) throws Exception {
+    
+    /**
+     * Añade una nueva referencia.
+     * 
+     */
+    public void afegirReferencia(String nom, String uomStr, int idFamilia, String cifProveidor, LocalDate dataAlta, LocalDate dataCaducitat, int quantitat_total, float preu_total) throws Exception {
         try {
             // Validar datos
-            validarReferencia(nom, uomStr, idFamilia, cifProveidor, dataAlta, dataCaducitat, quantitat, preu);
+            validarReferencia(nom, uomStr, idFamilia, cifProveidor, dataAlta, dataCaducitat, quantitat_total, preu_total);
 
             // Convertir el String a UnitatMesura (enum)
             UnitatMesura uom = UnitatMesura.valueOf(uomStr);
 
             // Crear la referencia
-            Referencia novaReferencia = new Referencia(0, nom, uom, idFamilia, cifProveidor, dataAlta, 0.0f, dataCaducitat, quantitat, preu);
+            Referencia novaReferencia = new Referencia(0, nom, uom, idFamilia, cifProveidor, dataAlta, 0.0f, dataCaducitat, quantitat_total, preu_total);
 
             // Llamamos al DAO para añadir la referencia
             daoReferencia.afegir(novaReferencia);
@@ -42,18 +52,21 @@ public class ReferenciaLogica {
             throw new Exception("La unitat de mesura no és vàlida.");
         }
     }
-
-    // Modificar una referencia existente
-    public void modificarReferencia(int id, String nom, String uomStr, int idFamilia, String cifProveidor, LocalDate dataAlta, LocalDate dataCaducitat, int quantitat, float preu) throws Exception {
+    
+    /**
+     * Modifica una referencia existente.
+     * 
+     */
+    public void modificarReferencia(int id, String nom, String uomStr, int idFamilia, String cifProveidor, LocalDate dataAlta, LocalDate dataCaducitat, int quantitat_total, float preu_total) throws Exception {
         try {
             // Validar datos
-            validarReferencia(nom, uomStr, idFamilia, cifProveidor, dataAlta, dataCaducitat, quantitat, preu);
+            validarReferencia(nom, uomStr, idFamilia, cifProveidor, dataAlta, dataCaducitat, quantitat_total, preu_total);
 
             // Convertir el String a UnitatMesura (enum)
             UnitatMesura uom = UnitatMesura.valueOf(uomStr);
 
             // Crear la referencia con los nuevos datos
-            Referencia referenciaModificada = new Referencia(id, nom, uom, idFamilia, cifProveidor, dataAlta, 0.0f, dataCaducitat, quantitat, preu);
+            Referencia referenciaModificada = new Referencia(id, nom, uom, idFamilia, cifProveidor, dataAlta, 0.0f, dataCaducitat, quantitat_total, preu_total);
 
             // Llamamos al DAO para modificar la referencia
             daoReferencia.actualitzar(referenciaModificada);
@@ -61,8 +74,12 @@ public class ReferenciaLogica {
             throw new Exception("La unitat de mesura no és vàlida.");
         }
     }
-
-    // Eliminar una referencia existente
+    /**
+     * Elimina una referencia existente.
+     * 
+     * @param id el ID de la referencia a eliminar.
+     * @throws Exception si ocurre un error al eliminar la referencia.
+     */
     public void eliminarReferencia(int id) throws Exception {
         try {
             // Creamos una referencia solo con el ID
@@ -74,19 +91,30 @@ public class ReferenciaLogica {
             throw new Exception("Error al eliminar la referència: " + e.getMessage());
         }
     }
-
-    // Obtener todas las referencias
+    
+    /**
+     * Obtiene todas las referencias.
+     * 
+     * @return una lista de {@code Referencia} que contiene todas las referencias.
+     */
     public List<Referencia> obtenirTotesLesReferencies() {
         return daoReferencia.obtenirEntitats();
     }
-
-    // Obtener referencias sin stock
+    
+    /**
+     * Obtiene las referencias que no tienen stock.
+     * 
+     * @return una lista de {@code Referencia} que no tienen cantidad disponible.
+     */
     public List<Referencia> obtenirReferenciesSenseEstoc() {
         return daoReferencia.obtenirReferenciesSenseEstoc();
     }
-
-    // Validar datos de referencia
-    private void validarReferencia(String nom, String uomStr, int idFamilia, String cifProveidor, LocalDate dataAlta, LocalDate dataCaducitat, int quantitat, float preu) throws Exception {
+    
+    /**
+     * Valida los datos de una referencia.
+     * 
+     */
+    private void validarReferencia(String nom, String uomStr, int idFamilia, String cifProveidor, LocalDate dataAlta, LocalDate dataCaducitat, int quantitat_total, float preu_total) throws Exception {
         if (nom == null || nom.trim().isEmpty()) {
             throw new Exception("El nom no pot estar buit.");
         }
@@ -105,13 +133,11 @@ public class ReferenciaLogica {
         if (dataCaducitat != null && dataCaducitat.isBefore(dataAlta)) {
             throw new Exception("La data de caducitat no pot ser anterior a la data d'alta.");
         }
-        if (quantitat < 0) {
+        if (quantitat_total < 0) {
             throw new Exception("La quantitat no pot ser negativa.");
         }
-        if (preu < 0) {
+        if (preu_total < 0) {
             throw new Exception("El preu no pot ser negatiu.");
         }
     }
 }
-
-

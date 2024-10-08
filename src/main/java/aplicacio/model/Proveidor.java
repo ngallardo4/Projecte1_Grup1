@@ -8,7 +8,10 @@ import enums.EstatProveidor;
 import java.time.LocalDate;
 
 /**
- *
+ * Clase que representa un proveedor en el sistema.
+ * Contiene información sobre el proveedor como su CIF, nombre, estado,
+ * motivo de inactividad, teléfono, descuento, fecha de alta y calificación.
+ * 
  * @author ngall
  */
 public class Proveidor {
@@ -21,6 +24,11 @@ public class Proveidor {
     public LocalDate Data_Alt;
     public int Qualificacio;
 
+     /**
+     * Constructor para crear un nuevo proveedor con todos los campos.
+     *
+     */
+    
     public Proveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu, String Telefon, float Descompte, LocalDate Data_Alt, int Qualificacio) {
         this.CIF = CIF;
         this.Nom = Nom;
@@ -32,8 +40,13 @@ public class Proveidor {
         this.Qualificacio = Qualificacio;
     }
     
-    public Proveidor(String CIF, String Nom) {
-        this.CIF = CIF;
+    /**
+     * Constructor para crear un nuevo proveedor con solo CIF y nombre.
+     *
+     * 
+     * @param Nom El nombre del proveedor.
+     */
+    public Proveidor(String Nom) {
         this.Nom = Nom;
     }
     

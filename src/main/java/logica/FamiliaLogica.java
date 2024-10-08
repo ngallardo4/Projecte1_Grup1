@@ -10,19 +10,27 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- *
+ * Clase para la lógica de negocio de las familias.
+ * Proporciona métodos para agregar, modificar, eliminar y obtener familias.
+ * 
  * @author danie
  */
 public class FamiliaLogica {
 
     private final DAOfamiliaImpl daoFamilia;
-
-    // Constructor que inicializa el DAO
+    
+    /**
+     * Constructor de la clase {@code FamiliaLogica}.
+     * Inicializa el DAO para realizar operaciones sobre familias.
+     */
     public FamiliaLogica() {
         this.daoFamilia = new DAOfamiliaImpl();  // Aseguramos que el DAO esté listo
     }
-
-    // Método para añadir una nueva familia
+    
+    /**
+     * Añade una nueva familia.
+     * 
+     */
     public void afegirFamilia(int id, String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
         // Validar los datos de entrada antes de proceder
         validarFamilia(id,nom, descripcio, data_alta, prov_defecte, observacions);
@@ -35,8 +43,10 @@ public class FamiliaLogica {
 
         System.out.println("Familia afegida correctament.");
     }
-
-    // Método para modificar una familia existente
+    /**
+     * Modifica una familia existente.
+     *
+     */
     public void modificarFamilia(int id, String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
         // Validar los datos de entrada
         validarFamilia(id,nom, descripcio, data_alta, prov_defecte, observacions);
@@ -49,7 +59,12 @@ public class FamiliaLogica {
         System.out.println("Familia modificada correctament.");
     }
 
-    // Método para eliminar una familia existente
+    /**
+     * Elimina una familia existente.
+     * 
+     * @param id el ID de la familia a eliminar.
+     * @throws Exception si ocurre un error al eliminar la familia.
+     */
     public void eliminarFamilia(int id) throws Exception {
         try {
            
@@ -62,12 +77,20 @@ public class FamiliaLogica {
     }
 
 
-    // Método para obtener todas las familias
+    /**
+     * Obtiene todas las familias.
+     * 
+     * @return una lista de {@code Familia} que contiene todas las familias.
+     */
     public List<Familia> obtenirTotesLesFamilies() {
         return daoFamilia.obtenirEntitats();
     }
 
-    // Método para validar los datos de la familia
+    
+    /**
+     * Valida los datos de la familia.
+     * 
+     */
     private void validarFamilia(int id, String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
         if (id <= 0) {
             throw new Exception("L'ID de família ha de ser major que 0.");

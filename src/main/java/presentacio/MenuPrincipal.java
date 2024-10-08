@@ -17,6 +17,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
+ * Clase que representa el menú principal de la aplicación de gestión de proveedores y familias.
+ * Esta clase permite al usuario interactuar con las funcionalidades de agregar, eliminar y consultar 
+ * proveedores y familias a través de un menú de texto.
+ */
+
+/**
  *
  * @author danie
  */
@@ -26,6 +32,12 @@ public class MenuPrincipal {
     ProveidorLogica proveidor = new ProveidorLogica();
     FamiliaLogica familia = new FamiliaLogica();
     ReferenciaLogica referencia = new ReferenciaLogica();
+    
+    /**
+     * Método que muestra el menú principal y permite al usuario seleccionar una opción.
+     * El menú presenta opciones para listar proveedores, familias y referencias.
+     * El ciclo se ejecuta indefinidamente hasta que el usuario decide salir.
+     */
     
     public void mostrarMenu(){
         
@@ -57,7 +69,12 @@ public class MenuPrincipal {
             }
         }
     }
-
+    
+    /**
+     * Método que muestra un menú para listar y gestionar proveedores.
+     * El usuario puede agregar, eliminar, modificar y consultar proveedores.
+     */
+    
     public void llistarProveidors() {
 
         while (true) {
@@ -95,6 +112,12 @@ public class MenuPrincipal {
         }
     }
 
+    
+    /**
+     * Método para agregar un nuevo proveedor.
+     * Solicita al usuario información relevante y llama a la lógica correspondiente para añadir el proveedor.
+     */
+    
     private void altaProveidor() {
 
         try {
@@ -130,6 +153,11 @@ public class MenuPrincipal {
             System.out.println("Error al afegir el proveidor: " + e.getMessage());
         }
     }
+    
+    /**
+     * Método para dar de baja a un proveedor existente.
+     * Solicita al usuario el CIF del proveedor y confirma la acción antes de proceder a eliminarlo.
+     */
 
     private void baixaProveidor() {
 
@@ -152,6 +180,12 @@ public class MenuPrincipal {
         }
     }
 
+    
+    /**
+     * Método para modificar un proveedor existente.
+     * Solicita al usuario el CIF del proveedor y la nueva información para realizar la modificación.
+     */
+    
     private void modificarProveidor() {
 
         try {
@@ -187,6 +221,11 @@ public class MenuPrincipal {
         }
     }
 
+    /**
+     * Método para consultar un proveedor existente.
+     * Solicita al usuario el CIF del proveedor y muestra sus detalles si se encuentra.
+     */
+    
     private void consultarProveidor(){
         
         System.out.print("CIF del Proveidor a consultar: ");
@@ -218,6 +257,13 @@ public class MenuPrincipal {
         }
     }
     
+    /**
+     * Método para seleccionar el estado de un proveedor.
+     * Permite al usuario elegir entre los estados disponibles: ACTIU o INACTIU.
+     * 
+     * @return Estado del proveedor seleccionado.
+     */
+    
     private EstatProveidor seleccionarEstat() {
 
         while (true) {
@@ -234,6 +280,11 @@ public class MenuPrincipal {
             }
         }
     }
+    
+    /**
+     * Método que muestra un menú para listar y gestionar familias.
+     * El usuario puede agregar, eliminar, modificar y consultar familias.
+     */
     
     private void llistarFamilia(){
         
@@ -271,6 +322,11 @@ public class MenuPrincipal {
         }
     }
     
+    /**
+     * Método para agregar una nueva familia.
+     * Solicita al usuario la información relevante y llama a la lógica correspondiente para añadir la familia.
+     */
+    
     private void altaFamilia() {
         try {
             System.out.println("Introdueix el id de la família: ");
@@ -299,6 +355,11 @@ public class MenuPrincipal {
         }
     }
     
+    /**
+     * Método para dar de baja a una familia existente.
+     * Solicita al usuario el ID de la familia y confirma la acción antes de proceder a eliminarla.
+     */
+    
     private void baixaFamilia() {
         try {
             System.out.print("Id de Familia a donar de baixa: ");
@@ -319,6 +380,11 @@ public class MenuPrincipal {
         }
     }
 
+    /**
+     * Método para modificar una familia existente.
+     * Solicita al usuario el ID de la familia y la nueva información para realizar la modificación.
+     */
+    
     private void modificarFamilia(){
         try {
             System.out.print("Id de la Familia a modificar: ");
@@ -346,6 +412,11 @@ public class MenuPrincipal {
             System.out.println("Error al modificar el proveidor: " + e.getMessage());
         }
     }
+    
+    /**
+     * Método para consultar una familia existente.
+     * Solicita al usuario el ID de la familia y muestra sus detalles si se encuentra.
+     */
     
     private void consultarFamilia(){
         System.out.print("ID de la Família a consultar: ");
@@ -377,6 +448,11 @@ public class MenuPrincipal {
             System.out.println("Observacions: " + familia.getObservacions());
         }
     }
+    
+    /**
+     * Método que muestra un menú para listar y gestionar referencias.
+     * El usuario puede agregar, eliminar, modificar y consultar referencias.
+     */
     
     private void llistarReferencia(){
         
@@ -414,6 +490,11 @@ public class MenuPrincipal {
         }
     }
     
+    /**
+     * Método para agregar una nueva referencia.
+     * Solicita al usuario información relevante y llama a la lógica correspondiente para añadir la referencia.
+     */
+    
     private void altaReferencia() {
         try {
             
@@ -448,6 +529,11 @@ public class MenuPrincipal {
         }
     }
     
+    /**
+     * Método para dar de baja a una referencia existente.
+     * Solicita al usuario el ID de la referencia y confirma la acción antes de proceder a eliminarla.
+     */
+    
     private void baixaReferencia() {
         try {
             System.out.print("Id de Referencia a donar de baixa: ");
@@ -467,6 +553,11 @@ public class MenuPrincipal {
             System.out.println("Error al donar de baixa la referencia: " + e.getMessage());
         }
     }
+    
+     /**
+     * Método para modificar una referencia existente.
+     * Solicita al usuario el ID de la referencia y la nueva información para realizar la modificación.
+     */
     
     private void modificarReferencia(){
         try {
@@ -503,6 +594,11 @@ public class MenuPrincipal {
         }
     }
     
+    /**
+     * Método para consultar referencias existentes.
+     * Permite al usuario ver todas las referencias o solo aquellas sin stock.
+     */
+    
     private void consultarReferencies() {
     
         System.out.println("Vols veure (1) Totes les referències o (2) Referències sense estoc?");
@@ -520,7 +616,14 @@ public class MenuPrincipal {
             System.out.println("Opció no vàlida.");
         }
     }
-
+ 
+    /**
+     * Método que muestra las referencias en un formato legible.
+     * 
+     * @param referencies Lista de referencias a mostrar.
+     * @param titol Título que se mostrará antes de las referencias.
+     */
+    
     private void mostrarReferencies(List<Referencia> referencies, String titol) {
         
         if (referencies.isEmpty()) {
@@ -534,12 +637,20 @@ public class MenuPrincipal {
                 System.out.println("ID Família: " + referencia.getId_familia());
                 System.out.println("CIF Proveïdor: " + referencia.getCif_proveidor());
                 System.out.println("Data d'Alta: " + referencia.getData_alta());
+                System.out.println("Pes total: " + referencia.getPes_total());
                 System.out.println("Data de Caducitat: " + referencia.getData_caducitat());
-                System.out.println("Quantitat: " + referencia.getQuantitat());
-                System.out.println("Preu: " + referencia.getPreu());
+                System.out.println("Quantitat: " + referencia.getQuantitat_total());
+                System.out.println("Preu: " + referencia.getPreu_total());
             }
         }
     }
+    
+    /**
+     * Método para seleccionar la unidad de medida.
+     * Permite al usuario elegir entre KG, L o PACKS.
+     * 
+     * @return Unidad de medida seleccionada.
+     */
     
     private UnitatMesura seleccionarUOM() {
 
