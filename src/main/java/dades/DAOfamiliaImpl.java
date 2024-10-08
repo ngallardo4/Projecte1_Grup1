@@ -14,12 +14,21 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- *
+ * Implementación del DAO (Data Access Object) para la entidad {@code Familia}.
+ * Proporciona métodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) 
+ * sobre la tabla 'familia' en la base de datos.
+ * 
  * @author Yaiza
  */
 public class DAOfamiliaImpl implements DAOinterface<Familia> {
 
+    /**
+     * Añade una nueva familia a la base de datos.
+     * 
+     * @param familia la familia a añadir.
+     */
     @Override
     public void afegir(Familia familia) {
         String insertSQL = "INSERT INTO familia (nom, descripcio, data_alta, prov_defecte, observacions) VALUES (?, ?, ?, ?, ?)";
@@ -51,6 +60,11 @@ public class DAOfamiliaImpl implements DAOinterface<Familia> {
         }
     }
 
+    /**
+     * Obtiene todas las familias de la base de datos.
+     * 
+     * @return una lista de objetos {@code Familia} que representan todas las familias.
+     */
     @Override
     public List<Familia> obtenirEntitats() {
         String sql = "SELECT * FROM familia";
@@ -76,6 +90,11 @@ public class DAOfamiliaImpl implements DAOinterface<Familia> {
         return families;
     }
 
+    /**
+     * Actualiza los datos de una familia existente en la base de datos.
+     * 
+     * @param familia la familia con los nuevos datos.
+     */
     @Override
     public void actualitzar(Familia familia) {
         String updateSQL = "UPDATE familia SET nom = ?, descripcio = ?, prov_defecte = ?, observacions = ? WHERE id = ?";
@@ -94,7 +113,12 @@ public class DAOfamiliaImpl implements DAOinterface<Familia> {
             ex.getMessage();
         }
     }
-
+    
+    /**
+     * Elimina una familia de la base de datos.
+     * 
+     * @param familia la familia a eliminar.
+     */
     @Override
     public void eliminar(Familia familia) {
         String deleteSQL = "DELETE FROM familia WHERE id = ?";

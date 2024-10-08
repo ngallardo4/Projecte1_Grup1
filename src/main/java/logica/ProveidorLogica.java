@@ -11,21 +11,33 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
+ * La clase {@code ProveidorLogica} maneja la lógica de negocio relacionada con
+ * los proveedores. Proporciona métodos para añadir, modificar, eliminar y
+ * obtener proveedores, así como para validar los datos del proveedor.
  *
  * @author danie
  */
 public class ProveidorLogica {
-    
+
     private final DAOproveidorImpl daoProveidor;
 
+    /**
+     * Crea una nueva instancia de {@code ProveidorLogica} e inicializa el DAO
+     * de proveedores.
+     */
     public ProveidorLogica() {
         // Inicializamos el DAO
         daoProveidor = new DAOproveidorImpl();
     }
 
-    // Añadir un nuevo proveedor
+    /**
+     * Añade un nuevo proveedor al sistema.
+     *
+     * @throws Exception Si hay un error en la validación o al añadir el
+     * proveedor.
+     */
     public void afegirProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu,
-                                 String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
+                             String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
         // Validar datos
         validarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
 
@@ -36,9 +48,14 @@ public class ProveidorLogica {
         daoProveidor.afegir(nouProveidor);
     }
 
-    // Modificar un proveedor existente
+    /**
+     * Modifica un proveedor existente en el sistema.
+     *
+     * @throws Exception Si hay un error en la validación o al modificar el
+     * proveedor.
+     */
     public void modificarProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu,
-                                 String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
+            String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
         // Validar datos
         validarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
 
@@ -49,7 +66,12 @@ public class ProveidorLogica {
         daoProveidor.actualitzar(proveidorModificat);
     }
 
-    // Eliminar un proveedor existente
+    /**
+     * Elimina un proveedor existente del sistema.
+     *
+     * @param CIF El CIF del proveedor a eliminar.
+     * @throws Exception Si hay un error al eliminar el proveedor.
+     */
     public void eliminarProveidor(String CIF) throws Exception {
         try {
             // Creamos un proveedor solo con el CIF
@@ -62,14 +84,22 @@ public class ProveidorLogica {
         }
     }
 
-    // Obtener todos los proveedores
+    /**
+     * Obtiene todos los proveedores registrados en el sistema.
+     *
+     * @return Una lista de proveedores.
+     */
     public List<Proveidor> obtenirTotsElsProveidors() {
         return daoProveidor.obtenirEntitats();
     }
 
-    // Validar datos del proveedor
+    /**
+     * Valida los datos del proveedor.
+     *
+     * @throws Exception Si hay un error en la validación de los datos.
+     */
     private void validarProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu,
-                                 String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
+            String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
         if (CIF == null || CIF.trim().isEmpty()) {
             throw new Exception("El CIF no pot estar buit.");
         }
@@ -94,4 +124,3 @@ public class ProveidorLogica {
         }
     }
 }
-

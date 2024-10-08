@@ -10,19 +10,33 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
+ * Classe per la lógica de negoci de les families. Proporciona métodes per
+ * afegir, modificar, eliminar i obtenir families.
  *
- * @author danie
+ * @author yaiza
  */
 public class FamiliaLogica {
 
     private final DAOfamiliaImpl daoFamilia;
 
-    // Constructor que inicialitza el DAO
+    /**
+     * Constructor de la classe {@code FamiliaLogica}. Inicialitza el DAO per
+     * realitzar operacions sobre families.
+     */
     public FamiliaLogica() {
         this.daoFamilia = new DAOfamiliaImpl();
     }
 
-    // Métode per afegir una nova família
+    /**
+     * Afegir una nova família
+     *
+     * @param nom
+     * @param descripcio
+     * @param data_alta
+     * @param prov_defecte
+     * @param observacions
+     * @throws Exception
+     */
     public void afegirFamilia(String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
         // Validar les dades d'entrada abans de procedir
         validarFamilia(nom, descripcio, data_alta, prov_defecte, observacions);
@@ -36,7 +50,17 @@ public class FamiliaLogica {
         System.out.println("Família afegida correctament.");
     }
 
-    // Métode per modificar una família existent
+    /**
+     * Modifica una família existent.
+     *
+     * @param id
+     * @param nom
+     * @param descripcio
+     * @param data_alta
+     * @param prov_defecte
+     * @param observacions
+     * @throws Exception
+     */
     public void modificarFamilia(int id, String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
         // Validar les dades d'entrada
         validarFamilia(nom, descripcio, data_alta, prov_defecte, observacions);
@@ -49,7 +73,12 @@ public class FamiliaLogica {
         System.out.println("Família modificada correctament.");
     }
 
-    // Métode per eliminar una família existent
+    /**
+     * Elimina una familia existente.
+     *
+     * @param id el ID de la familia a eliminar.
+     * @throws Exception si hi ha un error en eliminar la família.
+     */
     public void eliminarFamilia(int id) throws Exception {
         try {
 
@@ -61,12 +90,25 @@ public class FamiliaLogica {
         }
     }
 
-    // Métode per obtenir totes les famílies
+    /**
+     * Obté totes las familias.
+     *
+     * @return una llista de {@code Familia} que conté totes les families.
+     */
     public List<Familia> obtenirTotesLesFamilies() {
         return daoFamilia.obtenirEntitats();
     }
 
-    // Métode per validar les dades de la família
+    /**
+     * Métode per validar les dades de la família
+     *
+     * @param nom
+     * @param descripcio
+     * @param data_alta
+     * @param prov_defecte
+     * @param observacions
+     * @throws Exception
+     */
     private void validarFamilia(String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
         if (nom == null || nom.trim().isEmpty()) {
             throw new Exception("El nom no pot estar buit.");

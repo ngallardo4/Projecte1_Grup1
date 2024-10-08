@@ -16,33 +16,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Implementación del DAO (Data Access Object) para la entidad Proveidor.
+ * Esta clase gestiona las operaciones CRUD (Crear, Leer, Actualizar, Eliminar)
+ * para los proveedores en la base de datos.
  *
  * @author danie
  */
 public class DAOproveidorImpl implements DAOinterface<Proveidor> {
-
+    
+    /**
+     * Añade un nuevo proveedor a la base de datos.
+     *
+     * @param proveidor El objeto Proveidor que se desea añadir.
+     */
     @Override
     public void afegir(Proveidor proveidor) {
-
         try (Connection conn = MyDataSource.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO proveidor (CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio) VALUES " + "(?, ?, ?, ?, ?, ?, ?)\";");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO proveidor (CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
             stmt.setString(1, proveidor.getCIF());
             stmt.setString(2, proveidor.getNom());
             stmt.setString(3, proveidor.getEstat().name());
             stmt.setString(4, proveidor.getMotiuInactiu());
             stmt.setString(5, proveidor.getTelefon());
-            stmt.setFloat (6, proveidor.getDescompte());
-            stmt.setDate  (7, java.sql.Date.valueOf(proveidor.getData_Alt()));
-            stmt.setInt   (8, proveidor.getQualificacio());
+            stmt.setFloat(6, proveidor.getDescompte());
+            stmt.setDate(7, java.sql.Date.valueOf(proveidor.getData_Alt()));
+            stmt.setInt(8, proveidor.getQualificacio());
 
-            stmt.executeUpdate();
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Proveedor añadido correctamente: " + proveidor.getCIF());
+            } else {
+                System.out.println("Error al añadir el proveedor: " + proveidor.getCIF());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    
+    /**
+     * Obtiene todos los proveedores de la base de datos.
+     *
+     * @return Una lista de objetos Proveidor que representan todos los proveedores.
+     */
     @Override
     public List<Proveidor> obtenirEntitats() {
 
@@ -72,41 +90,59 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor> {
         }
         return proveidors;
     }
-
+    
+    /**
+     * Actualiza la información de un proveedor existente en la base de datos.
+     *
+     * @param proveidor El objeto Proveidor que contiene la información actualizada.
+     */ 
     @Override
     public void actualitzar(Proveidor proveidor) {
-        
-        try (Connection conn = MyDataSource.getConnection()){
-            PreparedStatement stmt = conn.prepareStatement("UPDATE proveidor SET Nom = ?, MotiuInactiu = ?, Telefon = ?, Descompte = ?, Data_Alt = ?, Qualificacio = ? WHERE CIF = ?");
+        try (Connection conn = MyDataSource.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(
+                "UPDATE proveidor SET Nom = ?, Estat = ?, MotiuInactiu = ?, Telefon = ?, Descompte = ?, Data_Alt = ?, Qualificacio = ? WHERE CIF = ?"
+            );
 
-            stmt.setString(1, proveidor.getCIF());
-            stmt.setString(2, proveidor.getNom());
-            stmt.setString(3, proveidor.getEstat().name());
-            stmt.setString(4, proveidor.getMotiuInactiu());
-            stmt.setString(5, proveidor.getTelefon());
-            stmt.setFloat (6, proveidor.getDescompte());
-            stmt.setDate  (7, java.sql.Date.valueOf(proveidor.getData_Alt()));
-            stmt.setInt   (8, proveidor.getQualificacio());
+            // Asignar los valores correctamente
+            stmt.setString(1, proveidor.getNom()); // Nombre
+            stmt.setString(2, proveidor.getEstat().name()); // Estado
+            stmt.setString(3, proveidor.getMotiuInactiu()); // Motivo de inactividad
+            stmt.setString(4, proveidor.getTelefon()); // Teléfono
+            stmt.setFloat(5, proveidor.getDescompte()); // Descuento
+            stmt.setDate(6, java.sql.Date.valueOf(proveidor.getData_Alt())); // Fecha de alta
+            stmt.setInt(7, proveidor.getQualificacio()); // Cualificación
+            stmt.setString(8, proveidor.getCIF()); // CIF (para la cláusula WHERE)
 
-            if (stmt.executeUpdate() > 0) {
-                System.out.println("Dades modificades.");
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated == 0) {
+                throw new SQLException("No se encontró el proveedor con CIF: " + proveidor.getCIF());
+            }else {
+                System.out.println("No se encontró el proveedor con CIF: " + proveidor.getCIF());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al actualizar el proveedor", e);
         }
     }
 
+    
+    /**
+     * Elimina un proveedor de la base de datos.
+     *
+     * @param proveidor El objeto Proveidor que se desea eliminar.
+     */
     @Override
     public void eliminar(Proveidor proveidor) {
-        
-        try (Connection conn = MyDataSource.getConnection()){
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO proveidor (CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio) VALUES " + "(?, ?, ?, ?, ?, ?, ?)\";");
+        try (Connection conn = MyDataSource.getConnection()) {
+            conn.setAutoCommit(false); // Desactivar auto commit para manejar manualmente
 
-            stmt.setString(1, proveidor.CIF);
+            // Eliminar el proveedor
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM proveidor WHERE CIF = ?");
+            stmt.setString(1, proveidor.getCIF());
             stmt.executeUpdate();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            conn.commit(); // Forzar commit después de la operación
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar el proveedor", e);
         }
     }
 
