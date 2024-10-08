@@ -5,6 +5,7 @@
 package presentacio;
 
 import aplicacio.App;
+import aplicacio.model.Usuari;
 import dades.DAOusuariImpl;
 import java.io.IOException;
 import javafx.event.ActionEvent;
@@ -29,14 +30,16 @@ public class Login {
     private Button btnLogin;
     
     private DAOusuariImpl usuariDAO;
+    private Usuari usuariAutenticat; // Variable per emmagatzemar l'usuari autenticat
 
     //Métode per inicialitzar el controlador
-    public void in(){
+    @FXML
+    public void initialize(){
         String rutaArxiu = "uspass.txt";
         usuariDAO = new DAOusuariImpl(rutaArxiu);
         
         //Acció que realitzarà el botó Confirmar
-        btnLogin.setOnAction(e -> verificarLogin(e));
+        btnLogin.setOnAction(this::verificarLogin);
     }
     
     private void verificarLogin(ActionEvent event){
@@ -51,6 +54,7 @@ public class Login {
         
         //Verificar l'usuari amb DAOusuariImpl
         if(usuariDAO.verificarUsuari(email, password)){
+            usuariAutenticat = usuariDAO.getUsuari(email);
             mostrarMissatge("Login correcte. ", "Benvingut!");
             handleLogin(event);
         }else{
@@ -73,10 +77,11 @@ public class Login {
         alert.setContentText(missatge);
         alert.showAndWait();
     }
+    
     @FXML
-    void handleLogin(ActionEvent event) {
+    private void handleLogin(ActionEvent event) {
         try{
-            App.setRoot("secondary");
+            App.setRoot("menuPrincipal", usuariAutenticat);
         } catch (IOException e){
             mostrarMissatgeError("Error", "No s'ha pogut obrir el menú principal.");
         }
