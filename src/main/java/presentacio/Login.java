@@ -81,7 +81,7 @@ public class Login {
     @FXML
     private void handleLogin(ActionEvent event) {
         try{
-            App.setRoot("menuPrincipal");
+            App.setRoot("menuPrincipal", usuariAutenticat);
         } catch (IOException e){
             mostrarMissatgeError("Error", "No s'ha pogut obrir el menú principal.");
         }

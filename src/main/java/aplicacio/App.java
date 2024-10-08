@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import presentacio.MenuPrincipal;
+import aplicacio.model.Usuari;
 
 /**
  * JavaFX App
@@ -22,6 +24,19 @@ public class App extends Application {
         stage.show();
     }
 
+    public static void setRoot(String fxml, Usuari usuari) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/cat/copernic/projecte1_equip1/" + fxml + ".fxml"));
+        Parent root = fxmlLoader.load();
+
+        //Si carreguem la vista de menuPrincipal, passem l'usuari autenticat
+        if (fxml.equals("menuPrincipal")) {
+            MenuPrincipal controller = fxmlLoader.getController();
+            controller.setUsuari(usuari);  // Aqui pasem l'objete Usuari
+        }
+        scene.setRoot(root);
+    }
+    
+    //setRoot per usar sense passar l'usuari per tancar la sessió
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }

@@ -4,7 +4,9 @@
  */
 package presentacio;
 
+import aplicacio.App;
 import aplicacio.model.Usuari;
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -44,34 +46,32 @@ public class MenuPrincipal {
     
     @FXML
     private void handleFamilia(ActionEvent event){
-        carregarEscena("menuFamilia.fxml","Familia");
+        try{
+            App.setRoot("menuFamilia", usuari);
+        }catch (IOException e){e.printStackTrace();}
     }
     
     
     
     @FXML
     private void handleReferencia(ActionEvent event){
-        carregarEscena("menuReferencia.fxml","Referència");
+        try{
+            App.setRoot("menuReferencia", usuari);
+        }catch (IOException e){e.printStackTrace();}
     }
     
     @FXML
     private void handleProveidor(ActionEvent event){
-        carregarEscena("menuProveidor.fxml","Proveïdor");
+        try{
+            App.setRoot("menuProveidor", usuari);
+        }catch (IOException e){e.printStackTrace();}
     }
     
     @FXML
     private void handleTancarSessio(ActionEvent event){
-        carregarEscena("iniciSessio.fxml","Iniciar Sessió");
+        try{
+            App.setRoot("iniciSessio");
+        }catch (IOException e){e.printStackTrace();}
     }
     
-    private void carregarEscena(String fxmlArxiu, String title){
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlArxiu));
-            Parent root = loader.load();
-            Stage stage = (Stage) mainMenu.getScene().getWindow();
-            stage.setTitle(title);
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch(Exception e){e.printStackTrace();}
-    }
 }
