@@ -37,7 +37,7 @@ public class ProveidorLogica {
      * proveedor.
      */
     public void afegirProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu,
-            String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
+                             String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
         // Validar datos
         validarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
 
