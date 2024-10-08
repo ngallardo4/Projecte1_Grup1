@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" minHeight="660.0" minWidth="322.0" prefHeight="783.0" prefWidth="842.0" style="-fx-background-color: azure;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentacio.MenuPrincipal">
+<VBox alignment="TOP_CENTER" minHeight="660.0" minWidth="322.0" prefHeight="783.0" prefWidth="842.0" style="-fx-background-color: azure;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentacio.MenuPrincipal">
     <children>
         <HBox alignment="TOP_CENTER" focusTraversable="true" nodeOrientation="LEFT_TO_RIGHT" prefHeight="35.0" prefWidth="408.0" style="-fx-background-color: POWDERBLUE;" VBox.vgrow="SOMETIMES">
             <children>
@@ -37,7 +36,7 @@
                 </HBox>
                 <HBox alignment="TOP_RIGHT" fillHeight="false" prefHeight="130.0" prefWidth="242.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Button mnemonicParsing="false" text="Tancar Sessió">
+                        <Button fx:id="tancarSessioBtn" mnemonicParsing="false" text="Tancar Sessió">
                             <cursor>
                                 <Cursor fx:constant="HAND" />
                             </cursor>
@@ -68,7 +67,7 @@
          <children>
               <VBox alignment="CENTER" blendMode="SRC_ATOP" nodeOrientation="LEFT_TO_RIGHT" prefHeight="550.0" prefWidth="298.0" spacing="10.0" style="-fx-background-color: azure;">
                   <children>
-                      <Button contentDisplay="CENTER" maxHeight="133.0" maxWidth="942.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="133.0" prefWidth="544.0" text="FAMÍLIA" wrapText="true" VBox.vgrow="ALWAYS">
+                      <Button fx:id="familiaBtn" onAction="#handleFamilia" contentDisplay="CENTER" maxHeight="133.0" maxWidth="942.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="133.0" prefWidth="544.0" text="FAMÍLIA" wrapText="true" VBox.vgrow="ALWAYS">
                           <font>
                               <Font name="Corbel Light" size="40.0" />
                           </font>
@@ -79,7 +78,7 @@
                               <Cursor fx:constant="HAND" />
                           </cursor>
                       </Button>
-                      <Button maxHeight="133.0" maxWidth="942.0" mnemonicParsing="false" prefHeight="133.0" prefWidth="200.0" text="REFERÈNCIA" VBox.vgrow="ALWAYS">
+                      <Button fx:id="referenciaBtn" onAction="#handleReferencia" maxHeight="133.0" maxWidth="942.0" mnemonicParsing="false" prefHeight="133.0" prefWidth="200.0" text="REFERÈNCIA" VBox.vgrow="ALWAYS">
                           <font>
                               <Font name="Corbel Light" size="40.0" />
                           </font>
@@ -90,7 +89,7 @@
                               <Cursor fx:constant="HAND" />
                           </cursor>
                       </Button>
-                      <Button maxHeight="133.0" maxWidth="942.0" mnemonicParsing="false" prefHeight="125.0" prefWidth="200.0" text="PROVEÏDOR" VBox.vgrow="ALWAYS">
+                      <Button fx:id="proveidorBtn" onAction="#handleProveidor" maxHeight="133.0" maxWidth="942.0" mnemonicParsing="false" prefHeight="125.0" prefWidth="200.0" text="PROVEÏDOR" VBox.vgrow="ALWAYS">
                           <font>
                               <Font name="Corbel Light" size="40.0" />
                           </font>
