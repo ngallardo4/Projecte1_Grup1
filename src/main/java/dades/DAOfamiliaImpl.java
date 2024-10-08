@@ -14,20 +14,19 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * Implementación del DAO (Data Access Object) para la entidad {@code Familia}.
- * Proporciona métodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) 
- * sobre la tabla 'familia' en la base de datos.
- * 
+ * Implementació del DAO (Data Access Object) per a l'entitat {@code Familia}.
+ * Proporciona métodes per a realitzar operacions CRUD (Crear, Llegir,
+ * Actualitzar, Eliminar) sobre la taula 'familia' a la base de dades.
+ *
  * @author Yaiza
  */
 public class DAOfamiliaImpl implements DAOinterface<Familia> {
 
     /**
-     * Añade una nueva familia a la base de datos.
-     * 
-     * @param familia la familia a añadir.
+     * Afegeix una nova família a la base de dades.
+     *
+     * @param familia la familia a afegir.
      */
     @Override
     public void afegir(Familia familia) {
@@ -42,7 +41,7 @@ public class DAOfamiliaImpl implements DAOinterface<Familia> {
                 stmt.executeUpdate();
 
                 System.out.println("Executant INSERT INTO familia...");
-                
+
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int generatedId = generatedKeys.getInt(1);
@@ -61,9 +60,10 @@ public class DAOfamiliaImpl implements DAOinterface<Familia> {
     }
 
     /**
-     * Obtiene todas las familias de la base de datos.
-     * 
-     * @return una lista de objetos {@code Familia} que representan todas las familias.
+     * Obté totes les families de la base de dades.
+     *
+     * @return una llista d'objectes {@code Familia} que representen totes les
+     * families.
      */
     @Override
     public List<Familia> obtenirEntitats() {
@@ -91,9 +91,9 @@ public class DAOfamiliaImpl implements DAOinterface<Familia> {
     }
 
     /**
-     * Actualiza los datos de una familia existente en la base de datos.
-     * 
-     * @param familia la familia con los nuevos datos.
+     * Actualitza les dades d'una família existent a la base de dades.
+     *
+     * @param familia la família amb les noves dades.
      */
     @Override
     public void actualitzar(Familia familia) {
@@ -113,11 +113,11 @@ public class DAOfamiliaImpl implements DAOinterface<Familia> {
             ex.getMessage();
         }
     }
-    
+
     /**
-     * Elimina una familia de la base de datos.
-     * 
-     * @param familia la familia a eliminar.
+     * Elimina una família de la base de dades.
+     *
+     * @param familia la família a eliminar.
      */
     @Override
     public void eliminar(Familia familia) {
