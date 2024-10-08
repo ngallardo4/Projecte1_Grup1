@@ -26,7 +26,7 @@ public class Login {
     @FXML
     private PasswordField contrasenyaField;
     @FXML
-    private Button confirmarButton;
+    private Button btnLogin;
     
     private DAOusuariImpl usuariDAO;
 
@@ -36,7 +36,7 @@ public class Login {
         usuariDAO = new DAOusuariImpl(rutaArxiu);
         
         //Acció que realitzarà el botó Confirmar
-        confirmarButton.setOnAction(e -> verificarLogin(e));
+        btnLogin.setOnAction(e -> verificarLogin(e));
     }
     
     private void verificarLogin(ActionEvent event){
@@ -76,7 +76,7 @@ public class Login {
     @FXML
     void handleLogin(ActionEvent event) {
         try{
-            App.setRoot("menuPrincipal");
+            App.setRoot("secondary");
         } catch (IOException e){
             mostrarMissatgeError("Error", "No s'ha pogut obrir el menú principal.");
         }
