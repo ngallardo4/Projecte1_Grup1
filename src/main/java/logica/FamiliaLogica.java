@@ -17,61 +17,57 @@ public class FamiliaLogica {
 
     private final DAOfamiliaImpl daoFamilia;
 
-    // Constructor que inicializa el DAO
+    // Constructor que inicialitza el DAO
     public FamiliaLogica() {
-        this.daoFamilia = new DAOfamiliaImpl();  // Aseguramos que el DAO esté listo
+        this.daoFamilia = new DAOfamiliaImpl();
     }
 
-    // Método para añadir una nueva familia
-    public void afegirFamilia(int id, String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
-        // Validar los datos de entrada antes de proceder
-        validarFamilia(id,nom, descripcio, data_alta, prov_defecte, observacions);
+    // Métode per afegir una nova família
+    public void afegirFamilia(String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
+        // Validar les dades d'entrada abans de procedir
+        validarFamilia(nom, descripcio, data_alta, prov_defecte, observacions);
 
-        // Crear una nueva familia con los datos proporcionados
-        Familia novaFamilia = new Familia(id, nom, descripcio, data_alta, prov_defecte, observacions);
+        // Crear una nueva família amb les dades proporcionades
+        Familia novaFamilia = new Familia(0, nom, descripcio, data_alta, prov_defecte, observacions);
 
-        // Utilizamos el DAO para guardar la familia en la base de datos o la lista
+        // Utilitzem el DAO per guardar la família
         daoFamilia.afegir(novaFamilia);
 
-        System.out.println("Familia afegida correctament.");
+        System.out.println("Família afegida correctament.");
     }
 
-    // Método para modificar una familia existente
+    // Métode per modificar una família existent
     public void modificarFamilia(int id, String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
-        // Validar los datos de entrada
-        validarFamilia(id,nom, descripcio, data_alta, prov_defecte, observacions);
+        // Validar les dades d'entrada
+        validarFamilia(nom, descripcio, data_alta, prov_defecte, observacions);
 
-        // Crear el proveedor modificado
-        Familia familiaAModificar = new Familia(id,nom, descripcio, data_alta, prov_defecte, observacions);
+        // Crear la família modificada
+        Familia familiaAModificar = new Familia(id, nom, descripcio, data_alta, prov_defecte, observacions);
 
-        // Guardar los cambios
+        // Guardar canvis
         daoFamilia.actualitzar(familiaAModificar);
-        System.out.println("Familia modificada correctament.");
+        System.out.println("Família modificada correctament.");
     }
 
-    // Método para eliminar una familia existente
+    // Métode per eliminar una família existent
     public void eliminarFamilia(int id) throws Exception {
         try {
-           
-            Familia familiaAEliminar = new Familia(id, null, null, null, null, null);
 
+            Familia familiaAEliminar = new Familia(id, null, null, null, null, null);
             daoFamilia.eliminar(familiaAEliminar);
+
         } catch (Exception e) {
-            throw new Exception("Error al eliminar el proveidor: " + e.getMessage());
+            throw new Exception("Error en eliminar la família: " + e.getMessage());
         }
     }
 
-
-    // Método para obtener todas las familias
+    // Métode per obtenir totes les famílies
     public List<Familia> obtenirTotesLesFamilies() {
         return daoFamilia.obtenirEntitats();
     }
 
-    // Método para validar los datos de la familia
-    private void validarFamilia(int id, String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
-        if (id <= 0) {
-            throw new Exception("L'ID de família ha de ser major que 0.");
-        }
+    // Métode per validar les dades de la família
+    private void validarFamilia(String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
         if (nom == null || nom.trim().isEmpty()) {
             throw new Exception("El nom no pot estar buit.");
         }
