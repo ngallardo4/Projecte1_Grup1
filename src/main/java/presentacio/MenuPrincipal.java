@@ -496,8 +496,7 @@ public class MenuPrincipal {
      */
     
     private void altaReferencia() {
-        try {
-            
+        try {           
             System.out.print("Introdueix el nom de la referencia: ");
             String nom = sc.nextLine();
 
@@ -512,17 +511,20 @@ public class MenuPrincipal {
             System.out.print("Introdueix la data d'alta (YYYY-MM-DD): ");
             LocalDate dataAlta = LocalDate.parse(sc.nextLine());
 
+            System.out.println("Introdueix el pes total de la referencia: ");
+            float pes_total = sc.nextInt();
+            
             System.out.print("Introdueix la data de caducitat (YYYY-MM-DD): ");
             LocalDate dataCaducitat = LocalDate.parse(sc.nextLine());
 
-            System.out.print("Introdueix la quantitat: ");
-            int quantitat = sc.nextInt();
+            System.out.print("Introdueix la quantitat total: ");
+            int quantitat_total = sc.nextInt();
 
-            System.out.print("Introdueix el preu: ");
-            float preu = sc.nextFloat();
+            System.out.print("Introdueix el preu total: ");
+            float preu_total = sc.nextFloat();
 
             // Llamamos al método de la lógica
-            referencia.afegirReferencia(nom, uomStr.toString(), idFamilia, cifProveidor, dataAlta, dataCaducitat, quantitat, preu);
+            referencia.afegirReferencia(nom, uomStr.toString(), idFamilia, cifProveidor, dataAlta, pes_total,dataCaducitat, quantitat_total, preu_total);
             System.out.println("Proveidor afegit exitosament.");
         } catch (Exception e) {
             System.out.println("Error al afegir el proveidor: " + e.getMessage());
@@ -578,16 +580,19 @@ public class MenuPrincipal {
             System.out.print("Introdueix la data d'alta (YYYY-MM-DD): ");
             LocalDate dataAlta = LocalDate.parse(sc.nextLine());
 
+            System.out.println("Introdueix el pes total de la referencia: ");
+            float pes_total = sc.nextInt();
+            
             System.out.print("Introdueix la data de caducitat (YYYY-MM-DD): ");
             LocalDate dataCaducitat = LocalDate.parse(sc.nextLine());
 
             System.out.print("Introdueix la quantitat: ");
-            int quantitat = sc.nextInt();
+            int quantitat_total = sc.nextInt();
 
             System.out.print("Introdueix el preu: ");
-            float preu = sc.nextFloat();
+            float preu_total = sc.nextFloat();
 
-            referencia.modificarReferencia(id, nom, uomStr.toString(), idFamilia, cifProveidor, dataAlta, dataCaducitat, quantitat, preu);
+            referencia.modificarReferencia(id, nom, uomStr.toString(), idFamilia, cifProveidor, dataAlta, pes_total,dataCaducitat, quantitat_total, preu_total);
             System.out.println("Referència modificada correctament.");
         } catch (Exception e) {
             System.out.println("Error al modificar la referència: " + e.getMessage());

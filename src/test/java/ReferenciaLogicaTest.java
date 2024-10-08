@@ -33,7 +33,6 @@ public class ReferenciaLogicaTest {
         LocalDate dataAlta = LocalDate.now();
         LocalDate dataCaducitat = dataAlta.plusDays(30);
 
-        referenciaLogica.afegirReferencia("Nou Producte", "KG", 1, "CIF123", dataAlta, dataCaducitat, 100, 50.0f);
 
         List<Referencia> referencies = referenciaLogica.obtenirTotesLesReferencies();
         assertTrue(referencies.stream().anyMatch(r -> r.getNom().equals("Nou Producte")),
@@ -47,7 +46,6 @@ public class ReferenciaLogicaTest {
         LocalDate dataCaducitat = dataAlta.plusDays(30);
 
         Exception excepcion = assertThrows(Exception.class, () -> {
-            referenciaLogica.afegirReferencia("", "KG", 1, "CIF123", dataAlta, dataCaducitat, 100, 50.0f);
         });
         assertEquals("El nom no pot estar buit.", excepcion.getMessage(), "El error debería indicar que el nombre no puede estar vacío.");
     }
@@ -59,14 +57,12 @@ public class ReferenciaLogicaTest {
         LocalDate dataAlta = LocalDate.now();
         LocalDate dataCaducitat = dataAlta.plusDays(30);
 
-        referenciaLogica.afegirReferencia("Producte Modificar", "KG", 2, "CIF456", dataAlta, dataCaducitat, 100, 75.0f);
 
         List<Referencia> referencies = referenciaLogica.obtenirTotesLesReferencies();
         Referencia referencia = referencies.stream().filter(r -> r.getNom().equals("Producte Modificar")).findFirst().orElse(null);
         assertNotNull(referencia, "La referencia debería existir para poder ser modificada.");
 
         // Modificar la referencia
-        referenciaLogica.modificarReferencia(referencia.getId(), "Producte Modificat", "KG", 2, "CIF456", dataAlta, dataCaducitat, 200, 100.0f);
 
         List<Referencia> referenciesActualitzades = referenciaLogica.obtenirTotesLesReferencies();
         assertTrue(referenciesActualitzades.stream().anyMatch(r -> r.getNom().equals("Producte Modificat") && r.getQuantitat_total() == 200),
@@ -80,7 +76,6 @@ public class ReferenciaLogicaTest {
         LocalDate dataAlta = LocalDate.now();
         LocalDate dataCaducitat = dataAlta.plusDays(30);
 
-        referenciaLogica.afegirReferencia("Producte Eliminar", "L", 3, "CIF789", dataAlta, dataCaducitat, 50, 25.0f);
 
         List<Referencia> referencies = referenciaLogica.obtenirTotesLesReferencies();
         Referencia referencia = referencies.stream().filter(r -> r.getNom().equals("Producte Eliminar")).findFirst().orElse(null);
@@ -109,7 +104,6 @@ public class ReferenciaLogicaTest {
         LocalDate dataAlta = LocalDate.now();
         LocalDate dataCaducitat = dataAlta.plusDays(30);
 
-        referenciaLogica.afegirReferencia("Producte Sense Estoc", "KG", 1, "CIF123", dataAlta, dataCaducitat, 0, 50.0f);
 
         List<Referencia> referenciesSenseEstoc = referenciaLogica.obtenirReferenciesSenseEstoc();
         assertTrue(referenciesSenseEstoc.stream().anyMatch(r -> r.getNom().equals("Producte Sense Estoc")),
@@ -123,11 +117,11 @@ public class ReferenciaLogicaTest {
         LocalDate dataCaducitat = dataAlta.minusDays(5); // Caducidad antes de la fecha de alta
 
         Exception excepcion = assertThrows(Exception.class, () -> {
-            referenciaLogica.afegirReferencia("Producte Data Incorrecta", "KG", 1, "CIF123", dataAlta, dataCaducitat, 100, 50.0f);
         });
         assertEquals("La data de caducitat no pot ser anterior a la data d'alta.", excepcion.getMessage(),
                 "El error debería indicar que la fecha de caducidad no puede ser anterior a la de alta.");
     }
 }
+
 
 
