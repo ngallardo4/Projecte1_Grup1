@@ -12,269 +12,259 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
 
-<VBox alignment="TOP_CENTER" prefHeight="730.0" prefWidth="576.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cat.copernic.projecte1_equip1.PrimaryController">
-   <children>
-      <HBox alignment="TOP_CENTER" focusTraversable="true" nodeOrientation="LEFT_TO_RIGHT" prefHeight="35.0" prefWidth="408.0" VBox.vgrow="SOMETIMES">
-         <children>
-            <HBox prefHeight="125.0" prefWidth="202.0">
-               <children>
-                  <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <graphic>
-                        <ImageView fitHeight="105.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <image>
-                              <Image url="@Logo.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-            </HBox>
-            <HBox alignment="TOP_RIGHT" fillHeight="false" prefHeight="130.0" prefWidth="242.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <Button mnemonicParsing="false" text="Tancar Sessió">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <HBox.margin>
+<VBox alignment="TOP_CENTER" prefHeight="783.0" prefWidth="842.0" style="-fx-background-color: azure;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentacio.SecondaryController">
+    <children>
+        <HBox alignment="TOP_CENTER" focusTraversable="true" nodeOrientation="LEFT_TO_RIGHT" prefHeight="35.0" prefWidth="408.0" style="-fx-background-color: POWDERBLUE;" VBox.vgrow="SOMETIMES">
+            <children>
+                <HBox prefHeight="125.0" prefWidth="202.0">
+                    <children>
+                        <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;">
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                            <graphic>
+                                <ImageView fitHeight="105.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true">
+                                    <cursor>
+                                        <Cursor fx:constant="DEFAULT" />
+                                    </cursor>
+                                    <image>
+                                        <Image url="@Logo.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                    </children>
+                </HBox>
+                <HBox alignment="TOP_RIGHT" fillHeight="false" prefHeight="130.0" prefWidth="242.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Button mnemonicParsing="false" text="Tancar Sessió">
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                            <HBox.margin>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+        <VBox alignment="CENTER" focusTraversable="true" prefHeight="0.0" prefWidth="442.0" style="-fx-background-color: BEIGE; -fx-border-color: grey;" VBox.vgrow="ALWAYS">
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="113.0" text="PROVEÏDOR" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+        <VBox alignment="TOP_CENTER" focusTraversable="true" prefHeight="195.0" prefWidth="802.0" VBox.vgrow="ALWAYS">
+            <children>
+                <HBox alignment="TOP_CENTER" focusTraversable="true" prefHeight="160.0" prefWidth="389.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <TableView prefHeight="205.0" prefWidth="576.0" tableMenuButtonVisible="true" HBox.hgrow="ALWAYS">
+                            <columns>
+                                <TableColumn prefWidth="75.0" text="CIF" />
+                                <TableColumn prefWidth="75.0" text="NOM" />
+                                <TableColumn prefWidth="75.0" text="ESTAT" />
+                                <TableColumn prefWidth="75.0" text="MOTIU" />
+                                <TableColumn prefWidth="75.0" text="TELÈFON" />
+                                <TableColumn prefWidth="75.0" text="DESCOMPTE" />
+                                <TableColumn prefWidth="75.0" text="DATA ALTA" />
+                                <TableColumn prefWidth="75.0" text="QUALIFICACIO" />
+                            </columns>
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                            </columnResizePolicy>
+                        </TableView>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+        <Separator opacity="0.0" prefWidth="200.0">
+            <VBox.margin>
+                <Insets bottom="10.0" />
+            </VBox.margin>
+        </Separator>
+        <HBox alignment="CENTER_LEFT" prefHeight="82.0" prefWidth="842.0" style="-fx-background-color: azure;" VBox.vgrow="ALWAYS">
+            <children>
+                <VBox alignment="TOP_RIGHT" prefHeight="185.0" prefWidth="305.0" style="-fx-background-color: azure;" HBox.hgrow="SOMETIMES">
+                    <children>
+                        <HBox prefHeight="0.0" prefWidth="506.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="27.0" prefWidth="159.0" text="CIF:">
+                                    <HBox.margin>
+                                     
+                                    </HBox.margin>
+                                </Label>
+                                <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
+                                <TextField prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="0.0" prefWidth="506.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="27.0" prefWidth="159.0" text="Nom:">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </Label>
+                                <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
+                                <TextField prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="27.0" prefWidth="159.0" text="Estat:">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </Label>
+                                <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
+                                <TextField prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="27.0" prefWidth="159.0" text="Motiu:">
+                                    <HBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </HBox.margin>
+                                </Label>
+                                <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
+                                <TextField prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                    </children>
+                    <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                  </Button>
-               </children>
-            </HBox>
-         </children>
-      </HBox>
-      <VBox alignment="TOP_CENTER" focusTraversable="true" prefHeight="0.0" prefWidth="442.0" VBox.vgrow="ALWAYS">
-         <children>
-            <Separator prefWidth="200.0" valignment="BOTTOM" VBox.vgrow="ALWAYS" />
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="41.0" prefWidth="110.0" text="PROVEÏDOR" textAlignment="CENTER" VBox.vgrow="ALWAYS">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Separator prefWidth="200.0" valignment="TOP">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </Separator>
-         </children>
-      </VBox>
-      <VBox alignment="TOP_CENTER" focusTraversable="true" prefHeight="195.0" prefWidth="802.0" VBox.vgrow="ALWAYS">
-         <children>
-            <HBox alignment="TOP_CENTER" focusTraversable="true" prefHeight="160.0" prefWidth="389.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <TableView prefHeight="102.0" prefWidth="802.0" tableMenuButtonVisible="true" HBox.hgrow="ALWAYS">
-                     <columns>
-                        <TableColumn prefWidth="75.0" text="CIF" />
-                        <TableColumn prefWidth="75.0" text="NOM" />
-                        <TableColumn prefWidth="75.0" text="ESTAT" />
-                        <TableColumn prefWidth="75.0" text="MOTIU" />
-                        <TableColumn prefWidth="75.0" text="TELÈFON" />
-                        <TableColumn prefWidth="75.0" text="DESCOMPTE" />
-                        <TableColumn prefWidth="75.0" text="DATA ALTA" />
-                        <TableColumn prefWidth="75.0" text="QUALIFICACIO" />
-                     </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
-               </children>
-            </HBox>
-            <ScrollBar VBox.vgrow="ALWAYS" />
-         </children>
-      </VBox>
-      <HBox alignment="TOP_CENTER" prefHeight="68.0" prefWidth="792.0" VBox.vgrow="ALWAYS">
-         <children>
-            <VBox prefHeight="46.0" prefWidth="568.0">
-               <children>
-                  <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Label prefHeight="27.0" prefWidth="159.0" text="CIF:">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
-                        <TextField prefHeight="27.0" prefWidth="371.0">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Label prefHeight="27.0" prefWidth="159.0" text="Nom:">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
-                        <TextField prefHeight="27.0" prefWidth="371.0">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Label prefHeight="27.0" prefWidth="159.0" text="Estat:">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
-                        <TextField prefHeight="27.0" prefWidth="371.0">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Label prefHeight="27.0" prefWidth="159.0" text="Motiu:">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
-                        <TextField prefHeight="27.0" prefWidth="371.0">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Label prefHeight="27.0" prefWidth="159.0" text="Telèfon:">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
-                        <TextField prefHeight="27.0" prefWidth="371.0">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Label prefHeight="27.0" prefWidth="159.0" text="Descompte:">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
-                        <TextField prefHeight="27.0" prefWidth="371.0">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="37.0" prefWidth="448.0">
-                     <children>
-                        <Label prefHeight="27.0" prefWidth="159.0" text="Data d'alta:">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
-                        <TextField prefHeight="27.0" prefWidth="371.0">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="37.0" prefWidth="448.0">
-                     <children>
-                        <Label prefHeight="27.0" prefWidth="159.0" text="Qualificació:">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
-                        <TextField prefHeight="27.0" prefWidth="371.0">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                  </HBox>
-               </children>
-               <HBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </HBox.margin>
-            </VBox>
-         </children>
-         <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </VBox.margin>
-      </HBox>
-      <Separator prefHeight="32.0" prefWidth="576.0" />
-      <HBox alignment="TOP_CENTER" focusTraversable="true" prefHeight="117.0" prefWidth="459.0" VBox.vgrow="ALWAYS">
-         <children>
-            <VBox alignment="TOP_RIGHT" prefHeight="98.0" prefWidth="231.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="&lt;&lt; Sortir">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="Productes &gt;&gt;">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
-            </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="98.0" prefWidth="231.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="Nou">
-                     <VBox.margin>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="Eliminar">
-                     <VBox.margin>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="Modificar">
-                     <VBox.margin>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                     </VBox.margin></Button>
-               </children>
-            </VBox>
-            <VBox prefHeight="98.0" prefWidth="231.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="Importar">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="Exportar">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
-            </VBox>
-         </children>
-         <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </VBox.margin>
-      </HBox>
-   </children>
+                    </HBox.margin>
+                </VBox>
+                <VBox prefHeight="170.0" prefWidth="332.0" HBox.hgrow="SOMETIMES">
+                    <children>
+                        <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="27.0" prefWidth="159.0" text="Telèfon:">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </Label>
+                                <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
+                                <TextField prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="27.0" prefWidth="159.0" text="Descompte:">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </Label>
+                                <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
+                                <TextField prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="37.0" prefWidth="448.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="27.0" prefWidth="159.0" text="Data d'alta:">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </Label>
+                                <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
+                                <TextField prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="37.0" prefWidth="448.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="27.0" prefWidth="159.0" text="Qualificació:">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </Label>
+                                <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
+                                <TextField prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                    </children>
+                    <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </HBox.margin>
+                </VBox>
+            </children>
+            <VBox.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </VBox.margin>
+        </HBox>
+        <HBox alignment="TOP_CENTER" focusTraversable="true" prefHeight="117.0" prefWidth="459.0" style="-fx-background-color: POWDERBLUE;" VBox.vgrow="ALWAYS">
+            <children>
+                <VBox alignment="TOP_RIGHT" prefHeight="98.0" prefWidth="231.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="&lt;&lt; Sortir">
+                            <VBox.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="Productes &gt;&gt;">
+                            <VBox.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </VBox.margin>
+                        </Button>
+                    </children>
+                </VBox>
+                <VBox alignment="TOP_CENTER" prefHeight="98.0" prefWidth="231.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="Nou">
+                            <VBox.margin>
+                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                            </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="Eliminar">
+                            <VBox.margin>
+                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                            </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="Modificar">
+                            <VBox.margin>
+                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                            </VBox.margin>
+                        </Button>
+                    </children>
+                </VBox>
+                <VBox prefHeight="98.0" prefWidth="231.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="Importar">
+                            <VBox.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="136.0" text="Exportar">
+                            <VBox.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </VBox.margin>
+                        </Button>
+                    </children>
+                </VBox>
+            </children>
+            <VBox.margin>
+            </VBox.margin>
+        </HBox>
+    </children>
 </VBox>

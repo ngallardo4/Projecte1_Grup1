@@ -10,91 +10,106 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Clase para la lógica de negocio de las familias.
- * Proporciona métodos para agregar, modificar, eliminar y obtener familias.
- * 
- * @author danie
+ * Classe per la lógica de negoci de les families. Proporciona métodes per
+ * afegir, modificar, eliminar i obtenir families.
+ *
+ * @author yaiza
  */
 public class FamiliaLogica {
 
     private final DAOfamiliaImpl daoFamilia;
-    
+
     /**
-     * Constructor de la clase {@code FamiliaLogica}.
-     * Inicializa el DAO para realizar operaciones sobre familias.
+     * Constructor de la classe {@code FamiliaLogica}. Inicialitza el DAO per
+     * realitzar operacions sobre families.
      */
     public FamiliaLogica() {
-        this.daoFamilia = new DAOfamiliaImpl();  // Aseguramos que el DAO esté listo
+        this.daoFamilia = new DAOfamiliaImpl();
     }
-    
+
     /**
-     * Añade una nueva familia.
-     * 
+     * Afegir una nova família
+     *
+     * @param nom
+     * @param descripcio
+     * @param data_alta
+     * @param prov_defecte
+     * @param observacions
+     * @throws Exception
      */
-    public void afegirFamilia(int id, String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
-        // Validar los datos de entrada antes de proceder
-        validarFamilia(id,nom, descripcio, data_alta, prov_defecte, observacions);
+    public void afegirFamilia(String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
+        // Validar les dades d'entrada abans de procedir
+        validarFamilia(nom, descripcio, data_alta, prov_defecte, observacions);
 
-        // Crear una nueva familia con los datos proporcionados
-        Familia novaFamilia = new Familia(id, nom, descripcio, data_alta, prov_defecte, observacions);
+        // Crear una nueva família amb les dades proporcionades
+        Familia novaFamilia = new Familia(0, nom, descripcio, data_alta, prov_defecte, observacions);
 
-        // Utilizamos el DAO para guardar la familia en la base de datos o la lista
+        // Utilitzem el DAO per guardar la família
         daoFamilia.afegir(novaFamilia);
 
-        System.out.println("Familia afegida correctament.");
+        System.out.println("Família afegida correctament.");
     }
+
     /**
-     * Modifica una familia existente.
+     * Modifica una família existent.
      *
+     * @param id
+     * @param nom
+     * @param descripcio
+     * @param data_alta
+     * @param prov_defecte
+     * @param observacions
+     * @throws Exception
      */
     public void modificarFamilia(int id, String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
-        // Validar los datos de entrada
-        validarFamilia(id,nom, descripcio, data_alta, prov_defecte, observacions);
+        // Validar les dades d'entrada
+        validarFamilia(nom, descripcio, data_alta, prov_defecte, observacions);
 
-        // Crear el proveedor modificado
-        Familia familiaAModificar = new Familia(id,nom, descripcio, data_alta, prov_defecte, observacions);
+        // Crear la família modificada
+        Familia familiaAModificar = new Familia(id, nom, descripcio, data_alta, prov_defecte, observacions);
 
-        // Guardar los cambios
+        // Guardar canvis
         daoFamilia.actualitzar(familiaAModificar);
-        System.out.println("Familia modificada correctament.");
+        System.out.println("Família modificada correctament.");
     }
 
     /**
      * Elimina una familia existente.
-     * 
+     *
      * @param id el ID de la familia a eliminar.
-     * @throws Exception si ocurre un error al eliminar la familia.
+     * @throws Exception si hi ha un error en eliminar la família.
      */
     public void eliminarFamilia(int id) throws Exception {
         try {
-           
-            Familia familiaAEliminar = new Familia(id, null, null, null, null, null);
 
+            Familia familiaAEliminar = new Familia(id, null, null, null, null, null);
             daoFamilia.eliminar(familiaAEliminar);
+
         } catch (Exception e) {
-            throw new Exception("Error al eliminar el proveidor: " + e.getMessage());
+            throw new Exception("Error en eliminar la família: " + e.getMessage());
         }
     }
 
-
     /**
-     * Obtiene todas las familias.
-     * 
-     * @return una lista de {@code Familia} que contiene todas las familias.
+     * Obté totes las familias.
+     *
+     * @return una llista de {@code Familia} que conté totes les families.
      */
     public List<Familia> obtenirTotesLesFamilies() {
         return daoFamilia.obtenirEntitats();
     }
 
-    
     /**
-     * Valida los datos de la familia.
-     * 
+     * Métode per validar les dades de la família
+     *
+     * @param nom
+     * @param descripcio
+     * @param data_alta
+     * @param prov_defecte
+     * @param observacions
+     * @throws Exception
      */
-    private void validarFamilia(int id, String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
-        if (id <= 0) {
-            throw new Exception("L'ID de família ha de ser major que 0.");
-        }
+    private void validarFamilia(String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
         if (nom == null || nom.trim().isEmpty()) {
             throw new Exception("El nom no pot estar buit.");
         }
