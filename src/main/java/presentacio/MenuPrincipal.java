@@ -347,7 +347,7 @@ public class MenuPrincipal {
             System.out.print("Introdueix observacions: ");
             String observacions = sc.nextLine();
 
-            familia.afegirFamilia(id, nom, descripcio, data_alta, prov_defecte, observacions);
+            familia.afegirFamilia(nom, descripcio, data_alta, prov_defecte, observacions);
 
             System.out.println("Família afegida correctament.");
         } catch (Exception e) {

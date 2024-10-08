@@ -6,6 +6,7 @@ package dades;
 
 import aplicacio.model.Familia;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,20 +31,32 @@ public class DAOfamiliaImpl implements DAOinterface<Familia> {
      */
     @Override
     public void afegir(Familia familia) {
-        String insertSQL = "INSERT INTO familia (nom, descripcio, prov_defecte, observacions) VALUES (?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO familia (nom, descripcio, data_alta, prov_defecte, observacions) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = MyDataSource.getConnection()) {
             try (PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
                 stmt.setString(1, familia.getNom());
                 stmt.setString(2, familia.getDescripcio());
-                stmt.setString(3, familia.getProv_defecte());
-                stmt.setString(4, familia.getObservacions());
+                stmt.setDate(3, Date.valueOf(familia.getData_alta()));
+                stmt.setString(4, familia.getProv_defecte());
+                stmt.setString(5, familia.getObservacions());
                 stmt.executeUpdate();
 
+                System.out.println("Executant INSERT INTO familia...");
+                
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int generatedId = generatedKeys.getInt(1);
+                        familia.setId(generatedId);
+                        System.out.println("ID generat: " + generatedId);
+                    } else {
+                        throw new SQLException("No s'ha pogut obtenir l'ID generat.");
+                    }
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         } catch (SQLException ex) {
-            ex.getMessage();
+            ex.printStackTrace();
         }
     }
 
@@ -120,4 +133,5 @@ public class DAOfamiliaImpl implements DAOinterface<Familia> {
             ex.getMessage();
         }
     }
+
 }
