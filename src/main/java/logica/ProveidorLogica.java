@@ -36,16 +36,13 @@ public class ProveidorLogica {
      * @throws Exception Si hay un error en la validación o al añadir el
      * proveedor.
      */
-    public void afegirProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu,
-                             String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
-        // Validar datos
-        validarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
+    public void afegirProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu, String Telefon, float Descompte, LocalDate Data_Alt, int Qualificacio) throws Exception {
 
-        // Crear el proveedor
-        Proveidor nouProveidor = new Proveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
+        validarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio);
 
-        // Llamamos al DAO para añadir el proveedor
-        daoProveidor.afegir(nouProveidor);
+        Proveidor proveidor = new Proveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio);
+
+        daoProveidor.afegir(proveidor);
     }
 
     /**
@@ -54,13 +51,11 @@ public class ProveidorLogica {
      * @throws Exception Si hay un error en la validación o al modificar el
      * proveedor.
      */
-    public void modificarProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu,
-            String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
-        // Validar datos
-        validarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
+    public void modificarProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu, String Telefon, float Descompte, LocalDate Data_Alt, int Qualificacio) throws Exception {
 
-        // Crear el proveedor modificado
-        Proveidor proveidorModificat = new Proveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
+        validarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio);
+
+        Proveidor proveidorModificat = new Proveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio);
 
         // Llamamos al DAO para modificar el proveedor
         daoProveidor.actualitzar(proveidorModificat);
@@ -73,15 +68,9 @@ public class ProveidorLogica {
      * @throws Exception Si hay un error al eliminar el proveedor.
      */
     public void eliminarProveidor(String CIF) throws Exception {
-        try {
-            // Creamos un proveedor solo con el CIF
-            Proveidor proveidorAEliminar = new Proveidor(CIF, null, null, null, null, 0.0f, null, 0);
-
-            // Llamamos al DAO para eliminarlo
-            daoProveidor.eliminar(proveidorAEliminar);
-        } catch (Exception e) {
-            throw new Exception("Error al eliminar el proveidor: " + e.getMessage());
-        }
+        Proveidor proveidorAEliminar = new Proveidor(CIF, null, null, null, null, 0.0f, null, 0);
+        // Llamamos al DAO para eliminarlo
+        daoProveidor.eliminar(proveidorAEliminar);
     }
 
     /**

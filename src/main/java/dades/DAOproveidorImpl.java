@@ -7,23 +7,25 @@ package dades;
 import aplicacio.model.Proveidor;
 import enums.EstatProveidor;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementación del DAO (Data Access Object) para la entidad Proveidor.
- * Esta clase gestiona las operaciones CRUD (Crear, Leer, Actualizar, Eliminar)
- * para los proveedores en la base de datos.
+ * Implementación del DAO (Data Access Object) para la entidad Proveidor. Esta
+ * clase gestiona las operaciones CRUD (Crear, Leer, Actualizar, Eliminar) para
+ * los proveedores en la base de datos.
  *
  * @author danie
  */
 public class DAOproveidorImpl implements DAOinterface<Proveidor> {
-    
+
     /**
      * Añade un nuevo proveedor a la base de datos.
      *
@@ -31,100 +33,92 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor> {
      */
     @Override
     public void afegir(Proveidor proveidor) {
-        try (Connection conn = MyDataSource.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO proveidor (CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        String sql = "INSERT INTO referencia (nom, UOM, id_familia, cif_proveidor, data_alta, pes_total, data_caducitat, quantitat_total, preu_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = MyDataSource.getConnection(); // Cambiar el PreparedStatement para que devuelva las claves generadas
+                 PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
+            // Configurar los parámetros de la sentencia SQL
             stmt.setString(1, proveidor.getCIF());
-            stmt.setString(2, proveidor.getNom());
-            stmt.setString(3, proveidor.getEstat().name());
-            stmt.setString(4, proveidor.getMotiuInactiu());
-            stmt.setString(5, proveidor.getTelefon());
+            stmt.setString(1, proveidor.getNom());
+            stmt.setString(2, proveidor.getEstat().name());
+            stmt.setString(3, proveidor.getMotiuInactiu());
+            stmt.setString(4, proveidor.getTelefon());
+            stmt.setDate(5, Date.valueOf(proveidor.getData_Alt()));
             stmt.setFloat(6, proveidor.getDescompte());
-            stmt.setDate(7, java.sql.Date.valueOf(proveidor.getData_Alt()));
             stmt.setInt(8, proveidor.getQualificacio());
 
-            int rowsAffected = stmt.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Proveedor añadido correctamente: " + proveidor.getCIF());
-            } else {
-                System.out.println("Error al añadir el proveedor: " + proveidor.getCIF());
-            }
+            // Ejecutar la inserción
+            int result = stmt.executeUpdate();
+            System.out.println("Resultado de la inserción: " + result);
 
-        } catch (Exception e) {
+            // Obtener las claves generadas (el CIF)
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    // Asignar el CIF generado al objeto proveidor
+                    String generatedCIF = generatedKeys.getString(1); // Cambiamos a String
+                    proveidor.setCIF(generatedCIF); // Suponiendo que hay un método setCIF en la clase Proveidor
+                    System.out.println("CIF generat: " + generatedCIF);  // Imprime el CIF generado
+                } else {
+                    throw new SQLException("No se ha generado un CIF para el proveidor.");
+                }
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    
     /**
      * Obtiene todos los proveedores de la base de datos.
      *
-     * @return Una lista de objetos Proveidor que representan todos los proveedores.
+     * @return Una lista de objetos Proveidor que representan todos los
+     * proveedores.
      */
     @Override
     public List<Proveidor> obtenirEntitats() {
-
+        String sql = "SELECT * FROM referencia";
         List<Proveidor> proveidors = new ArrayList<>();
-        try (Connection conn = MyDataSource.getConnection()) {
-            
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM proveidor");
-            ResultSet rs = stmt.executeQuery();
+        try (Connection conn = MyDataSource.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                EstatProveidor Estat = EstatProveidor.valueOf(rs.getString("Estat"));  // Convertim el String a enum
-                Proveidor proveidor = new Proveidor(
-                        rs.getString("CIF"),
-                        rs.getString("Nom"),
-                        Estat,
-                        rs.getString("MotiuInactiu"),
-                        rs.getString("Telefon"),
-                        rs.getFloat("Descompte"),
-                        rs.getDate("Data_Alt").toLocalDate(),
-                        rs.getInt("Qualificacio")
+                EstatProveidor estat = EstatProveidor.valueOf(rs.getString("Estat"));
+                Proveidor pro = new Proveidor(
+                        rs.getString("cif"),
+                        rs.getString("nom"),
+                        estat,
+                        rs.getString("motiuInactiu"),
+                        rs.getString("telefon"),
+                        rs.getFloat("descompte"),
+                        rs.getDate("data_alta").toLocalDate(),
+                        rs.getInt("qualificacio")
                 );
-                proveidors.add(proveidor);
+                proveidors.add(pro);
             }
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return proveidors;
     }
-    
-    /**
-     * Actualiza la información de un proveedor existente en la base de datos.
-     *
-     * @param proveidor El objeto Proveidor que contiene la información actualizada.
-     */ 
+
     @Override
     public void actualitzar(Proveidor proveidor) {
-        try (Connection conn = MyDataSource.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement(
-                "UPDATE proveidor SET Nom = ?, Estat = ?, MotiuInactiu = ?, Telefon = ?, Descompte = ?, Data_Alt = ?, Qualificacio = ? WHERE CIF = ?"
-            );
+        String sql = "UPDATE referencia SET nom = ?, UOM = ?, id_familia = ?, cif_proveidor = ?, data_alta = ?, pes_total = ?, data_caducitat = ?, quantitat_total = ?, preu_total = ? WHERE id = ?";
+        try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Asignar los valores correctamente
-            stmt.setString(1, proveidor.getNom()); // Nombre
-            stmt.setString(2, proveidor.getEstat().name()); // Estado
-            stmt.setString(3, proveidor.getMotiuInactiu()); // Motivo de inactividad
-            stmt.setString(4, proveidor.getTelefon()); // Teléfono
-            stmt.setFloat(5, proveidor.getDescompte()); // Descuento
-            stmt.setDate(6, java.sql.Date.valueOf(proveidor.getData_Alt())); // Fecha de alta
-            stmt.setInt(7, proveidor.getQualificacio()); // Cualificación
-            stmt.setString(8, proveidor.getCIF()); // CIF (para la cláusula WHERE)
+            stmt.setString(1, proveidor.getCIF());
+            stmt.setString(1, proveidor.getNom());
+            stmt.setString(2, proveidor.getEstat().name());
+            stmt.setString(3, proveidor.getMotiuInactiu());
+            stmt.setString(4, proveidor.getTelefon());
+            stmt.setDate(5, Date.valueOf(proveidor.getData_Alt()));
+            stmt.setFloat(6, proveidor.getDescompte());
+            stmt.setInt(8, proveidor.getQualificacio());
 
-            int rowsUpdated = stmt.executeUpdate();
-            if (rowsUpdated == 0) {
-                throw new SQLException("No se encontró el proveedor con CIF: " + proveidor.getCIF());
-            }else {
-                System.out.println("No se encontró el proveedor con CIF: " + proveidor.getCIF());
-            }
+            stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Error al actualizar el proveedor", e);
+            e.printStackTrace();
         }
     }
 
-    
     /**
      * Elimina un proveedor de la base de datos.
      *
@@ -132,17 +126,14 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor> {
      */
     @Override
     public void eliminar(Proveidor proveidor) {
-        try (Connection conn = MyDataSource.getConnection()) {
-            conn.setAutoCommit(false); // Desactivar auto commit para manejar manualmente
+        String sql = "DELETE FROM referencia WHERE id = ?";
+        try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Eliminar el proveedor
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM proveidor WHERE CIF = ?");
             stmt.setString(1, proveidor.getCIF());
-            stmt.executeUpdate();
 
-            conn.commit(); // Forzar commit después de la operación
+            stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Error al eliminar el proveedor", e);
+            e.printStackTrace();
         }
     }
 
