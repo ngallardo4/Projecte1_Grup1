@@ -4,7 +4,6 @@ import aplicacio.App;
 import aplicacio.model.Familia;
 import java.io.IOException;
 import java.time.LocalDate;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,7 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import logica.FamiliaLogica;
 
 public class MenuFamilia {
@@ -58,13 +56,11 @@ public class MenuFamilia {
     @FXML
     public void initialize() throws IOException {
         llistaObservableFamilia = FXCollections.observableArrayList();
-
-        // Assegura't d'inicialitzar l'objecte familiaLogica
         familiaLogica = new FamiliaLogica(); // O com el creïs
 
         // Obtenir les famílies de la base de dades
         try {
-            llistaObservableFamilia.addAll(familiaLogica.obtenirTotesLesFamilies()); // Assumeix que tens aquest mètode a FamiliaLogica
+            llistaObservableFamilia.addAll(familiaLogica.obtenirTotesLesFamilies());
         } catch (Exception e) {
             e.printStackTrace(); // Maneig d'errors, si cal
         }
@@ -81,43 +77,18 @@ public class MenuFamilia {
         colDescrip.setCellFactory(TextFieldTableCell.forTableColumn());
         colObvs.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        // COLUMNA NOM
-        colNom.setOnEditCommit(event -> {
-            // recuperem l'objecte CellEditEvent que ens dona informació de l'esdeveniment
-            TableColumn.CellEditEvent<Familia, String> e = (TableColumn.CellEditEvent<Familia, String>) event;
-
-            // recuperem l'objecte Familia de la fila afectada
-            Familia familia = e.getRowValue();
-            // li assignem el nou valor
-            familia.setNom(e.getNewValue());
-        });
-
-        // COLUMNA DESCRIPCIO
-        colDescrip.setOnEditCommit(event -> {
-            // recuperem l'objecte CellEditEvent que ens dona informació de l'esdeveniment
-            TableColumn.CellEditEvent<Familia, String> e = (TableColumn.CellEditEvent<Familia, String>) event;
-
-            // recuperem l'objecte Familia de la fila afectada
-            Familia familia = e.getRowValue();
-            // li assignem el nou valor
-            familia.setDescripcio(e.getNewValue());
-        });
-
-        // COLUMNA OBSERVACIONS
-        colObvs.setOnEditCommit(event -> {
-            // recuperem l'objecte CellEditEvent que ens dona informació de l'esdeveniment
-            TableColumn.CellEditEvent<Familia, String> e = (TableColumn.CellEditEvent<Familia, String>) event;
-
-            // recuperem l'objecte Familia de la fila afectada
-            Familia familia = e.getRowValue();
-            // li assignem el nou valor
-            familia.setObservacions(e.getNewValue());
-        });
-
-        // finalment afegim els elements a la llista
+        // Assignar event al TableView per seleccionar família
         TabViewFam.setItems(llistaObservableFamilia);
         TabViewFam.setOnMouseClicked(this::handleOnMouseClicked);
 
+        // Desactivar botons al principi
+        desactivarBotons();
+    }
+
+    private void desactivarBotons() {
+        btnEliminar.setDisable(true);
+        btnModificar.setDisable(true);
+        btnProducte.setDisable(true);
     }
 
     @FXML
@@ -133,65 +104,49 @@ public class MenuFamilia {
                 tf_dataltaFam.setText(familiaSeleccionada.getData_alta().toString());
                 tf_provFam.setText(familiaSeleccionada.getProv_defecte());
                 tf_obvsFam.setText(familiaSeleccionada.getObservacions());
+
+                // Activar botons
+                btnEliminar.setDisable(false);
+                btnModificar.setDisable(false);
+                btnProducte.setDisable(false);
             } else {
                 System.out.println("No se seleccionó ninguna fila.");
+                desactivarBotons();
             }
         }
-
     }
 
     @FXML
     public void btnLogo_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Logo' presionat");
-        App.setRoot("secondary");
+        App.setRoot("menuPrincipal");
     }
 
     @FXML
     public void btnTancar_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Tancar' presionat");
-        Stage stage = (Stage) btnTancar.getScene().getWindow(); // Obtener la ventana actual
-        stage.close(); // Cerrar la ventana
-        Platform.exit(); // Finalizar la aplicación
-        //App.setRoot("iniciSessio");
+        App.setRoot("iniciSessio");
     }
 
     @FXML
     public void btnSortir_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Sortir' presionat");
-        App.setRoot("secondary");
+        App.setRoot("menuPrincipal");
     }
 
     @FXML
     public void btnAfegir_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Nova' presionat");
 
-        // Obtenir les dades dels TextFields
-        String nom = tf_nomFam.getText();
-        String descripcio = tf_desFam.getText();
-        LocalDate dataAlta = LocalDate.parse(tf_dataltaFam.getText());
-        String provDefecte = tf_provFam.getText();
-        String observacions = tf_obvsFam.getText();
+        // Crear una nova família amb valors buits (només per al TableView)
+        Familia novaFamilia = new Familia(0, "", "", LocalDate.now(), "", "");
 
-        // Afegir la nova família a la base de dades
-        try {
-            familiaLogica.afegirFamilia(nom, descripcio, dataAlta, provDefecte, observacions);
-            System.out.println("Familia afegida a la base de dades.");
+        // Afegir la nova família a la llista observable
+        llistaObservableFamilia.add(novaFamilia);
 
-            // Crear un nou objecte Família i afegir-lo a la llista observable
-            Familia novaFamilia = new Familia(0, nom, descripcio, dataAlta, provDefecte, observacions);
-            llistaObservableFamilia.add(novaFamilia); // Aquí ja és accessible
-            TabViewFam.setItems(llistaObservableFamilia); // Actualitza el TableView
-
-            // Netejar els camps de text després de l'addició
-            tf_nomFam.clear();
-            tf_desFam.clear();
-            tf_dataltaFam.clear();
-            tf_provFam.clear();
-            tf_obvsFam.clear();
-
-        } catch (Exception e) {
-            e.printStackTrace(); // Maneig d'errors
-        }
+        // Actualitzar el TableView
+        TabViewFam.setItems(llistaObservableFamilia);
+        TabViewFam.getSelectionModel().select(novaFamilia);
     }
 
     @FXML
@@ -201,32 +156,39 @@ public class MenuFamilia {
 
         if (familiaSeleccionada != null) {
             try {
-                // Obtener los nuevos valores de los campos de texto
                 String nomNou = tf_nomFam.getText();
                 String descripcioNova = tf_desFam.getText();
                 LocalDate dataAltaNova = LocalDate.parse(tf_dataltaFam.getText());
                 String provDefecteNou = tf_provFam.getText();
                 String observacionsNovas = tf_obvsFam.getText();
 
-                // Llamar al método de lógica para actualizar en la base de datos
-                familiaLogica.modificarFamilia(familiaSeleccionada.getId(), nomNou, descripcioNova, dataAltaNova, provDefecteNou, observacionsNovas);
+                if (familiaSeleccionada.getId() == 0) {
+                    // Si l'ID és 0 és una nova família llavors inserim
+                    familiaLogica.afegirFamilia(nomNou, descripcioNova, dataAltaNova, provDefecteNou, observacionsNovas);
+                    // Actualitzem l'objecte seleccionat per fer-lo coincidir amb la nova família
+                    System.out.println("Nova família afegida amb ID: " + familiaSeleccionada.getId());
+                } else {
+                    // Si l'ID és diferent de 0 ja existeix i fem una actualització
+                    familiaLogica.modificarFamilia(familiaSeleccionada.getId(), nomNou, descripcioNova, dataAltaNova, provDefecteNou, observacionsNovas);
+                    System.out.println("Família modificada correctament.");
+                }
 
-                // Actualizar los valores de la familia en la lista observable (TableView)
+                // Actualizar els valors de la familia a la llista observable (TableView)
                 familiaSeleccionada.setNom(nomNou);
                 familiaSeleccionada.setDescripcio(descripcioNova);
                 familiaSeleccionada.setData_alta(dataAltaNova);
                 familiaSeleccionada.setProv_defecte(provDefecteNou);
                 familiaSeleccionada.setObservacions(observacionsNovas);
 
-                // Refrescar el TableView para mostrar los cambios
-                TabViewFam.refresh(); // Esto asegura que el TableView se actualice con los nuevos valores
+                // Refrescar el TableView per mostrar els canvis
+                TabViewFam.refresh();
                 TabViewFam.setItems(llistaObservableFamilia);
 
                 System.out.println("Familia modificada correctament.");
 
             } catch (Exception e) {
-                e.printStackTrace(); // Manejo de errores
-                System.out.println("Error al modificar la familia: " + e.getMessage());
+                e.printStackTrace();
+                System.out.println("Error en modificar la família: " + e.getMessage());
             }
         } else {
             System.out.println("No s'ha seleccionat cap família per modificar.");
@@ -235,30 +197,41 @@ public class MenuFamilia {
 
     @FXML
     public void btnEliminar_action(ActionEvent event) throws IOException {
-        // Obtenemos la familia seleccionada
+        System.out.println("Botó 'Eliminar' presionat");
         Familia familiaSeleccionada = (Familia) TabViewFam.getSelectionModel().getSelectedItem();
 
         if (familiaSeleccionada != null) {
             try {
-                // Eliminamos la familia de la base de datos
+                // Eliminar de la base de dades
                 familiaLogica.eliminarFamilia(familiaSeleccionada.getId());
                 System.out.println("Familia eliminada de la base de dades.");
 
-                // Eliminamos la familia de la lista observable
+                // Eliminar de la llista observable
                 llistaObservableFamilia.remove(familiaSeleccionada);
-                TabViewFam.setItems(llistaObservableFamilia); // Actualizamos el TableView
+                TabViewFam.setItems(llistaObservableFamilia);
 
             } catch (Exception e) {
-                e.printStackTrace(); // Manejo de errores
+                e.printStackTrace();
             }
         } else {
-            System.out.println("No se ha seleccionat cap família per eliminar.");
+            System.out.println("No s'ha seleccionat cap família per eliminar.");
         }
     }
 
     @FXML
     public void btnProducte_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Productes' presionat");
-        App.setRoot("menuReferencia");
+        Familia familiaSeleccionada = (Familia) TabViewFam.getSelectionModel().getSelectedItem();
+
+        if (familiaSeleccionada != null) {
+            // Passar la ID de la família a la nova vista
+            App.setRoot("menuReferencia"); // Canviem de vista
+
+            // Aquí passes la ID a la nova vista
+            //PantallaReferencia controller = (PantallaReferencia) App.getController("menuReferencia");
+            //controller.setFamiliaId(familiaSeleccionada.getId());
+        } else {
+            System.out.println("No s'ha seleccionat cap família.");
+        }
     }
 }
