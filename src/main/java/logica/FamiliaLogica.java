@@ -44,10 +44,14 @@ public class FamiliaLogica {
         // Crear una nueva família amb les dades proporcionades
         Familia novaFamilia = new Familia(0, nom, descripcio, data_alta, prov_defecte, observacions);
 
-        // Utilitzem el DAO per guardar la família
-        daoFamilia.afegir(novaFamilia);
+        try {
+            // Utilitzem el DAO per guardar la familia
+            daoFamilia.afegir(novaFamilia);
+            System.out.println("Família afegida correctament.");
 
-        System.out.println("Família afegida correctament.");
+        } catch (Exception e) {
+            System.out.println("Error afegint família: " + e.getMessage());
+        }
     }
 
     /**
