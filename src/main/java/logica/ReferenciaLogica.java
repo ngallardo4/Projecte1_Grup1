@@ -26,10 +26,10 @@ public class ReferenciaLogica {
     }
 
     public void afegirReferencia(String nom, UnitatMesura uom, int idFamilia, String cifProveidor, 
-                                  LocalDate dataAlta, LocalDate dataCaducitat, float pesTotal, 
+                                  LocalDate dataAlta, float pesTotal, LocalDate dataCaducitat, 
                                   int quantitatTotal, float preuTotal) throws Exception {
 
-        validarReferencia(nom, uom, idFamilia, cifProveidor, dataAlta, dataCaducitat, pesTotal, quantitatTotal, preuTotal);
+        validarReferencia(nom, uom, idFamilia, cifProveidor, dataAlta, pesTotal, dataCaducitat, quantitatTotal, preuTotal);
         
         Referencia referencia = new Referencia(0, nom, uom, idFamilia, cifProveidor, dataAlta, pesTotal, dataCaducitat, quantitatTotal, preuTotal);
         
@@ -39,7 +39,8 @@ public class ReferenciaLogica {
     public void modificarReferencia(int id, String nom, UnitatMesura uom, int idFamilia, String cifProveidor,
                                      LocalDate dataAlta, float pesTotal, LocalDate dataCaducitat,
                                      int quantitatTotal, float preuTotal) throws Exception {
-        validarReferencia(nom, uom, idFamilia, cifProveidor, dataAlta, dataCaducitat, pesTotal, quantitatTotal, preuTotal);
+        
+        validarReferencia(nom, uom, idFamilia, cifProveidor, dataAlta, pesTotal, dataCaducitat, quantitatTotal, preuTotal);
 
         Referencia referenciaModificada = new Referencia(id, nom, uom, idFamilia, cifProveidor, dataAlta, pesTotal, dataCaducitat, quantitatTotal, preuTotal);
 
@@ -60,7 +61,7 @@ public class ReferenciaLogica {
     }
 
     private void validarReferencia(String nom, UnitatMesura uom, int idFamilia, String cifProveidor,
-                                   LocalDate dataAlta, LocalDate dataCaducitat, float pesTotal,
+                                   LocalDate dataAlta, float pesTotal, LocalDate dataCaducitat,
                                    int quantitatTotal, float preuTotal) throws Exception {
         if (nom == null || nom.trim().isEmpty()) {
             throw new Exception("El nom no pot estar buit.");
@@ -77,15 +78,15 @@ public class ReferenciaLogica {
         if (dataAlta == null || dataAlta.isAfter(LocalDate.now())) {
             throw new Exception("La data d'alta no és vàlida.");
         }
-        if (quantitatTotal < 0) {
-            throw new Exception("La quantitat no pot ser negativa.");
+        if (pesTotal < 0) {
+            throw new Exception("El pes no pot ser negatiu.");
         }
         if (dataCaducitat != null && dataCaducitat.isBefore(dataAlta)) {
             throw new Exception("La data de caducitat no pot ser anterior a la data d'alta.");
         }
-        if (pesTotal < 0) {
-            throw new Exception("El pes no pot ser negatiu.");
-        }
+        if (quantitatTotal < 0) {
+            throw new Exception("La quantitat no pot ser negativa.");
+        }     
         if (preuTotal < 0) {
             throw new Exception("El preu no pot ser negatiu.");
         }

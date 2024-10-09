@@ -26,12 +26,13 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
      * sobre la entidad {@code Referencia}. Proporciona métodos para obtener,
      * agregar, actualizar y eliminar referencias en la base de datos.
      *
+     * @return 
      * @autor Héctor Vico
      */
     @Override
     public List<Referencia> obtenirEntitats() {
-        List<Referencia> referencies = new ArrayList<>();
         String sql = "SELECT * FROM referencia";
+        List<Referencia> referencies = new ArrayList<>();
         try (Connection conn = MyDataSource.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
