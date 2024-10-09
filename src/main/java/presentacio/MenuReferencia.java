@@ -8,88 +8,257 @@ package presentacio;
  *
  * @author Héctor Vico
  */
+import aplicacio.App;
+import aplicacio.model.Referencia;
+import enums.UnitatMesura;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import logica.ReferenciaLogica;
 
 public class MenuReferencia {
 
-    // Identificadors dels botons i altres elements de la interfície
+    @FXML
+    private TableView tabViewRef;
+
+    @FXML
+    private TableColumn colId, colNom, colUOM, colFamilia, colProveidor, colDataAlta, colPes, colDataCaducitat, colQuantitat, colPreu;
+
     @FXML
     private Button btnLogo, btnTancarSessio, btnAfegir, btnMod, btnElimi, btnEstoc, btnSortida;
 
     @FXML
-    private TextField tfId, tfNom, tfUOM, tfIdFamilia, tfCifProveidor, tfDataAlta, tfPes, tfQuantitat, tfPreu;
+    private TextField tfId, tfNom, tfIdFamilia, tfCifProveidor, tfDataAlta, tfPes, tfDataCaducitat, tfQuantitat, tfPreu;
 
     @FXML
-    private TableView<?> tabViewRef; // Defineix el tipus adequat segons les dades de la taula
+    private ComboBox<UnitatMesura> cbUOM;
+
+    private ObservableList<Referencia> llistaObservableReferencia;
+    private ReferenciaLogica referenciaLogica;
+
+    private boolean estocMode = false;
 
     // Mètodes per gestionar els esdeveniments dels botons
     @FXML
     public void initialize() {
-        // Defineix l'acció de cada botó
-        btnAfegir.setOnAction(event -> afegirNovaReferencia());
-        btnMod.setOnAction(event -> modificarReferencia());
-        btnElimi.setOnAction(event -> eliminarReferencia());
-        btnEstoc.setOnAction(event -> mostrarReferenciesSenseEstoc());
-        btnSortida.setOnAction(event -> sortir());
-        btnTancarSessio.setOnAction(event -> tancarSessio());
-        btnLogo.setOnAction(event -> mostrarInici());
+        llistaObservableReferencia = FXCollections.observableArrayList();
+        referenciaLogica = new ReferenciaLogica();
+
+        cbUOM.setItems(FXCollections.observableArrayList(UnitatMesura.values()));
+
+        try {
+            llistaObservableReferencia.addAll(referenciaLogica.obtenirTotesLesReferencies());
+        } catch (Exception e) {
+            e.printStackTrace(); // Maneig d'errors, si cal
+        }
+
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        colUOM.setCellValueFactory(new PropertyValueFactory<>("uom"));
+        colFamilia.setCellValueFactory(new PropertyValueFactory<>("id_familia"));
+        colProveidor.setCellValueFactory(new PropertyValueFactory<>("cif_proveidor"));
+        colDataAlta.setCellValueFactory(new PropertyValueFactory<>("data_alta"));
+        colPes.setCellValueFactory(new PropertyValueFactory<>("pes_total"));
+        colDataCaducitat.setCellValueFactory(new PropertyValueFactory<>("data_caducitat"));
+        colQuantitat.setCellValueFactory(new PropertyValueFactory<>("quantitat_total"));
+        colPreu.setCellValueFactory(new PropertyValueFactory<>("preu_total"));
+
+        // Assignar event al TableView per seleccionar família
+        tabViewRef.setItems(llistaObservableReferencia);
+        tabViewRef.setOnMouseClicked(this::handleOnMouseClicked);
+
+        // Desactivar botons al principi
+        desactivarBotons();
     }
 
-    private void afegirNovaReferencia() {
-        // Acció quan es fa clic en "Afegir"
-        System.out.println("Afegir nova referència");
-        // Aquí implementes la lògica per afegir una nova referència
+    private void desactivarBotons() {
+        btnElimi.setDisable(true);
+        btnMod.setDisable(true);
     }
 
-    private void modificarReferencia() {
-        // Acció quan es fa clic en "Modificar"
-        if (tabViewRef.getSelectionModel().getSelectedItem() != null) {
-            // Si una fila està seleccionada, la podem modificar
-            System.out.println("Modificar referència seleccionada");
-            // Aquí implementes la lògica per modificar la referència seleccionada
-        } else {
-            // Si no hi ha cap fila seleccionada, pots mostrar un missatge d'error
-            System.out.println("Cap fila seleccionada");
+    @FXML
+    private void handleOnMouseClicked(MouseEvent ev) {
+        if (ev.getButton() == MouseButton.PRIMARY) {
+            Referencia referenciaSeleccionada = (Referencia) tabViewRef.getSelectionModel().getSelectedItem();
+
+            if (referenciaSeleccionada != null) {
+                System.out.println("Referencia seleccionada: " + referenciaSeleccionada.toString());
+                tfId.setText(String.valueOf(referenciaSeleccionada.getId()));
+                tfNom.setText(referenciaSeleccionada.getNom());
+                cbUOM.setValue(referenciaSeleccionada.getUom());
+                tfIdFamilia.setText(String.valueOf(referenciaSeleccionada.getId_familia()));
+                tfCifProveidor.setText(referenciaSeleccionada.getCif_proveidor());
+                tfDataAlta.setText(referenciaSeleccionada.getData_alta().toString());
+                tfPes.setText(String.valueOf(referenciaSeleccionada.getPes_total()));
+                tfDataCaducitat.setText(referenciaSeleccionada.getData_caducitat().toString());
+                tfQuantitat.setText(String.valueOf(referenciaSeleccionada.getQuantitat_total()));
+                tfPreu.setText(String.valueOf(referenciaSeleccionada.getPreu_total()));
+
+                // Activar botons
+                btnElimi.setDisable(false);
+                btnMod.setDisable(false);
+            } else {
+                System.out.println("No se seleccionó ninguna fila.");
+                desactivarBotons();
+            }
         }
     }
 
-    private void eliminarReferencia() {
-        // Acció quan es fa clic en "Eliminar"
-        if (tabViewRef.getSelectionModel().getSelectedItem() != null) {
-            // Si una fila està seleccionada, la podem eliminar
-            System.out.println("Eliminar referència seleccionada");
-            // Aquí implementes la lògica per eliminar la referència seleccionada
+    @FXML
+    public void btnSortida_action(ActionEvent event) throws IOException {
+        System.out.println("Botó 'Sortir' presionat");
+        App.setRoot("menuPrincipal");
+    }
+
+    @FXML
+    public void btnTancar_action(ActionEvent event) throws IOException {
+        System.out.println("Botó 'Tancar' presionat");
+        App.setRoot("iniciSessio");
+    }
+
+    @FXML
+    public void btnAfegir_action(ActionEvent event) throws IOException {
+        System.out.println("Botó 'Afegir' presionat");
+
+        // Obtener el valor seleccionado del ComboBox
+        UnitatMesura uomSeleccionada = cbUOM.getValue();
+
+        // Crear una nova referència amb el valor seleccionat
+        Referencia novaReferencia = new Referencia(0, "", uomSeleccionada, 0, "", LocalDate.now(), 0.0f, LocalDate.now(), 0, 0.0f);
+
+        // Afegir la nova referència a la llista observable
+        llistaObservableReferencia.add(novaReferencia);
+
+        // Actualitzar el TableView
+        tabViewRef.setItems(llistaObservableReferencia);
+        tabViewRef.getSelectionModel().select(novaReferencia);
+    }
+
+    @FXML
+    public void btnMod_action(ActionEvent event) throws IOException {
+        System.out.println("Botó 'Modificar' presionat");
+        Referencia referenciaSeleccionada = (Referencia) tabViewRef.getSelectionModel().getSelectedItem();
+
+        if (referenciaSeleccionada != null) {
+            try {
+                String nomNou = tfNom.getText();
+                UnitatMesura uomNova = cbUOM.getValue();  // Obtener el valor del ComboBox para UOM
+                int idFamiliaNou = Integer.parseInt(tfIdFamilia.getText());
+                String cifProveidorNou = tfCifProveidor.getText();
+                LocalDate dataAltaNova = LocalDate.parse(tfDataAlta.getText());
+                float pesNou = Float.parseFloat(tfPes.getText());
+                LocalDate dataCaducitatNova = LocalDate.parse(tfDataCaducitat.getText());
+                int quantitatNova = Integer.parseInt(tfQuantitat.getText());
+                float preuNou = Float.parseFloat(tfPreu.getText());
+
+                if (referenciaSeleccionada.getId() == 0) {
+                    // Si l'ID és 0 és una nova família llavors inserim
+                    referenciaLogica.afegirReferencia(nomNou, uomNova, idFamiliaNou, cifProveidorNou, dataAltaNova, pesNou, dataCaducitatNova, quantitatNova, preuNou);
+                    // Actualitzem l'objecte seleccionat per fer-lo coincidir amb la nova família
+                    System.out.println("Nova família afegida amb ID: " + referenciaSeleccionada.getId());
+                } else {
+                    // Si l'ID és diferent de 0 ja existeix i fem una actualització
+                    referenciaLogica.modificarReferencia(referenciaSeleccionada.getId(), nomNou, uomNova, idFamiliaNou, cifProveidorNou, dataAltaNova, pesNou, dataCaducitatNova, quantitatNova, preuNou);
+                    System.out.println("Família modificada correctament.");
+                }
+
+                // Actualizar els valors de la familia a la llista observable (TableView)
+                referenciaSeleccionada.setNom(nomNou);
+                referenciaSeleccionada.setUom(uomNova);
+                referenciaSeleccionada.setId_familia(idFamiliaNou);
+                referenciaSeleccionada.setCif_proveidor(cifProveidorNou);
+                referenciaSeleccionada.setData_alta(dataAltaNova);
+                referenciaSeleccionada.setPes_total(pesNou);
+                referenciaSeleccionada.setData_caducitat(dataCaducitatNova);
+                referenciaSeleccionada.setQuantitat_total(quantitatNova);
+                referenciaSeleccionada.setPreu_total(preuNou);
+
+                // Refrescar el TableView per mostrar els canvis
+                tabViewRef.refresh();
+                tabViewRef.setItems(llistaObservableReferencia);
+
+                System.out.println("Familia modificada correctament.");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Error en modificar la família: " + e.getMessage());
+            }
         } else {
-            // Si no hi ha cap fila seleccionada, pots mostrar un missatge d'error
-            System.out.println("Cap fila seleccionada");
+            System.out.println("No s'ha seleccionat cap família per modificar.");
         }
     }
 
-    private void mostrarReferenciesSenseEstoc() {
-        // Acció quan es fa clic en "Ref. sense estoc"
-        System.out.println("Mostrar referències sense estoc");
-        // Aquí implementes la lògica per mostrar les referències sense estoc
+    @FXML
+    public void btnElimi_action(ActionEvent event) throws IOException {
+        System.out.println("Botó 'Eliminar' presionat");
+        Referencia referenciaSeleccionada = (Referencia) tabViewRef.getSelectionModel().getSelectedItem();
+
+        if (referenciaSeleccionada != null) {
+            try {
+                // Eliminar de la base de dades
+                referenciaLogica.eliminarReferencia(referenciaSeleccionada.getId());
+                System.out.println("Familia eliminada de la base de dades.");
+
+                // Eliminar de la llista observable
+                llistaObservableReferencia.remove(referenciaSeleccionada);
+                tabViewRef.setItems(llistaObservableReferencia);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("No s'ha seleccionat cap família per eliminar.");
+        }
     }
 
-    private void sortir() {
-        // Acció quan es fa clic en "<< Sortir"
-        System.out.println("Sortir");
-        // Aquí implementes la lògica per sortir de la pantalla actual
+    @FXML
+    public void btnEstoc_action(ActionEvent event) throws IOException {
+        System.out.println("Botó 'Estoc' presionat");
+
+        if (!estocMode) {
+            // Mostrar solo productos sin stock
+            try {
+                List<Referencia> referenciesSenseEstoc = referenciaLogica.obtenirReferenciesSenseEstoc();
+                llistaObservableReferencia.clear();
+                llistaObservableReferencia.addAll(referenciesSenseEstoc);
+                tabViewRef.refresh();
+                tabViewRef.setItems(llistaObservableReferencia);
+                estocMode = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            // Restaurar la lista completa
+            try {
+                List<Referencia> totesLesReferencies = referenciaLogica.obtenirTotesLesReferencies();
+                llistaObservableReferencia.clear();
+                llistaObservableReferencia.addAll(totesLesReferencies);
+                tabViewRef.refresh();
+                tabViewRef.setItems(llistaObservableReferencia);
+                estocMode = false;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    private void tancarSessio() {
-        // Acció quan es fa clic en "Tancar Sessió"
-        System.out.println("Tancar sessió");
-        // Aquí implementes la lògica per tancar la sessió de l'usuari
+    @FXML
+    public void btnLogo_action(ActionEvent event) throws IOException {
+        System.out.println("Botó 'Logo' presionat");
+        App.setRoot("menuPrincipal");
     }
 
-    private void mostrarInici() {
-        // Acció quan es fa clic en el botó de "Logo"
-        System.out.println("Tornar a la pantalla d'inici");
-        // Aquí implementes la lògica per tornar a la pantalla d'inici
-    }
 }
-

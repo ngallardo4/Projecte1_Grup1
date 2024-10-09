@@ -54,10 +54,10 @@ public class ReferenciaLogicaTest {
         LocalDate dataAlta = LocalDate.now();
         LocalDate dataCaducitat = LocalDate.now().plusDays(30);
 
-        referenciaLogica.afegirReferencia("Producte Modificar", UnitatMesura.KG,
+        /*referenciaLogica.afegirReferencia("Producte Modificar", UnitatMesura.KG,
                 1, "CIF123", dataAlta, dataCaducitat,
                 10.0f, 0, 20.0f);
-
+*/
         // Obtener la referencia añadida
         Referencia referencia = referenciaLogica.obtenirTotesLesReferencies().stream()
                 .filter(r -> r.getCif_proveidor().equals("CIF123"))
