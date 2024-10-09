@@ -28,6 +28,7 @@ public class Referencia{
     private float preu_total;
     private Proveidor proveidor;
 
+    // COMENTARIO
      /**
      * Crea una nueva instancia de {@code Referencia}.
      *

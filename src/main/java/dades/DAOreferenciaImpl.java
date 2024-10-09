@@ -11,7 +11,7 @@ import enums.UnitatMesura;
 import java.util.ArrayList;
 import java.util.List;
 import dades.MyDataSource;
-
+// COMENTARIO
 /**
  * Implementación de la interfaz DAOreferencia para manejar operaciones CRUD
  * sobre la entidad {@code Referencia}. Proporciona métodos para obtener,

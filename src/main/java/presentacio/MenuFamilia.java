@@ -2,6 +2,7 @@ package presentacio;
 
 import aplicacio.App;
 import aplicacio.model.Familia;
+import aplicacio.model.Usuari;
 import java.io.IOException;
 import java.time.LocalDate;
 import javafx.collections.FXCollections;
@@ -52,6 +53,13 @@ public class MenuFamilia {
 
     private ObservableList<Familia> llistaObservableFamilia;
     private FamiliaLogica familiaLogica;
+    private Usuari usuari; // Afegeix aquesta variable
+
+    // Mètode per establir l'usuari autenticat
+    public void setUsuari(Usuari usuari) {
+        this.usuari = usuari;
+        gestionarPermisos();
+    }
 
     @FXML
     public void initialize() throws IOException {
@@ -83,6 +91,17 @@ public class MenuFamilia {
 
         // Desactivar botons al principi
         desactivarBotons();
+    }
+
+    private void gestionarPermisos() {
+        // Habilitar o deshabilitar botons segons el rol
+        if (usuari != null) {
+            boolean esMagatzem = usuari.isRol();
+            btnAfegir.setDisable(!esMagatzem);
+            btnModificar.setDisable(!esMagatzem);
+            btnEliminar.setDisable(!esMagatzem);
+            btnProducte.setDisable(false); // Sempre habilitat per venedors
+        }
     }
 
     private void desactivarBotons() {
