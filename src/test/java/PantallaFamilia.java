@@ -3,39 +3,46 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
  */
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import org.junit.jupiter.api.Test;
+import org.testfx.framework.junit5.ApplicationTest;
 
 /**
  *
  * @author Yaiza
  */
-public class PantallaFamilia {
-    
-    public PantallaFamilia() {
-    }
-    
-    @BeforeAll
-    public static void setUpClass() {
-    }
-    
-    @AfterAll
-    public static void tearDownClass() {
-    }
-    
-    @BeforeEach
-    public void setUp() {
-    }
-    
-    @AfterEach
-    public void tearDown() {
+public class PantallaFamilia extends ApplicationTest {
+
+    private Parent rootNode;
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        // Cargar el archivo FXML
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/cat/copernic/projecte1_equip1/menuFamilia.fxml"));
+        rootNode = loader.load();
+
+        // Crear la escena y asignarla al stage
+        Scene scene = new Scene(rootNode);
+        stage.setScene(scene);
+        stage.setTitle("Menú Familia"); // Establecer título para la ventana
+        stage.show();
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    @Test
+    public void displayMenuFamilia() {
+        // Mantener el test en espera mientras la ventana esté abierta
+        while (true) {
+            if (!Stage.getWindows().isEmpty() && !Stage.getWindows().get(0).isShowing()) {
+                break; // Salir del bucle si la ventana se ha cerrado
+            }
+            try {
+                Thread.sleep(100); // Esperar un breve momento antes de verificar de nuevo
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

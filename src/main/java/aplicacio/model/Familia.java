@@ -81,4 +81,9 @@ public class Familia {
     public void setObservacions(String observacions) {
         this.observacions = observacions;
     }
+    
+    @Override
+    public String toString() {
+        return "Familia{" + "idFamilia=" + id + ", nom=" + nom + ", descripcio=" + descripcio + ", dataAlta=" + data_alta + ", proveidor=" + prov_defecte + ", observacions=" + observacions + '}';
+    }
 }

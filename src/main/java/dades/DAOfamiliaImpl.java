@@ -30,30 +30,39 @@ public class DAOfamiliaImpl implements DAOinterface<Familia> {
      */
     @Override
     public void afegir(Familia familia) {
-        String insertSQL = "INSERT INTO familia (nom, descripcio, data_alta, prov_defecte, observacions) VALUES (?, ?, ?, ?, ?)";
+        String obtenirMaxIdSQL = "SELECT MAX(id) FROM familia";
+        String insertSQL = "INSERT INTO familia (id, nom, descripcio, data_alta, prov_defecte, observacions) VALUES (?, ?, ?, ?, ?, ?)";
+
         try (Connection conn = MyDataSource.getConnection()) {
-            try (PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
-                stmt.setString(1, familia.getNom());
-                stmt.setString(2, familia.getDescripcio());
-                stmt.setDate(3, Date.valueOf(familia.getData_alta()));
-                stmt.setString(4, familia.getProv_defecte());
-                stmt.setString(5, familia.getObservacions());
-                stmt.executeUpdate();
-
-                System.out.println("Executant INSERT INTO familia...");
-
-                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        int generatedId = generatedKeys.getInt(1);
-                        familia.setId(generatedId);
-                        System.out.println("ID generat: " + generatedId);
-                    } else {
-                        throw new SQLException("No s'ha pogut obtenir l'ID generat.");
-                    }
+            // Obtenim l'últim ID
+            int seguentId = 1; // Per defecte si no hi ha registres
+            try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(obtenirMaxIdSQL)) {
+                if (rs.next()) {
+                    seguentId = rs.getInt(1) + 1; // Suma 1 al màxim ID trobat
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
+
+            // Inserim la nova família amb el següent ID
+            try (PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
+                stmt.setInt(1, seguentId); // Assignem el següent ID disponible
+                stmt.setString(2, familia.getNom());
+                stmt.setString(3, familia.getDescripcio());
+                stmt.setDate(4, Date.valueOf(familia.getData_alta()));
+                stmt.setString(5, familia.getProv_defecte());
+                stmt.setString(6, familia.getObservacions());
+
+                int rowsAffected = stmt.executeUpdate(); // Executem la inserció
+
+                if (rowsAffected == 0) {
+                    throw new SQLException("Error: No s'ha pogut inserir la família.");
+                }
+
+                // Actualitzem l'objecte família amb el nou ID
+                familia.setId(seguentId);
+                System.out.println("Família afegida amb ID: " + seguentId);
+
+            }
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -96,21 +105,27 @@ public class DAOfamiliaImpl implements DAOinterface<Familia> {
      * @param familia la família amb les noves dades.
      */
     @Override
-    public void actualitzar(Familia familia) {
+    public void actualitzar(Familia familia
+    ) {
         String updateSQL = "UPDATE familia SET nom = ?, descripcio = ?, prov_defecte = ?, observacions = ? WHERE id = ?";
-        try (Connection conn = MyDataSource.getConnection()) {
-            try (PreparedStatement stmt = conn.prepareStatement(updateSQL)) {
-                stmt.setString(1, familia.getNom());
-                stmt.setString(2, familia.getDescripcio());
-                stmt.setString(3, familia.getProv_defecte());
-                stmt.setString(4, familia.getObservacions());
-                stmt.setInt(5, familia.getId());
-                stmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
+        try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(updateSQL)) {
+
+            stmt.setString(1, familia.getNom());
+            stmt.setString(2, familia.getDescripcio());
+            stmt.setString(3, familia.getProv_defecte());
+            stmt.setString(4, familia.getObservacions());
+            stmt.setInt(5, familia.getId());
+
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Familia modificada correctamente en la base de datos.");
+            } else {
+                System.out.println("No se encontró ninguna familia con el ID proporcionado.");
             }
-        } catch (SQLException ex) {
-            ex.getMessage();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al actualizar la familia en la base de datos.");
         }
     }
 
@@ -120,7 +135,8 @@ public class DAOfamiliaImpl implements DAOinterface<Familia> {
      * @param familia la família a eliminar.
      */
     @Override
-    public void eliminar(Familia familia) {
+    public void eliminar(Familia familia
+    ) {
         String deleteSQL = "DELETE FROM familia WHERE id = ?";
         try (Connection conn = MyDataSource.getConnection()) {
             try (PreparedStatement stmt = conn.prepareStatement(deleteSQL)) {
