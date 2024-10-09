@@ -88,7 +88,7 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
                     // Asignar el ID generado al objeto referencia
                     int generatedId = generatedKeys.getInt(1);
                     referencia.setId(generatedId);
-                    System.out.println("ID generado: " + generatedId);  // Imprime el ID generado
+                    System.out.println("ID generat: " + generatedId);  // Imprime el ID generado
                 } else {
                     throw new SQLException("No se ha generado un ID para la referencia.");
                 }
