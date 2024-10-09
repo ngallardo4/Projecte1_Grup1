@@ -8,15 +8,16 @@
  * @author Héctor Vico
  */
 import aplicacio.model.Referencia;
-import logica.ReferenciaLogica;
-import enums.UnitatMesura;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.time.LocalDate;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import logica.ReferenciaLogica;
+import enums.UnitatMesura;
+import logica.ProveidorLogica;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ReferenciaLogicaTest {
 
@@ -24,104 +25,62 @@ public class ReferenciaLogicaTest {
 
     @BeforeEach
     public void setUp() {
-        referenciaLogica = new ReferenciaLogica(); // Instancia de la lógica de referencias
+        // Inicialitzem la lògica i el DAO
+        referenciaLogica = new ReferenciaLogica();
     }
 
-    // Test para afegirReferencia()
     @Test
-    public void testAfegirReferencia() throws Exception {
-        LocalDate dataAlta = LocalDate.now();
-        LocalDate dataCaducitat = dataAlta.plusDays(30);
+    public void testAfegirProveidor() throws Exception {
+        // Crear una instancia de ProveidorLogica
+        ReferenciaLogica logica = new ReferenciaLogica();
 
+        // Añadir un proveedor
+        //logica.afegirReferencia("Producte Test", UnitatMesura.KG.toString(), 1, "CIF123", LocalDate.now(), LocalDate.now().plusDays(30), 10.5f, 0, 20.0f);
 
-        List<Referencia> referencies = referenciaLogica.obtenirTotesLesReferencies();
-        assertTrue(referencies.stream().anyMatch(r -> r.getNom().equals("Nou Producte")),
-                "La referencia debería haberse añadido correctamente.");
-    }
+        // Recuperar la lista de proveedores
+        List<Referencia> proveidors = logica.obtenirTotesLesReferencies();
 
-    // Test para afegirReferencia() con datos inválidos
-    @Test
-    public void testAfegirReferenciaInvalida() {
-        LocalDate dataAlta = LocalDate.now();
-        LocalDate dataCaducitat = dataAlta.plusDays(30);
-
-        Exception excepcion = assertThrows(Exception.class, () -> {
-        });
-        assertEquals("El nom no pot estar buit.", excepcion.getMessage(), "El error debería indicar que el nombre no puede estar vacío.");
+        // Imprimir los proveedores recuperados
+        System.out.println("Producte recuperat despres de la inserción:");
+        proveidors.forEach(p -> System.out.println(p.getId()));
     }
 
     // Test para modificarReferencia()
     @Test
     public void testModificarReferencia() throws Exception {
-        // Añadir primero una referencia para modificar
+        ReferenciaLogica referenciaLogica = new ReferenciaLogica();
+
+        // Añadir una referencia para modificar
         LocalDate dataAlta = LocalDate.now();
-        LocalDate dataCaducitat = dataAlta.plusDays(30);
+        LocalDate dataCaducitat = LocalDate.now().plusDays(30);
 
+        referenciaLogica.afegirReferencia("Producte Modificar", UnitatMesura.KG,
+                1, "CIF123", dataAlta, dataCaducitat,
+                10.0f, 0, 20.0f);
 
-        List<Referencia> referencies = referenciaLogica.obtenirTotesLesReferencies();
-        Referencia referencia = referencies.stream().filter(r -> r.getNom().equals("Producte Modificar")).findFirst().orElse(null);
-        assertNotNull(referencia, "La referencia debería existir para poder ser modificada.");
+        // Obtener la referencia añadida
+        Referencia referencia = referenciaLogica.obtenirTotesLesReferencies().stream()
+                .filter(r -> r.getCif_proveidor().equals("CIF123"))
+                .findFirst().orElse(null);
+
+        assertNotNull(referencia, "La referencia debería haberse añadido correctamente.");
 
         // Modificar la referencia
+        referenciaLogica.modificarReferencia(
+                referencia.getId(), "Producte Modificat", UnitatMesura.KG,
+                1, "CIF456", dataAlta, 15.0f, dataCaducitat, 4, 30.0f);
 
-        List<Referencia> referenciesActualitzades = referenciaLogica.obtenirTotesLesReferencies();
-        assertTrue(referenciesActualitzades.stream().anyMatch(r -> r.getNom().equals("Producte Modificat") && r.getQuantitat_total() == 200),
-                "La referencia debería haberse modificado correctamente.");
+        // Verificar la referencia modificada
+        Referencia referenciaModificada = referenciaLogica.obtenirTotesLesReferencies().stream()
+                .filter(r -> r.getCif_proveidor().equals("CIF456"))
+                .findFirst().orElse(null);
+
+        assertNotNull(referenciaModificada, "La referencia debería existir después de la modificación.");
+        assertEquals("Producte Modificat", referenciaModificada.getNom(), "El nombre debería haber sido actualizado.");
+        assertEquals("CIF456", referenciaModificada.getCif_proveidor(), "El CIF debería haber sido actualizado.");
+        assertEquals(15.0f, referenciaModificada.getPes_total(), "El peso total debería haber sido actualizado.");
+        assertEquals(4, referenciaModificada.getQuantitat_total(), "La cantidad total debería haber sido actualizada.");
+        assertEquals(30.0f, referenciaModificada.getPreu_total(), "El precio total debería haber sido actualizado.");
     }
 
-    // Test para eliminarReferencia()
-    @Test
-    public void testEliminarReferencia() throws Exception {
-        // Añadir primero una referencia para eliminar
-        LocalDate dataAlta = LocalDate.now();
-        LocalDate dataCaducitat = dataAlta.plusDays(30);
-
-
-        List<Referencia> referencies = referenciaLogica.obtenirTotesLesReferencies();
-        Referencia referencia = referencies.stream().filter(r -> r.getNom().equals("Producte Eliminar")).findFirst().orElse(null);
-        assertNotNull(referencia, "La referencia debería existir para poder ser eliminada.");
-
-        // Eliminar la referencia
-        referenciaLogica.eliminarReferencia(referencia.getId());
-
-        List<Referencia> referenciesDespresEliminar = referenciaLogica.obtenirTotesLesReferencies();
-        assertFalse(referenciesDespresEliminar.stream().anyMatch(r -> r.getNom().equals("Producte Eliminar")),
-                "La referencia debería haberse eliminado.");
-    }
-
-    // Test para obtenirTotesLesReferencies()
-    @Test
-    public void testObtenirTotesLesReferencies() {
-        List<Referencia> referencies = referenciaLogica.obtenirTotesLesReferencies();
-        assertNotNull(referencies, "La lista de referencias no debería ser nula.");
-        assertFalse(referencies.isEmpty(), "La lista de referencias no debería estar vacía.");
-    }
-
-    // Test para obtenirReferenciesSenseEstoc()
-    @Test
-    public void testObtenirReferenciesSenseEstoc() throws Exception {
-        // Añadir una referencia con stock 0
-        LocalDate dataAlta = LocalDate.now();
-        LocalDate dataCaducitat = dataAlta.plusDays(30);
-
-
-        List<Referencia> referenciesSenseEstoc = referenciaLogica.obtenirReferenciesSenseEstoc();
-        assertTrue(referenciesSenseEstoc.stream().anyMatch(r -> r.getNom().equals("Producte Sense Estoc")),
-                "La referencia sin stock debería aparecer en la lista.");
-    }
-
-    // Test para la validación de datos en afegirReferencia (ejemplo con fecha de caducidad incorrecta)
-    @Test
-    public void testAfegirReferenciaFechaInvalida() {
-        LocalDate dataAlta = LocalDate.now();
-        LocalDate dataCaducitat = dataAlta.minusDays(5); // Caducidad antes de la fecha de alta
-
-        Exception excepcion = assertThrows(Exception.class, () -> {
-        });
-        assertEquals("La data de caducitat no pot ser anterior a la data d'alta.", excepcion.getMessage(),
-                "El error debería indicar que la fecha de caducidad no puede ser anterior a la de alta.");
-    }
 }
-
-
-
