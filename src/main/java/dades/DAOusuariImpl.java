@@ -13,20 +13,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * descripció: Implementació del DAO (Data Access Object) per a la gestió dels 
+ * usuaris. Aquesta classe llegeix un fitxer de text per carregar els usuaris i 
+ * ofereix funcionalitats per verificar i obtenir usuaris.
  * @author ngall
+ * @version 10/2024.1
  */
 public class DAOusuariImpl {
     
     private Map<String, Usuari> usuaris;
     private String rutaArxiu = "uspass.txt";
     
+    /**
+     * Constructor de la classe DAOusuariImpl: Inicialitza el mapa d'usuaris i 
+     * carrega els usuaris des del fitxer especificat.
+     * @param rutaArxiu La ruta del fitxer d'usuaris a carregar.
+     */
     public DAOusuariImpl(String rutaArxiu){
         this.rutaArxiu = rutaArxiu;
         usuaris = new HashMap<>();
         carregarUsuaris();
     }
     
+    /**
+     * Carrega els usuaris des d'un fitxer de text: El fitxer ha de tenir línies
+     * amb el format "email;password;rol", on rol és un valor booleà (true per a
+     * Responsable de Magatzem, false per a Venedor). Un cop es verifica que té
+     * aquesta estructura, guarda l'usuari al mapa.
+     */
     private void carregarUsuaris(){
         try(BufferedReader lec = new BufferedReader(new FileReader(rutaArxiu))){
             String linea;
@@ -51,6 +65,13 @@ public class DAOusuariImpl {
         }
     }
     
+    /**
+     * Verifica si un usuari existeix i si la contrasenya és correcta.
+     * @param email El correu electrònic de l'usuari.
+     * @param password La contrasenya de l'usuari.
+     * @return true si l'usuari existeix i la contrasenya és correcta, false si 
+     * no es compleixen les condicions.
+     */
     public boolean verificarUsuari(String email, String password){
         if(usuaris.containsKey(email)){
             Usuari usuari = usuaris.get(email);
@@ -59,6 +80,12 @@ public class DAOusuariImpl {
         return false;
     }
     
+    /**
+     * Retorna l'usuari associat amb un correu electrònic que donem.
+     * @param email El correu electrònic de l'usuari.
+     * @return L'usuari corresponent si existeix, o null si no existeix cap 
+     * usuari amb aquest correu.
+     */
     public Usuari getUsuari(String email){
         return usuaris.get(email);
     }
