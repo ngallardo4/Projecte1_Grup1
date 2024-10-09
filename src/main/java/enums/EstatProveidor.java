@@ -5,8 +5,9 @@
 package enums;
 
 /**
- *
+ * descripció: Enumeració que representa els possibles estats d'un proveïdor.
  * @author danie
+ * @version 10/2024.1
  */
 public enum EstatProveidor {
     ACTIU, INACTIU;
