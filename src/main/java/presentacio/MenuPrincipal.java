@@ -41,13 +41,13 @@ public class MenuPrincipal {
 
     //Métode per establir l'usuari autenticat
     public void setUsuari(Usuari usuari) {
-        this.usuari = usuari;
+        this.usuari = usuari; // Guarda el usuario
     }
-
+    
     @FXML
     private void handleFamilia(ActionEvent event) {
         try {
-            App.setRoot("menuFamilia", usuari);
+            App.setRoot("menuFamilia", usuari); // Pasa el usuario al menú familia
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,5 +79,4 @@ public class MenuPrincipal {
             e.printStackTrace();
         }
     }
-
 }
