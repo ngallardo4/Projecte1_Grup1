@@ -9,6 +9,8 @@ import java.io.IOException;
 import presentacio.MenuPrincipal;
 import aplicacio.model.Usuari;
 import presentacio.MenuFamilia;
+import presentacio.MenuProveidor;
+import presentacio.MenuReferencia;
 
 /**
  * JavaFX App
@@ -38,6 +40,16 @@ public class App extends Application {
         // Si carreguem la vista de menuFamilia, també passem l'usuari
         if (fxml.equals("menuFamilia")) {
             MenuFamilia controller = fxmlLoader.getController();
+            controller.setUsuari(usuari);  // Aquí passem l'objecte Usuari
+        }
+        
+        if (fxml.equals("menuReferencia")) {
+            MenuReferencia controller = fxmlLoader.getController();
+            controller.setUsuari(usuari);  // Aquí passem l'objecte Usuari
+        }
+        
+        if (fxml.equals("menuProveidor")) {
+            MenuProveidor controller = fxmlLoader.getController();
             controller.setUsuari(usuari);  // Aquí passem l'objecte Usuari
         }
         scene.setRoot(root);
