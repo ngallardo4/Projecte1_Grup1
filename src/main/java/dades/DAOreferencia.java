@@ -12,7 +12,7 @@ import java.util.List;
  * @author Héctor Vico
  */
 public interface DAOreferencia<T> {
-    
+    // COMENTARIO
     List<T> obtenirReferenciesSenseEstoc();
 
 }

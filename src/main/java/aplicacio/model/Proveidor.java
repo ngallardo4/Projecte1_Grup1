@@ -15,28 +15,28 @@ import java.time.LocalDate;
  * @author ngall
  */
 public class Proveidor {
-    public String CIF;
-    public String Nom;
-    public EstatProveidor Estat;
-    public String MotiuInactiu;
-    public String Telefon;
-    public float Descompte;
-    public LocalDate Data_Alt;
-    public int Qualificacio;
+    private String CIF;
+    private String Nom;
+    private EstatProveidor Estat;
+    private String MotiuInactiu;
+    private String Telefon;
+    private float Descompte;
+    private LocalDate Data_Alta;
+    private int Qualificacio;
 
      /**
      * Constructor para crear un nuevo proveedor con todos los campos.
      *
      */
     
-    public Proveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu, String Telefon, float Descompte, LocalDate Data_Alt, int Qualificacio) {
+    public Proveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu, String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) {
         this.CIF = CIF;
         this.Nom = Nom;
         this.Estat = Estat;
         this.MotiuInactiu = MotiuInactiu;
         this.Telefon = Telefon;
         this.Descompte = Descompte;
-        this.Data_Alt = Data_Alt;
+        this.Data_Alta = Data_Alta;
         this.Qualificacio = Qualificacio;
     }
     
@@ -98,12 +98,12 @@ public class Proveidor {
         this.Descompte = Descompte;
     }
 
-    public LocalDate getData_Alt() {
-        return Data_Alt;
+    public LocalDate getData_Alta() {
+        return Data_Alta;
     }
 
-    public void setData_Alt(LocalDate Data_Alt) {
-        this.Data_Alt = Data_Alt;
+    public void setData_Alta(LocalDate Data_Alta) {
+        this.Data_Alta = Data_Alta;
     }
 
     public int getQualificacio() {
