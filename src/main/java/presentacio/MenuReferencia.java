@@ -37,6 +37,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import logica.ReferenciaLogica;
+import javafx.scene.control.Alert;
 
 public class MenuReferencia {
 // COMENTARIO
@@ -71,15 +72,13 @@ public class MenuReferencia {
         this.familiaId = familiaId;
     }
 
-    private Usuari usuari;  // Variable para guardar el usuario autenticado
+    private Usuari usuari;  
 
-    // Método para establecer el usuario autenticado
     public void setUsuari(Usuari usuari) {
-        this.usuari = usuari;  // Guardar el usuario
-        gestionarPermisos();    // Gestionar los permisos según el rol
+        this.usuari = usuari;
+        gestionarPermisos();    
     }
 
-    // Mètodes per gestionar els esdeveniments dels botons
     @FXML
     public void initialize() {
         llistaObservableReferencia = FXCollections.observableArrayList();
@@ -90,7 +89,7 @@ public class MenuReferencia {
         try {
             llistaObservableReferencia.addAll(referenciaLogica.obtenirTotesLesReferencies(familiaId));
         } catch (Exception e) {
-            e.printStackTrace(); // Maneig d'errors, si cal
+            e.printStackTrace(); 
         }
 
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -104,11 +103,9 @@ public class MenuReferencia {
         colQuantitat.setCellValueFactory(new PropertyValueFactory<>("quantitat_total"));
         colPreu.setCellValueFactory(new PropertyValueFactory<>("preu_total"));
 
-        // Assignar event al TableView per seleccionar família
         tabViewRef.setItems(llistaObservableReferencia);
         tabViewRef.setOnMouseClicked(this::handleOnMouseClicked);
 
-        // Desactivar botons al principi
         gestionarPermisos();
     }
 
@@ -116,8 +113,8 @@ public class MenuReferencia {
         if (usuari != null) {
             boolean esMagatzem = usuari.isRol();
             btnAfegir.setDisable(!esMagatzem);
-            btnMod.setDisable(true); // Iniciar deshabilitado hasta que se seleccione una familia
-            btnElimi.setDisable(true);  // Iniciar deshabilitado hasta que se seleccione una familia
+            btnMod.setDisable(true);
+            btnElimi.setDisable(true);  
         } else {
             desactivarBotons();
         }
@@ -346,31 +343,38 @@ public class MenuReferencia {
                 System.out.println("Familia modificada correctament.");
 
             } catch (NomBuit e) {
-                System.out.println("Error: " + e.getMessage());
+                mostrarError(e.getMessage());
             } catch (UomBuit e) {
-                System.out.println("Error: " + e.getMessage());
+                mostrarError(e.getMessage());
             } catch (IdFamiliaBuit e) {
-                System.out.println("Error: " + e.getMessage());
+                mostrarError(e.getMessage());
             } catch (cifProveidorBuit e) {
-                System.out.println("Error: " + e.getMessage());
-                // Mostrar alerta gráfica al usuario
+                mostrarError(e.getMessage());
             } catch (dataAltaBuit e) {
-                System.out.println("Error: " + e.getMessage());
+                mostrarError(e.getMessage());
             } catch (dataCaducitatBuit e) {
-                System.out.println("Error: " + e.getMessage());
+                mostrarError(e.getMessage());
             } catch (pesTotalBuit e) {
-                System.out.println("Error: " + e.getMessage());
+                mostrarError(e.getMessage());
             } catch (quantitatTotalBuit e) {
-                System.out.println("Error: " + e.getMessage());
+                mostrarError(e.getMessage());
             } catch (preuTotalBuit e) {
-                System.out.println("Error: " + e.getMessage());
+                mostrarError(e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Error en modificar la família: " + e.getMessage());
+                mostrarError("Error en modificar la referencia: " + e.getMessage());
             }
         } else {
             System.out.println("No s'ha seleccionat cap família per modificar.");
         }
+    }
+    
+    private void mostrarError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null); // No necesitas un encabezado
+        alert.setContentText(mensaje);
+        alert.showAndWait(); // Espera a que el usuario cierre la alerta
     }
 
     @FXML
