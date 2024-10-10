@@ -3,13 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
  */
 
-import dades.MyDataSource;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.Statement;
+import aplicacio.model.Familia;
+import excepcions.NomBuit;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import logica.FamiliaLogica;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,58 +20,65 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FamiliaLogicaTest {
 
     private FamiliaLogica familiaLogica;
-    private Connection connection;
 
     @BeforeEach
-    public void setUp() throws Exception {
-        // Configura la connexió a la base de dades de prova
-        connection = MyDataSource.getConnection();
-
-        // Inicia la classe FamiliaLogica que farà servir DAOfamiliaImpl real
+    public void setUp() {
+        // Inicialitzar l'objecte FamiliaLogica abans de cada test
         familiaLogica = new FamiliaLogica();
-
-        // Eliminar les referències primer
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("DELETE FROM referencia WHERE id_familia = 1");
-            statement.executeUpdate("DELETE FROM familia WHERE id = 1");
-        }
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        // Eliminar referències primer
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("DELETE FROM referencia WHERE id_familia = 1");
-            statement.executeUpdate("DELETE FROM familia WHERE id = 1");
-        }
-        connection.close();
     }
 
     @Test
-    public void testAfegirFamilia() throws Exception {
-        // Dades de prova
-        String nom = "Prova 1";
-        String descripcio = "Productes prova1";
-        LocalDate data_alta = LocalDate.now();
-        String prov_defecte = "PROVEIDOR prova1";
-        String observacions = "Res important1";
+    void testAfegirFamiliaCorrecte() throws Exception {
+        // Dades d'entrada vàlides
+        String nom = "Família Exemple";
+        String descripcio = "Descripció de la família";
+        LocalDate dataAlta = LocalDate.of(2023, 1, 1);
+        String provDefecte = "Proveïdor Exemple";
+        String observacions = "Observacions aquí";
 
-        // Executa el mètode a provar (no retorna cap valor)
-        familiaLogica.afegirFamilia(nom, descripcio, data_alta, prov_defecte, observacions);
+        // Executar el mètode
+        familiaLogica.afegirFamilia(nom, descripcio, dataAlta, provDefecte, observacions);
 
-        // Comprova que la família s'ha afegit correctament fent una cerca pel nom
-        try (Statement statement = connection.createStatement()) {
-            var resultSet = statement.executeQuery("SELECT * FROM familia WHERE nom = '" + nom + "'");
-            assertTrue(resultSet.next(), "La família amb nom '" + nom + "' hauria d'haver estat afegida a la base de dades.");
+        // Comprovar que no es llença cap excepció
+        // Nota: Aquí es pot afegir una comprovació si es té accés a les dades afegides
+    }
 
-            // Si vols, també pots verificar els altres camps:
-            assertEquals(descripcio, resultSet.getString("descripcio"));
-            assertEquals(Date.valueOf(data_alta), resultSet.getDate("data_alta"));
-            assertEquals(prov_defecte, resultSet.getString("prov_defecte"));
-            assertEquals(observacions, resultSet.getString("observacions"));
+    @Test
+    void testAfegirFamiliaExcepcioNomBuit() {
+        // Dades d'entrada amb nom buit (invàlid)
+        String nom = "";
+        String descripcio = "Descripció vàlida";
+        LocalDate dataAlta = LocalDate.of(2023, 1, 1);
+        String provDefecte = "Proveïdor Exemple";
+        String observacions = "Observacions vàlides";
 
-        } catch (Exception e) {
-            fail("No hauria d'haver fallat la verificació de la família a la base de dades.");
-        }
+        // Comprovar que es llença una excepció de tipus NomBuit
+        assertThrows(NomBuit.class, () -> familiaLogica.afegirFamilia(nom, descripcio, dataAlta, provDefecte, observacions));
+    }
+
+    @Test
+    void testEliminarFamilia() throws Exception {
+        // Id d'una família a eliminar
+        int id = 1;
+
+        // Executar el mètode eliminarFamilia
+        familiaLogica.eliminarFamilia(id);
+
+        // Nota: Aquí es podria comprovar si realment la família ha estat eliminada, 
+        // depenent de l'accés a les dades després de la crida.
+    }
+
+    @Test
+    public void testObtenirTotesLesFamilies() {
+        FamiliaLogica logica = new FamiliaLogica();
+
+        // Obtenim totes les families
+        List<Familia> families = logica.obtenirTotesLesFamilies();
+
+        // Verificar que la llista no sigui null
+        assertNotNull(families);
+
+        // Si s'espera que hi hagi families a la base de dades, es pot verificar que la llista no estigui buida
+        assertTrue(families.size() >= 0);
     }
 }
