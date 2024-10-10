@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import presentacio.MenuPrincipal;
 import aplicacio.model.Usuari;
+import presentacio.MenuFamilia;
 
 /**
  * JavaFX App
@@ -33,9 +34,15 @@ public class App extends Application {
             MenuPrincipal controller = fxmlLoader.getController();
             controller.setUsuari(usuari);  // Aqui pasem l'objete Usuari
         }
+
+        // Si carreguem la vista de menuFamilia, també passem l'usuari
+        if (fxml.equals("menuFamilia")) {
+            MenuFamilia controller = fxmlLoader.getController();
+            controller.setUsuari(usuari);  // Aquí passem l'objecte Usuari
+        }
         scene.setRoot(root);
     }
-    
+
     //setRoot per usar sense passar l'usuari per tancar la sessió
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));

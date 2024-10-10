@@ -57,8 +57,8 @@ public class MenuFamilia {
 
     // Mètode per establir l'usuari autenticat
     public void setUsuari(Usuari usuari) {
-        this.usuari = usuari;
-        gestionarPermisos();
+        this.usuari = usuari; // Assignar l'usuari a la variable de classe
+        gestionarPermisos(); // Gestionar permisos després d'assignar l'usuari
     }
 
     @FXML
@@ -91,6 +91,8 @@ public class MenuFamilia {
 
         // Desactivar botons al principi
         desactivarBotons();
+        // Gestionar permisos al final
+        gestionarPermisos();
     }
 
     private void gestionarPermisos() {
