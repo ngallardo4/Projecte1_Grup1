@@ -8,6 +8,7 @@ import java.time.LocalDate;
  * descripció: Aquesta classe representa un usuari del sistema amb els atributs id, email,
  * contrasenya, nom, el descompte del treballador, la data d'alta i el rol, si 
  * és Responsable de Magatzem o Venedor.
+ * 
  * @author ngall
  * @version 10/2024.1
  */
@@ -23,7 +24,7 @@ public class Usuari {
     /**
      * Constructor per inicialitzar un nou usuari amb els detalls proporcionats.
      * 
-     * @param idUsuari, Identificador únic per cada usuari.
+     * @param idUsuari, identificador únic per cada usuari.
      * @param email, el correu electrònic de l'usuari que utilitzar1à per registrar-se.
      * @param password, la contrasenya de l'usuari que també utilitzarà per registrar-se.
      * @param nom, el nom de l'usuari.
