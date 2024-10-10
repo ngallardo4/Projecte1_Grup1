@@ -6,6 +6,7 @@ package logica;
 
 import aplicacio.model.Familia;
 import dades.DAOfamiliaImpl;
+import excepcions.NomBuit;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -113,9 +114,9 @@ public class FamiliaLogica {
      * @param observacions
      * @throws Exception
      */
-    private void validarFamilia(String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws Exception {
+    private void validarFamilia(String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws NomBuit, Exception {
         if (nom == null || nom.trim().isEmpty()) {
-            throw new Exception("El nom no pot estar buit.");
+            throw new NomBuit("El nom no pot estar buit.");
         }
         if (descripcio == null || descripcio.trim().isEmpty()) {
             throw new Exception("La descripció no pot estar buida.");
