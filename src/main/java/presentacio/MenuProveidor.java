@@ -30,6 +30,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
@@ -296,13 +297,21 @@ public class MenuProveidor {
                 System.out.println("Error: " + e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Error en modificar el proveedor: " + e.getMessage());
+                mostrarError("Error en modificar la proveidor: " + e.getMessage());
             }
         } else {
             System.out.println("No se ha seleccionado ningún proveedor para modificar.");
         }
     }
 
+    private void mostrarError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null); // No necesitas un encabezado
+        alert.setContentText(mensaje);
+        alert.showAndWait(); // Espera a que el usuario cierre la alerta
+    }
+    
     @FXML
     public void btnElimi_action(ActionEvent event) throws Exception {
         Proveidor proveidorSeleccionat = tabViewProveidor.getSelectionModel().getSelectedItem();
