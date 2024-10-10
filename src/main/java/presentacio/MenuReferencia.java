@@ -12,7 +12,15 @@ import aplicacio.App;
 import aplicacio.model.Referencia;
 import aplicacio.model.Usuari;
 import enums.UnitatMesura;
+import excepcions.IdFamiliaBuit;
 import excepcions.NomBuit;
+import excepcions.UomBuit;
+import excepcions.cifProveidorBuit;
+import excepcions.dataAltaBuit;
+import excepcions.dataCaducitatBuit;
+import excepcions.pesTotalBuit;
+import excepcions.preuTotalBuit;
+import excepcions.quantitatTotalBuit;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -195,15 +203,9 @@ public class MenuReferencia {
     }
 
     @FXML
-    public void btnAfegir_action(ActionEvent event) throws IOException, NomBuit {
+    public void btnAfegir_action(ActionEvent event) throws IOException, NomBuit, UomBuit {
         System.out.println("Botó 'Afegir' presionat");
 
-        String nomReferencia = "";
-        if (nomReferencia.isEmpty()) {
-            throw new NomBuit("El nom de la referencia no pot estar buit.");
-        }
-
-        // Obtener el valor seleccionado del ComboBox
         UnitatMesura uomSeleccionada = cbUOM.getValue();
 
         // Crear una nova referència amb el valor seleccionat
@@ -218,7 +220,9 @@ public class MenuReferencia {
     }
 
     @FXML
-    public void btnMod_action(ActionEvent event) throws IOException {
+    public void btnMod_action(ActionEvent event) throws IOException, NomBuit, UomBuit, IdFamiliaBuit, cifProveidorBuit, dataAltaBuit, 
+        pesTotalBuit, dataCaducitatBuit, quantitatTotalBuit, preuTotalBuit {
+        
         System.out.println("Botó 'Modificar' presionat");
         Referencia referenciaSeleccionada = (Referencia) tabViewRef.getSelectionModel().getSelectedItem();
 
@@ -228,14 +232,90 @@ public class MenuReferencia {
                 if (nomNou.isEmpty()) {
                     throw new NomBuit("El nom de la referencia no pot estar buit.");
                 }
-                UnitatMesura uomNova = cbUOM.getValue();  // Obtener el valor del ComboBox para UOM
-                int idFamiliaNou = Integer.parseInt(tfIdFamilia.getText());
+
+                UnitatMesura uomNova = cbUOM.getValue();
+                if (uomNova == null) {
+                    throw new UomBuit("Has de seleccionar una unitat de mesura (UOM).");
+                }
+
+                String idFamiliaStr = tfIdFamilia.getText();
+                if (idFamiliaStr.isEmpty()) {
+                    throw new IdFamiliaBuit("L'ID de la familia no pot estar buit.");
+                }
+
+                int idFamiliaNou;
+                try {
+                    idFamiliaNou = Integer.parseInt(idFamiliaStr);
+                } catch (NumberFormatException e) {
+                    throw new IdFamiliaBuit("L'ID de la familia ha de ser un número enter.");
+                }
+
                 String cifProveidorNou = tfCifProveidor.getText();
-                LocalDate dataAltaNova = LocalDate.parse(tfDataAlta.getText());
-                float pesNou = Float.parseFloat(tfPes.getText());
-                LocalDate dataCaducitatNova = LocalDate.parse(tfDataCaducitat.getText());
-                int quantitatNova = Integer.parseInt(tfQuantitat.getText());
-                float preuNou = Float.parseFloat(tfPreu.getText());
+                if (cifProveidorNou.isEmpty()) {
+                    throw new cifProveidorBuit("El CIF del proveedor no pot estar buit.");
+                }
+
+                String dataAltaStr = tfDataAlta.getText();
+                if (dataAltaStr.isEmpty()) {
+                    throw new dataAltaBuit("La data d'alta no pot estar buida.");
+                }
+
+                LocalDate dataAltaNova;
+                try {
+                    dataAltaNova = LocalDate.parse(dataAltaStr);
+                } catch (Exception e) {
+                    throw new dataAltaBuit("Format de data d'alta no valida.");
+                }
+
+                String pesTotalStr = tfPes.getText();
+                if (pesTotalStr.isEmpty()) {
+                    throw new pesTotalBuit("El pes total no pot estar buit.");
+                }
+
+                // Convertir el peso a float
+                float pesNou;
+                try {
+                    pesNou = Float.parseFloat(pesTotalStr);
+                } catch (NumberFormatException e) {
+                    throw new pesTotalBuit("El format del pes total es invalit.");
+                }
+
+                String dataCaducitatStr = tfDataCaducitat.getText();
+                if (dataCaducitatStr.isEmpty()) {
+                    throw new dataCaducitatBuit("La data de caducitat no pot estar buida.");
+                }
+
+                LocalDate dataCaducitatNova;
+                try {
+                    dataCaducitatNova = LocalDate.parse(dataCaducitatStr);
+                } catch (Exception e) {
+                    throw new dataCaducitatBuit("Format de data de caducitat no valida.");
+                }
+
+                String quantitatTotalStr = tfQuantitat.getText();
+                if (quantitatTotalStr.isEmpty()) {
+                    throw new quantitatTotalBuit("La cantidad total no puede estar vacía.");
+                }
+
+                // Convertir la cantidad a int
+                int quantitatNova;
+                try {
+                    quantitatNova = Integer.parseInt(quantitatTotalStr);
+                } catch (NumberFormatException e) {
+                    throw new quantitatTotalBuit("El formato de la cantidad total es inválido.");
+                }
+
+                String preuTotalStr = tfPreu.getText();
+                if (preuTotalStr.isEmpty()) {
+                    throw new preuTotalBuit("El preu total no pot estar buida.");
+                }
+
+                float preuNou;
+                try {
+                    preuNou = Float.parseFloat(preuTotalStr);
+                } catch (NumberFormatException e) {
+                    throw new preuTotalBuit("El format del preu total es invalit.");
+                }
 
                 if (referenciaSeleccionada.getId() == 0) {
                     // Si l'ID és 0 és una nova família llavors inserim
@@ -266,6 +346,23 @@ public class MenuReferencia {
                 System.out.println("Familia modificada correctament.");
 
             } catch (NomBuit e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (UomBuit e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (IdFamiliaBuit e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (cifProveidorBuit e) {
+                System.out.println("Error: " + e.getMessage());
+                // Mostrar alerta gráfica al usuario
+            } catch (dataAltaBuit e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (dataCaducitatBuit e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (pesTotalBuit e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (quantitatTotalBuit e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (preuTotalBuit e) {
                 System.out.println("Error: " + e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
