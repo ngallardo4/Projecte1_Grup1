@@ -13,7 +13,7 @@ import aplicacio.model.Referencia;
 import enums.UnitatMesura;
 import java.io.IOException;
 import java.time.LocalDate;
-import javafx.application.Platform;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,40 +27,21 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import logica.ReferenciaLogica;
 
 public class MenuReferencia {
 // COMENTARIO
     @FXML
-    private TableView<Referencia> TabViewRef;
+    private TableView tabViewRef;
 
     @FXML
-    private TableColumn colId, colNom, colUOM, colIdFamilia, colCifProveidor, colDataAlta, colPes, colDataCaducitat, colQuantitat, colPreu;
+    private TableColumn colId, colNom, colUOM, colFamilia, colProveidor, colDataAlta, colPes, colDataCaducitat, colQuantitat, colPreu;
 
     @FXML
-    private TextField tfId, tfNom, tfUOM, tfIdFamilia, tfCifProveidor, tfDataAlta, tfPes, tfDataCaducitat, tfQuantitat, tfPreu;
+    private Button btnLogo, btnTancarSessio, btnAfegir, btnMod, btnElimi, btnEstoc, btnSortida;
 
     @FXML
-    private Button btnLogo;
-
-    @FXML
-    private Button btnTancar;
-
-    @FXML
-    private Button btnEliminar;
-
-    @FXML
-    private Button btnMod;
-
-    @FXML
-    private Button btnAfegir;
-
-    @FXML
-    private Button btnSortir;
-
-    @FXML
-    private Button btnProd;
+    private TextField tfId, tfNom, tfIdFamilia, tfCifProveidor, tfDataAlta, tfPes, tfDataCaducitat, tfQuantitat, tfPreu;
 
     @FXML
     private ComboBox<UnitatMesura> cbUOM;
@@ -68,65 +49,208 @@ public class MenuReferencia {
     private ObservableList<Referencia> llistaObservableReferencia;
     private ReferenciaLogica referenciaLogica;
 
+    private boolean estocMode = false;
+
+    // Mètodes per gestionar els esdeveniments dels botons
     @FXML
-    public void initialize() throws IOException {
+    public void initialize() {
         llistaObservableReferencia = FXCollections.observableArrayList();
-
-        // Inicializa la lógica de Referencia
         referenciaLogica = new ReferenciaLogica();
-        cbUOM.getItems().addAll(UnitatMesura.values());
 
-        // Obtener las referencias de la base de datos
+        cbUOM.setItems(FXCollections.observableArrayList(UnitatMesura.values()));
+
         try {
             llistaObservableReferencia.addAll(referenciaLogica.obtenirTotesLesReferencies());
         } catch (Exception e) {
-            e.printStackTrace(); // Manejo de errores
+            e.printStackTrace(); // Maneig d'errors, si cal
         }
 
-        // Configurar las columnas del TableView
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
         colUOM.setCellValueFactory(new PropertyValueFactory<>("uom"));
-        colIdFamilia.setCellValueFactory(new PropertyValueFactory<>("id_familia"));
-        colCifProveidor.setCellValueFactory(new PropertyValueFactory<>("cif_proveidor"));
+        colFamilia.setCellValueFactory(new PropertyValueFactory<>("id_familia"));
+        colProveidor.setCellValueFactory(new PropertyValueFactory<>("cif_proveidor"));
         colDataAlta.setCellValueFactory(new PropertyValueFactory<>("data_alta"));
         colPes.setCellValueFactory(new PropertyValueFactory<>("pes_total"));
         colDataCaducitat.setCellValueFactory(new PropertyValueFactory<>("data_caducitat"));
         colQuantitat.setCellValueFactory(new PropertyValueFactory<>("quantitat_total"));
         colPreu.setCellValueFactory(new PropertyValueFactory<>("preu_total"));
 
-        // Hacer editables algunas columnas si es necesario
-        colNom.setCellFactory(TextFieldTableCell.forTableColumn());
-        colNom.setOnEditCommit(event -> {
-            TableColumn.CellEditEvent<Referencia, String> e = (TableColumn.CellEditEvent<Referencia, String>) event;
-            Referencia referencia = e.getRowValue();
-            referencia.setNom(e.getNewValue());
-        });
+        // Assignar event al TableView per seleccionar família
+        tabViewRef.setItems(llistaObservableReferencia);
+        tabViewRef.setOnMouseClicked(this::handleOnMouseClicked);
 
-        // Configurar el TableView
-        TabViewRef.setItems(llistaObservableReferencia);
-        TabViewRef.setOnMouseClicked(this::handleOnMouseClicked);
+        // Desactivar botons al principi
+        desactivarBotons();
+    }
+
+    private void desactivarBotons() {
+        btnElimi.setDisable(true);
+        btnMod.setDisable(true);
     }
 
     @FXML
     private void handleOnMouseClicked(MouseEvent ev) {
         if (ev.getButton() == MouseButton.PRIMARY) {
-            Referencia referencia = TabViewRef.getSelectionModel().getSelectedItem();
+            Referencia referenciaSeleccionada = (Referencia) tabViewRef.getSelectionModel().getSelectedItem();
 
-            if (referencia != null) {
-                System.out.println("Referencia seleccionada: " + referencia.toString());
-                tfId.setText(String.valueOf(referencia.getId()));
-                tfNom.setText(referencia.getNom());
-                tfUOM.setText(referencia.getUom().toString());
-                tfIdFamilia.setText(String.valueOf(referencia.getId_familia()));
-                tfCifProveidor.setText(referencia.getCif_proveidor());
-                tfDataAlta.setText(referencia.getData_alta().toString());
-                tfPes.setText(String.valueOf(referencia.getPes_total()));
-                tfDataCaducitat.setText(referencia.getData_caducitat().toString());
-                tfQuantitat.setText(String.valueOf(referencia.getQuantitat_total()));
-                tfPreu.setText(String.valueOf(referencia.getPreu_total()));
+            if (referenciaSeleccionada != null) {
+                System.out.println("Referencia seleccionada: " + referenciaSeleccionada.toString());
+                tfId.setText(String.valueOf(referenciaSeleccionada.getId()));
+                tfNom.setText(referenciaSeleccionada.getNom());
+                cbUOM.setValue(referenciaSeleccionada.getUom());
+                tfIdFamilia.setText(String.valueOf(referenciaSeleccionada.getId_familia()));
+                tfCifProveidor.setText(referenciaSeleccionada.getCif_proveidor());
+                tfDataAlta.setText(referenciaSeleccionada.getData_alta().toString());
+                tfPes.setText(String.valueOf(referenciaSeleccionada.getPes_total()));
+                tfDataCaducitat.setText(referenciaSeleccionada.getData_caducitat().toString());
+                tfQuantitat.setText(String.valueOf(referenciaSeleccionada.getQuantitat_total()));
+                tfPreu.setText(String.valueOf(referenciaSeleccionada.getPreu_total()));
+
+                // Activar botons
+                btnElimi.setDisable(false);
+                btnMod.setDisable(false);
             } else {
                 System.out.println("No se seleccionó ninguna fila.");
+                desactivarBotons();
+            }
+        }
+    }
+
+    @FXML
+    public void btnSortida_action(ActionEvent event) throws IOException {
+        System.out.println("Botó 'Sortir' presionat");
+        App.setRoot("menuPrincipal");
+    }
+
+    @FXML
+    public void btnTancar_action(ActionEvent event) throws IOException {
+        System.out.println("Botó 'Tancar' presionat");
+        App.setRoot("iniciSessio");
+    }
+
+    @FXML
+    public void btnAfegir_action(ActionEvent event) throws IOException {
+        System.out.println("Botó 'Afegir' presionat");
+
+        // Obtener el valor seleccionado del ComboBox
+        UnitatMesura uomSeleccionada = cbUOM.getValue();
+
+        // Crear una nova referència amb el valor seleccionat
+        Referencia novaReferencia = new Referencia(0, "", uomSeleccionada, 0, "", LocalDate.now(), 0.0f, LocalDate.now(), 0, 0.0f);
+
+        // Afegir la nova referència a la llista observable
+        llistaObservableReferencia.add(novaReferencia);
+
+        // Actualitzar el TableView
+        tabViewRef.setItems(llistaObservableReferencia);
+        tabViewRef.getSelectionModel().select(novaReferencia);
+    }
+
+    @FXML
+    public void btnMod_action(ActionEvent event) throws IOException {
+        System.out.println("Botó 'Modificar' presionat");
+        Referencia referenciaSeleccionada = (Referencia) tabViewRef.getSelectionModel().getSelectedItem();
+
+        if (referenciaSeleccionada != null) {
+            try {
+                String nomNou = tfNom.getText();
+                UnitatMesura uomNova = cbUOM.getValue();  // Obtener el valor del ComboBox para UOM
+                int idFamiliaNou = Integer.parseInt(tfIdFamilia.getText());
+                String cifProveidorNou = tfCifProveidor.getText();
+                LocalDate dataAltaNova = LocalDate.parse(tfDataAlta.getText());
+                float pesNou = Float.parseFloat(tfPes.getText());
+                LocalDate dataCaducitatNova = LocalDate.parse(tfDataCaducitat.getText());
+                int quantitatNova = Integer.parseInt(tfQuantitat.getText());
+                float preuNou = Float.parseFloat(tfPreu.getText());
+
+                if (referenciaSeleccionada.getId() == 0) {
+                    // Si l'ID és 0 és una nova família llavors inserim
+                    referenciaLogica.afegirReferencia(nomNou, uomNova, idFamiliaNou, cifProveidorNou, dataAltaNova, pesNou, dataCaducitatNova, quantitatNova, preuNou);
+                    // Actualitzem l'objecte seleccionat per fer-lo coincidir amb la nova família
+                    System.out.println("Nova família afegida amb ID: " + referenciaSeleccionada.getId());
+                } else {
+                    // Si l'ID és diferent de 0 ja existeix i fem una actualització
+                    referenciaLogica.modificarReferencia(referenciaSeleccionada.getId(), nomNou, uomNova, idFamiliaNou, cifProveidorNou, dataAltaNova, pesNou, dataCaducitatNova, quantitatNova, preuNou);
+                    System.out.println("Família modificada correctament.");
+                }
+
+                // Actualizar els valors de la familia a la llista observable (TableView)
+                referenciaSeleccionada.setNom(nomNou);
+                referenciaSeleccionada.setUom(uomNova);
+                referenciaSeleccionada.setId_familia(idFamiliaNou);
+                referenciaSeleccionada.setCif_proveidor(cifProveidorNou);
+                referenciaSeleccionada.setData_alta(dataAltaNova);
+                referenciaSeleccionada.setPes_total(pesNou);
+                referenciaSeleccionada.setData_caducitat(dataCaducitatNova);
+                referenciaSeleccionada.setQuantitat_total(quantitatNova);
+                referenciaSeleccionada.setPreu_total(preuNou);
+
+                // Refrescar el TableView per mostrar els canvis
+                tabViewRef.refresh();
+                tabViewRef.setItems(llistaObservableReferencia);
+
+                System.out.println("Familia modificada correctament.");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Error en modificar la família: " + e.getMessage());
+            }
+        } else {
+            System.out.println("No s'ha seleccionat cap família per modificar.");
+        }
+    }
+
+    @FXML
+    public void btnElimi_action(ActionEvent event) throws IOException {
+        System.out.println("Botó 'Eliminar' presionat");
+        Referencia referenciaSeleccionada = (Referencia) tabViewRef.getSelectionModel().getSelectedItem();
+
+        if (referenciaSeleccionada != null) {
+            try {
+                // Eliminar de la base de dades
+                referenciaLogica.eliminarReferencia(referenciaSeleccionada.getId());
+                System.out.println("Familia eliminada de la base de dades.");
+
+                // Eliminar de la llista observable
+                llistaObservableReferencia.remove(referenciaSeleccionada);
+                tabViewRef.setItems(llistaObservableReferencia);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("No s'ha seleccionat cap família per eliminar.");
+        }
+    }
+
+    @FXML
+    public void btnEstoc_action(ActionEvent event) throws IOException {
+        System.out.println("Botó 'Estoc' presionat");
+
+        if (!estocMode) {
+            // Mostrar solo productos sin stock
+            try {
+                List<Referencia> referenciesSenseEstoc = referenciaLogica.obtenirReferenciesSenseEstoc();
+                llistaObservableReferencia.clear();
+                llistaObservableReferencia.addAll(referenciesSenseEstoc);
+                tabViewRef.refresh();
+                tabViewRef.setItems(llistaObservableReferencia);
+                estocMode = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            // Restaurar la lista completa
+            try {
+                List<Referencia> totesLesReferencies = referenciaLogica.obtenirTotesLesReferencies();
+                llistaObservableReferencia.clear();
+                llistaObservableReferencia.addAll(totesLesReferencies);
+                tabViewRef.refresh();
+                tabViewRef.setItems(llistaObservableReferencia);
+                estocMode = false;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -134,80 +258,7 @@ public class MenuReferencia {
     @FXML
     public void btnLogo_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Logo' presionat");
-        App.setRoot("secondary");
+        App.setRoot("menuPrincipal");
     }
 
-    @FXML
-    public void btnTancar_action(ActionEvent event) throws IOException {
-        System.out.println("Botó 'Tancar' presionat");
-        Stage stage = (Stage) btnTancar.getScene().getWindow();
-        stage.close();
-        Platform.exit();
-    }
-
-    @FXML
-    public void btnSortir_action(ActionEvent event) throws IOException {
-        System.out.println("Botó 'Sortir' presionat");
-        App.setRoot("secondary");
-    }
-
-    @FXML
-    public void btnNova_action(ActionEvent event) throws IOException {
-        System.out.println("Botó 'Nova' presionat");
-
-        String nom = tfNom.getText();
-        UnitatMesura uom = cbUOM.getValue();
-        int idFamilia = Integer.parseInt(tfIdFamilia.getText());
-        String cifProveidor = tfCifProveidor.getText();
-        LocalDate dataAlta = LocalDate.parse(tfDataAlta.getText());
-        float pes_total = Float.parseFloat(tfPes.getText());
-        LocalDate dataCaducitat = LocalDate.parse(tfDataCaducitat.getText());
-        int quantitat_total = Integer.parseInt(tfQuantitat.getText());
-        float preu_total = Float.parseFloat(tfPreu.getText());
-
-        try {
-            referenciaLogica.afegirReferencia(nom, uom, idFamilia, cifProveidor, dataAlta, dataCaducitat, pes_total, quantitat_total, preu_total);
-            Referencia novaReferencia = new Referencia(0, nom, uom, idFamilia, cifProveidor, dataAlta, pes_total, dataCaducitat, quantitat_total, preu_total);
-            llistaObservableReferencia.add(novaReferencia);
-            TabViewRef.setItems(llistaObservableReferencia);
-
-            // Limpiar los campos después de agregar
-            tfNom.clear();
-            cbUOM.getSelectionModel().clearSelection();
-            tfIdFamilia.clear();
-            tfCifProveidor.clear();
-            tfDataAlta.clear();
-            tfPes.clear();
-            tfDataCaducitat.clear();
-            tfQuantitat.clear();
-            tfPreu.clear();
-
-        } catch (Exception e) {
-            e.printStackTrace(); // Manejo de errores
-        }
-    }
-
-    @FXML
-    public void btnDel_action(ActionEvent event) throws IOException {
-        Referencia referencia = TabViewRef.getSelectionModel().getSelectedItem();
-
-        if (referencia != null) {
-            try {
-                referenciaLogica.eliminarReferencia(referencia.getId());
-                llistaObservableReferencia.remove(referencia);
-                TabViewRef.setItems(llistaObservableReferencia);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("No se ha seleccionat cap referència per eliminar.");
-        }
-    }
-
-    @FXML
-    public void btnProd_action(ActionEvent event) throws IOException {
-        System.out.println("Botó 'Productes' presionat");
-        App.setRoot("menuProducte");
-    }
 }

@@ -5,8 +5,10 @@
 package enums;
 
 /**
- *
+ * descripció: Enumeració que representa les diferents unitats de mesura 
+ * utilitzades per als productes del magatzem.
  * @author danie
+ * @version 10/2024.1
  */
 public enum UnitatMesura {
     KG, L, PACKS;
