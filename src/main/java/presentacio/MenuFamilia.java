@@ -149,7 +149,7 @@ public class MenuFamilia {
     @FXML
     public void btnLogo_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Logo' presionat");
-        App.setRoot("menuPrincipal");
+        App.setRoot("menuPrincipal", this.usuari);
     }
 
     @FXML

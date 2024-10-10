@@ -11,14 +11,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+
 
 /**
+ * descripció: Aquesta classe és el controlador que gestiona la finestra del
+ * Menú principal, gestiona les accions en pressionar els botons i manté
+ * l'informació de l'usuari autenticat per pasar-ho als següents controladors,
+ * MenuFamilia, MenuProveidor i MenuReferencia.
  *
  * @author ngallardo
+ * @version 10/2024.1
  */
 public class MenuPrincipal {
 
@@ -39,11 +41,20 @@ public class MenuPrincipal {
 
     private Usuari usuari;
 
-    //Métode per establir l'usuari autenticat
+    /**
+     * Estableix l'usuari autenticat per a la sessió actual.
+     *
+     * @param usuari, establert com a autenticat.
+     */
     public void setUsuari(Usuari usuari) {
         this.usuari = usuari; // Guarda el usuario
     }
-    
+
+    /**
+     * Gestiona l'acció del botó Familia, canvia a la vista del menú família.
+     *
+     * @param event, esdeveniment de clic que desencadena l'acció.
+     */
     @FXML
     private void handleFamilia(ActionEvent event) {
         try {
@@ -53,6 +64,12 @@ public class MenuPrincipal {
         }
     }
 
+    /**
+     * Gestiona l'acció del botó Referència, canvia a la vista del menú
+     * referència.
+     *
+     * @param event, esdeveniment de clic que desencadena l'acció.
+     */
     @FXML
     private void handleReferencia(ActionEvent event) {
         try {
@@ -62,6 +79,12 @@ public class MenuPrincipal {
         }
     }
 
+    /**
+     * Gestiona l'acció del botó Proveïdor, canvia a la vista del menú
+     * proveïdor.
+     *
+     * @param event, esdeveniment de clic que desencadena l'acció.
+     */
     @FXML
     private void handleProveidor(ActionEvent event) {
         try {
@@ -71,6 +94,12 @@ public class MenuPrincipal {
         }
     }
 
+    /**
+     * Gestiona l'acció del botó Tancar sessió, torna a la vista d'inici de
+     * sessió.
+     *
+     * @param event, esdeveniment de clic que desencadena l'acció.
+     */
     @FXML
     private void handleTancarSessio(ActionEvent event) {
         try {
