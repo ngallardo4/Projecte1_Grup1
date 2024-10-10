@@ -40,7 +40,6 @@ import logica.ReferenciaLogica;
 import javafx.scene.control.Alert;
 
 public class MenuReferencia {
-// COMENTARIO
 
     @FXML
     private TableView tabViewRef;
