@@ -10,6 +10,8 @@ package presentacio;
  */
 import aplicacio.App;
 import aplicacio.model.Referencia;
+import aplicacio.model.Usuari;
+import dades.DAOreferenciaImpl;
 import enums.UnitatMesura;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -28,6 +30,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import logica.ReferenciaLogica;
+import logica.UsuariLogica;
 
 public class MenuReferencia {
 // COMENTARIO
@@ -51,6 +54,16 @@ public class MenuReferencia {
 
     private boolean estocMode = false;
 
+    private int familiaId;
+
+    public int getFamiliaId() {
+        return familiaId;
+    }
+
+    public void setFamiliaId(int familiaId) {
+        this.familiaId = familiaId; 
+    }
+
     // Mètodes per gestionar els esdeveniments dels botons
     @FXML
     public void initialize() {
@@ -60,7 +73,7 @@ public class MenuReferencia {
         cbUOM.setItems(FXCollections.observableArrayList(UnitatMesura.values()));
 
         try {
-            llistaObservableReferencia.addAll(referenciaLogica.obtenirTotesLesReferencies());
+            llistaObservableReferencia.addAll(referenciaLogica.obtenirTotesLesReferencies(familiaId));
         } catch (Exception e) {
             e.printStackTrace(); // Maneig d'errors, si cal
         }
@@ -243,7 +256,7 @@ public class MenuReferencia {
         } else {
             // Restaurar la lista completa
             try {
-                List<Referencia> totesLesReferencies = referenciaLogica.obtenirTotesLesReferencies();
+                List<Referencia> totesLesReferencies = referenciaLogica.obtenirTotesLesReferencies(familiaId);
                 llistaObservableReferencia.clear();
                 llistaObservableReferencia.addAll(totesLesReferencies);
                 tabViewRef.refresh();

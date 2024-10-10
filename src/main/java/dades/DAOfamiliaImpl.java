@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author Yaiza
  */
-public class DAOfamiliaImpl implements DAOinterface<Familia> {
+public class DAOfamiliaImpl implements DAOinterface<Familia>, DAOinterfaceLlista<Familia> {
 
     /**
      * Afegeix una nova família a la base de dades.

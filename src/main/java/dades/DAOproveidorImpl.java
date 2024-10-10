@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author danie
  */
-public class DAOproveidorImpl implements DAOinterface<Proveidor> {
+public class DAOproveidorImpl implements DAOinterface<Proveidor>, DAOinterfaceLlista<Proveidor> {
 
     /**
      * Añade un nuevo proveedor a la base de datos.

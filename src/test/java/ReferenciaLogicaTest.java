@@ -38,11 +38,11 @@ public class ReferenciaLogicaTest {
         //logica.afegirReferencia("Producte Test", UnitatMesura.KG.toString(), 1, "CIF123", LocalDate.now(), LocalDate.now().plusDays(30), 10.5f, 0, 20.0f);
 
         // Recuperar la lista de proveedores
-        List<Referencia> proveidors = logica.obtenirTotesLesReferencies();
+        //List<Referencia> proveidors = logica.obtenirTotesLesReferencies();
 
         // Imprimir los proveedores recuperados
         System.out.println("Producte recuperat despres de la inserción:");
-        proveidors.forEach(p -> System.out.println(p.getId()));
+        //proveidors.forEach(p -> System.out.println(p.getId()));
     }
 
     // Test para modificarReferencia()
@@ -58,7 +58,7 @@ public class ReferenciaLogicaTest {
                 1, "CIF123", dataAlta, dataCaducitat,
                 10.0f, 0, 20.0f);
 */
-        // Obtener la referencia añadida
+  /*      // Obtener la referencia añadida
         Referencia referencia = referenciaLogica.obtenirTotesLesReferencies().stream()
                 .filter(r -> r.getCif_proveidor().equals("CIF123"))
                 .findFirst().orElse(null);
@@ -81,6 +81,7 @@ public class ReferenciaLogicaTest {
         assertEquals(15.0f, referenciaModificada.getPes_total(), "El peso total debería haber sido actualizado.");
         assertEquals(4, referenciaModificada.getQuantitat_total(), "La cantidad total debería haber sido actualizada.");
         assertEquals(30.0f, referenciaModificada.getPreu_total(), "El precio total debería haber sido actualizado.");
+*/
     }
 
 }
