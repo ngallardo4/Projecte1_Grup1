@@ -12,6 +12,7 @@ import aplicacio.App;
 import aplicacio.model.Referencia;
 import aplicacio.model.Usuari;
 import enums.UnitatMesura;
+import excepcions.NomBuit;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -194,8 +195,13 @@ public class MenuReferencia {
     }
 
     @FXML
-    public void btnAfegir_action(ActionEvent event) throws IOException {
+    public void btnAfegir_action(ActionEvent event) throws IOException, NomBuit {
         System.out.println("Botó 'Afegir' presionat");
+
+        String nomReferencia = "";
+        if (nomReferencia.isEmpty()) {
+            throw new NomBuit("El nom de la referencia no pot estar buit.");
+        }
 
         // Obtener el valor seleccionado del ComboBox
         UnitatMesura uomSeleccionada = cbUOM.getValue();
@@ -219,6 +225,9 @@ public class MenuReferencia {
         if (referenciaSeleccionada != null) {
             try {
                 String nomNou = tfNom.getText();
+                if (nomNou.isEmpty()) {
+                    throw new NomBuit("El nom de la referencia no pot estar buit.");
+                }
                 UnitatMesura uomNova = cbUOM.getValue();  // Obtener el valor del ComboBox para UOM
                 int idFamiliaNou = Integer.parseInt(tfIdFamilia.getText());
                 String cifProveidorNou = tfCifProveidor.getText();
@@ -256,6 +265,8 @@ public class MenuReferencia {
 
                 System.out.println("Familia modificada correctament.");
 
+            } catch (NomBuit e) {
+                System.out.println("Error: " + e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Error en modificar la família: " + e.getMessage());
