@@ -17,11 +17,16 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 /**
- *
+ * descripció: Aquesta classe és el controlador que gestiona l'interfície d'usuari
+ * per al procés d'iniciar sessió. Verifica les credencials introduïdes per 
+ * l'usuari i si són correctes permet l'accés a l'aplicació.
+ * Utilitza una instància de DAOusuariImpl per obtenir les dades d'usuari i 
+ * UsuariLogica per validar-les.
  * @author ngall
+ * @version 10/2024.1
  */
 public class Login {
-    
+
     @FXML
     private TextField correuField;
     @FXML
@@ -31,19 +36,28 @@ public class Login {
     
     private DAOusuariImpl usuariDAO;
     private UsuariLogica usuariLogica; 
-    private Usuari usuariAutenticat; // Variable per emmagatzemar l'usuari autenticat
+    private Usuari usuariAutenticat;
 
-    //Métode per inicialitzar el controlador
+    /**
+     * Métode per inicialitzar el controlador de la finestra del Login. S'encarrega
+     * de carregar el DAO amb el fitxer que porta les credencials correctes i 
+     * inicialitza la lògica de l'usuari.
+     */
     @FXML
     public void initialize(){
         String rutaArxiu = "uspass.txt";
         usuariDAO = new DAOusuariImpl(rutaArxiu);
-        usuariLogica = new UsuariLogica(usuariDAO); // Inicialitzem UsuariLogica amb el DAO
+        usuariLogica = new UsuariLogica(usuariDAO);
         
         //Acció que realitzarà el botó Confirmar
         btnLogin.setOnAction(this::verificarLogin);
     }
     
+    /**
+     * Métode per verificar el login de l'usuari, mitjançant els mètodes empleats
+     * a DAOusuariImpl y UsuariLogica, quan es prem el botó.
+     * @param event, l'esdeveniment de quan premem el botó de confirmar al login.
+     */
     private void verificarLogin(ActionEvent event){
         String email = correuField.getText();
         String password = contrasenyaField.getText();
@@ -64,6 +78,11 @@ public class Login {
         }
     }
     
+    /**
+     * Aquest mètode serveix per mostrar un missatge a l'usuari.
+     * @param titol, el títol de la finestra d'alerta.
+     * @param missatge, el contingut del missatge que es mostrarà.
+     */
     private void mostrarMissatge(String titol, String missatge){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titol);
@@ -72,6 +91,11 @@ public class Login {
         alert.showAndWait();
     }
     
+    /**
+     * Aquest mètode serveix per mostrar un missatge d'error a l'usuari.
+     * @param titol, el títol de la finestra d'alerta.
+     * @param missatge, el contingut del missatge que es mostrarà.
+     */
     private void mostrarMissatgeError(String titol, String missatge){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(titol);
@@ -80,13 +104,17 @@ public class Login {
         alert.showAndWait();
     }
     
+    /**
+     * Aquest mètode serveix per poder processar la redirecció a la finestra del
+     * menú principal.
+     * @param event, l'esdeveniment del login correcte.
+     */
     @FXML
     private void handleLogin(ActionEvent event) {
         try{
             App.setRoot("menuPrincipal", usuariAutenticat);
         } catch (IOException e){
             mostrarMissatgeError("Error", "No s'ha pogut obrir el menú principal.");
-        }
-        
+        }    
     }
 }
