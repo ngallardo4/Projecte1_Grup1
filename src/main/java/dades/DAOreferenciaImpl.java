@@ -107,9 +107,10 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
      *
      * @param referencia la {@code Referencia} que contiene los datos
      * actualizados.
+     * @throws java.lang.Exception
      */
     @Override
-    public void actualitzar(Referencia referencia) {
+    public void actualitzar(Referencia referencia){
         String sql = "UPDATE referencia SET nom = ?, UOM = ?, id_familia = ?, cif_proveidor = ?, data_alta = ?, pes_total = ?, data_caducitat = ?, quantitat_total = ?, preu_total = ? WHERE id = ?";
         try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -126,7 +127,7 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+             throw new RuntimeException("Error al actualizar la familia en la base de datos.");
         }
     }
 
@@ -169,7 +170,7 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
                 UnitatMesura uom = UnitatMesura.valueOf(rs.getString("UOM"));
 
                 Proveidor proveidor = new Proveidor(
-                        rs.getString("nom_proveidor")
+                        rs.getString("cif_proveidor")
                 );
 
                 Referencia ref = new Referencia(

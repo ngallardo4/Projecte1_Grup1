@@ -13,11 +13,20 @@ package logica;
 import aplicacio.model.Referencia;
 import dades.DAOreferenciaImpl;
 import enums.UnitatMesura;
+import excepcions.IdFamiliaBuit;
 import excepcions.NomBuit;
+import excepcions.UomBuit;
+import excepcions.cifProveidorBuit;
+import excepcions.dataAltaBuit;
+import excepcions.dataCaducitatBuit;
+import excepcions.pesTotalBuit;
+import excepcions.preuTotalBuit;
+import excepcions.quantitatTotalBuit;
 
 import java.time.LocalDate;
 import java.util.List;
 // COMENTARIO
+
 public class ReferenciaLogica {
 
     private final DAOreferenciaImpl daoReferencia;
@@ -63,33 +72,37 @@ public class ReferenciaLogica {
 
     private void validarReferencia(String nom, UnitatMesura uom, int idFamilia, String cifProveidor,
             LocalDate dataAlta, float pesTotal, LocalDate dataCaducitat,
-            int quantitatTotal, float preuTotal) throws Exception, NomBuit {
+            int quantitatTotal, float preuTotal) throws Exception, NomBuit, UomBuit, IdFamiliaBuit, cifProveidorBuit,
+            dataAltaBuit, pesTotalBuit, dataCaducitatBuit, quantitatTotalBuit, preuTotalBuit {
+        
         if (nom == null || nom.trim().isEmpty()) {
             throw new NomBuit("El nom no pot estar buit.");
         }
-        if (uom == null) { //Posible ERROR
-            throw new Exception("La unitat de mesura no pot estar buida.");
+        if (uom == null) { 
+            throw new UomBuit("La unitat de mesura no pot estar buida.");
         }
         if (idFamilia <= 0) {
-            throw new Exception("L'ID de família ha de ser major que 0.");
+            throw new IdFamiliaBuit("L'ID de família ha de ser major que 0.");
         }
         if (cifProveidor == null || cifProveidor.trim().isEmpty()) {
-            throw new Exception("El CIF del proveïdor no pot estar buit.");
+            throw new cifProveidorBuit("El CIF del proveïdor no pot estar buit.");
         }
         if (dataAlta == null || dataAlta.isAfter(LocalDate.now())) {
-            throw new Exception("La data d'alta no és vàlida.");
+            throw new dataAltaBuit("La data d'alta no és vàlida.");
         }
         if (pesTotal < 0) {
-            throw new Exception("El pes no pot ser negatiu.");
+            throw new pesTotalBuit("El pes no pot ser negatiu.");
         }
         if (dataCaducitat != null && dataCaducitat.isBefore(dataAlta)) {
-            throw new Exception("La data de caducitat no pot ser anterior a la data d'alta.");
+            throw new dataCaducitatBuit("La data de caducitat no pot ser anterior a la data d'alta.");
         }
         if (quantitatTotal < 0) {
-            throw new Exception("La quantitat no pot ser negativa.");
+            throw new quantitatTotalBuit("La quantitat no pot ser negativa.");
         }
         if (preuTotal < 0) {
-            throw new Exception("El preu no pot ser negatiu.");
+            throw new preuTotalBuit("El preu no pot ser negatiu.");
         }
     }
 }
+
+

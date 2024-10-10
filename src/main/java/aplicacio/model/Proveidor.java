@@ -49,10 +49,10 @@ public class Proveidor {
     
     /**
      * Constructor per crear un nou proveïdor només amb el nom.
-     * @param Nom El nom del proveïdor.
+     * @param CIF El cif del proveïdor.
      */
-    public Proveidor(String Nom) {
-        this.Nom = Nom;
+    public Proveidor(String CIF) {
+        this.CIF = CIF;
     }
     
     /**
