@@ -36,7 +36,7 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor>, DAOinterfaceLl
     public void afegir(Proveidor proveidor) {
         String sql = "INSERT INTO proveidor (cif, nom, Estat, motiuInactiu, telefon, descompte, data_alta, qualificacio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = MyDataSource.getConnection(); // Cambiar el PreparedStatement para que devuelva las claves generadas
-                 PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             // Configurar los parámetros de la sentencia SQL
             stmt.setString(1, proveidor.getCIF());
@@ -51,18 +51,6 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor>, DAOinterfaceLl
             // Ejecutar la inserción
             int result = stmt.executeUpdate();
             System.out.println("Resultado de la inserción: " + result);
-
-            // Obtener las claves generadas (el CIF)
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    // Asignar el CIF generado al objeto proveidor
-                    String generatedCIF = generatedKeys.getString(1); // Cambiamos a String
-                    proveidor.setCIF(generatedCIF); // Suponiendo que hay un método setCIF en la clase Proveidor
-                    System.out.println("CIF generat: " + generatedCIF);  // Imprime el CIF generado
-                } else {
-                    throw new SQLException("No se ha generado un CIF para el proveidor.");
-                }
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -102,17 +90,17 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor>, DAOinterfaceLl
 
     @Override
     public void actualitzar(Proveidor proveidor) {
-        String sql = "UPDATE proveidor SET CIF= ?, Nom = ?, Estat = ?, MotiuInactiu = ?, Telefon = ?, Descompte = ?, Data_Alta = ?, Qualificacio = ? WHERE cif = ?";
+        String sql = "UPDATE proveidor SET Nom = ?, Estat = ?, MotiuInactiu = ?, Telefon = ?, Descompte = ?, Data_Alta = ?, Qualificacio = ? WHERE CIF = ?";
         try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, proveidor.getCIF());
-            stmt.setString(2, proveidor.getNom());
-            stmt.setString(3, proveidor.getEstat().name());
-            stmt.setString(4, proveidor.getMotiuInactiu());
-            stmt.setString(5, proveidor.getTelefon());
-            stmt.setFloat(6, proveidor.getDescompte());
-            stmt.setDate(7, Date.valueOf(proveidor.getData_Alta()));
-            stmt.setInt(8, proveidor.getQualificacio());
+            stmt.setString(1, proveidor.getNom());
+            stmt.setString(2, proveidor.getEstat().name());
+            stmt.setString(3, proveidor.getMotiuInactiu());
+            stmt.setString(4, proveidor.getTelefon());
+            stmt.setFloat(5, proveidor.getDescompte());
+            stmt.setDate(6, Date.valueOf(proveidor.getData_Alta()));
+            stmt.setInt(7, proveidor.getQualificacio());
+            stmt.setString(8, proveidor.getCIF()); // Ahora el CIF es el último parámetro
 
             stmt.executeUpdate();
         } catch (SQLException e) {
