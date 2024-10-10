@@ -7,6 +7,10 @@ package logica;
 import aplicacio.model.Familia;
 import dades.DAOfamiliaImpl;
 import excepcions.NomBuit;
+import excepcions.cifProveidorBuit;
+import excepcions.dataAltaBuit;
+import excepcions.descripcioBuit;
+import excepcions.observacionsBuit;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -114,21 +118,21 @@ public class FamiliaLogica {
      * @param observacions
      * @throws Exception
      */
-    private void validarFamilia(String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws NomBuit, Exception {
+    private void validarFamilia(String nom, String descripcio, LocalDate data_alta, String prov_defecte, String observacions) throws NomBuit, descripcioBuit, dataAltaBuit, cifProveidorBuit, observacionsBuit {
         if (nom == null || nom.trim().isEmpty()) {
             throw new NomBuit("El nom no pot estar buit.");
         }
         if (descripcio == null || descripcio.trim().isEmpty()) {
-            throw new Exception("La descripció no pot estar buida.");
+            throw new descripcioBuit ("La descripció no pot estar buida.");
         }
         if (data_alta == null || data_alta.isAfter(LocalDate.now())) {
-            throw new Exception("La data d'alta no és vàlida.");
+            throw new dataAltaBuit ("La data d'alta no és vàlida.");
         }
         if (prov_defecte == null || prov_defecte.trim().isEmpty()) {
-            throw new Exception("El proveïdor per defecte no pot estar buit.");
+            throw new cifProveidorBuit ("El proveïdor per defecte no pot estar buit.");
         }
         if (observacions == null || observacions.trim().isEmpty()) {
-            throw new Exception("Les observacions no poden estar buides.");
+            throw new observacionsBuit ("Les observacions no poden estar buides.");
         }
     }
 }

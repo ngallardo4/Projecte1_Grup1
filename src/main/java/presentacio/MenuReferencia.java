@@ -237,19 +237,19 @@ public class MenuReferencia {
 
                 String idFamiliaStr = tfIdFamilia.getText();
                 if (idFamiliaStr.isEmpty()) {
-                    throw new IdFamiliaBuit("L'ID de la familia no pot estar buit.");
+                    throw new IdFamiliaBuit("L'ID de la família no pot estar buit.");
                 }
 
                 int idFamiliaNou;
                 try {
                     idFamiliaNou = Integer.parseInt(idFamiliaStr);
                 } catch (NumberFormatException e) {
-                    throw new IdFamiliaBuit("L'ID de la familia ha de ser un número enter.");
+                    throw new IdFamiliaBuit("L'ID de la família ha de ser un número enter.");
                 }
 
                 String cifProveidorNou = tfCifProveidor.getText();
                 if (cifProveidorNou.isEmpty()) {
-                    throw new cifProveidorBuit("El CIF del proveedor no pot estar buit.");
+                    throw new cifProveidorBuit("El CIF del proveïdor no pot estar buit.");
                 }
 
                 String dataAltaStr = tfDataAlta.getText();
@@ -274,7 +274,7 @@ public class MenuReferencia {
                 try {
                     pesNou = Float.parseFloat(pesTotalStr);
                 } catch (NumberFormatException e) {
-                    throw new pesTotalBuit("El format del pes total es invalit.");
+                    throw new pesTotalBuit("El format del pes total és invalit.");
                 }
 
                 String dataCaducitatStr = tfDataCaducitat.getText();
@@ -291,7 +291,7 @@ public class MenuReferencia {
 
                 String quantitatTotalStr = tfQuantitat.getText();
                 if (quantitatTotalStr.isEmpty()) {
-                    throw new quantitatTotalBuit("La cantidad total no puede estar vacía.");
+                    throw new quantitatTotalBuit("La quantitat total no pot estar buida.");
                 }
 
                 // Convertir la cantidad a int
@@ -299,12 +299,12 @@ public class MenuReferencia {
                 try {
                     quantitatNova = Integer.parseInt(quantitatTotalStr);
                 } catch (NumberFormatException e) {
-                    throw new quantitatTotalBuit("El formato de la cantidad total es inválido.");
+                    throw new quantitatTotalBuit("El format de la quantitat total es invalit.");
                 }
 
                 String preuTotalStr = tfPreu.getText();
                 if (preuTotalStr.isEmpty()) {
-                    throw new preuTotalBuit("El preu total no pot estar buida.");
+                    throw new preuTotalBuit("El preu total no pot estar buit.");
                 }
 
                 float preuNou;

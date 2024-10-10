@@ -93,40 +93,27 @@
                         <HBox prefHeight="0.0" prefWidth="506.0" VBox.vgrow="ALWAYS">
                             <children>
                                 <Label prefHeight="27.0" prefWidth="159.0" text="CIF:">
-                                    <HBox.margin>
-                                     
-                                    </HBox.margin>
                                 </Label>
                                 <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
                                 <TextField fx:id="tfCif" prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
-                                    <HBox.margin>
-                                    </HBox.margin>
                                 </TextField>
                             </children>
                         </HBox>
                         <HBox prefHeight="0.0" prefWidth="506.0" VBox.vgrow="ALWAYS">
                             <children>
                                 <Label prefHeight="27.0" prefWidth="159.0" text="Nom:">
-                                    <HBox.margin>
-                                    </HBox.margin>
                                 </Label>
                                 <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
                                 <TextField fx:id="tfNom" prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
-                                    <HBox.margin>
-                                    </HBox.margin>
                                 </TextField>
                             </children>
                         </HBox>
                         <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
                             <children>
                                 <Label prefHeight="27.0" prefWidth="159.0" text="Estat:">
-                                    <HBox.margin>
-                                    </HBox.margin>
                                 </Label>
                                 <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
                                 <ComboBox fx:id="cbEstat" prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS" />
-                                <HBox.margin>
-                                </HBox.margin>
                             </children>
                         </HBox>
                         <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
@@ -138,8 +125,6 @@
                                 </Label>
                                 <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
                                 <TextField fx:id="tfMotiuInactiu" prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
-                                    <HBox.margin>
-                                    </HBox.margin>
                                 </TextField>
                             </children>
                         </HBox>
@@ -153,52 +138,36 @@
                         <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
                             <children>
                                 <Label prefHeight="27.0" prefWidth="159.0" text="Telèfon:">
-                                    <HBox.margin>
-                                    </HBox.margin>
                                 </Label>
                                 <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
                                 <TextField fx:id="tfTelefon" prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
-                                    <HBox.margin>
-                                    </HBox.margin>
                                 </TextField>
                             </children>
                         </HBox>
                         <HBox prefHeight="37.0" prefWidth="448.0" VBox.vgrow="ALWAYS">
                             <children>
                                 <Label prefHeight="27.0" prefWidth="159.0" text="Descompte:">
-                                    <HBox.margin>
-                                    </HBox.margin>
                                 </Label>
                                 <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
                                 <TextField fx:id="tfDescompte" prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
-                                    <HBox.margin>
-                                    </HBox.margin>
                                 </TextField>
                             </children>
                         </HBox>
                         <HBox prefHeight="37.0" prefWidth="448.0" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label prefHeight="27.0" prefWidth="159.0" text="Data d'alta:">
-                                    <HBox.margin>
-                                    </HBox.margin>
                                 </Label>
                                 <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
                                 <TextField fx:id="tfDataAlta" prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
-                                    <HBox.margin>
-                                    </HBox.margin>
                                 </TextField>
                             </children>
                         </HBox>
                         <HBox prefHeight="37.0" prefWidth="448.0" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label prefHeight="27.0" prefWidth="159.0" text="Qualificació:">
-                                    <HBox.margin>
-                                    </HBox.margin>
                                 </Label>
                                 <Separator opacity="0.0" orientation="VERTICAL" prefHeight="28.0" prefWidth="2.0" />
                                 <TextField fx:id="tfQualificacio" prefHeight="27.0" prefWidth="371.0" HBox.hgrow="ALWAYS">
-                                    <HBox.margin>
-                                    </HBox.margin>
                                 </TextField>
                             </children>
                         </HBox>
@@ -257,8 +226,6 @@
                     </children>
                 </VBox>
             </children>
-            <VBox.margin>
-            </VBox.margin>
         </HBox>
     </children>
 </VBox>
