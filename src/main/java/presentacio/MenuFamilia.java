@@ -3,16 +3,13 @@ package presentacio;
 import aplicacio.App;
 import aplicacio.model.Familia;
 import aplicacio.model.Usuari;
+import excepcions.NomBuit;
 import java.io.IOException;
 import java.time.LocalDate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -21,7 +18,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import logica.FamiliaLogica;
 
 public class MenuFamilia {
@@ -59,8 +55,7 @@ public class MenuFamilia {
     private ObservableList<Familia> llistaObservableFamilia;
     private FamiliaLogica familiaLogica;
     private Usuari usuari;  // Variable para guardar el usuario autenticado
-    
-    
+
     // Método para establecer el usuario autenticado
     public void setUsuari(Usuari usuari) {
         this.usuari = usuari;  // Guardar el usuario
@@ -168,8 +163,13 @@ public class MenuFamilia {
     }
 
     @FXML
-    public void btnAfegir_action(ActionEvent event) throws IOException {
+    public void btnAfegir_action(ActionEvent event) throws IOException, NomBuit {
         System.out.println("Botó 'Nova' presionat");
+
+        String nomFamilia = "";
+        if (nomFamilia.isEmpty()) {
+            throw new NomBuit("El nom de la família no pot estar buit.");
+        }
 
         // Crear una nova família amb valors buits (només per al TableView)
         Familia novaFamilia = new Familia(0, "", "", LocalDate.now(), "", "");
@@ -183,13 +183,17 @@ public class MenuFamilia {
     }
 
     @FXML
-    public void btnModificar_action(ActionEvent event) throws IOException {
+    public void btnModificar_action(ActionEvent event) throws IOException, NomBuit {
         System.out.println("Botó 'Modificar' presionat");
         Familia familiaSeleccionada = (Familia) TabViewFam.getSelectionModel().getSelectedItem();
 
         if (familiaSeleccionada != null) {
+
             try {
                 String nomNou = tf_nomFam.getText();
+                if (nomNou.isEmpty()) {
+                    throw new NomBuit("El nom de la família no pot estar buit.");
+                }
                 String descripcioNova = tf_desFam.getText();
                 LocalDate dataAltaNova = LocalDate.parse(tf_dataltaFam.getText());
                 String provDefecteNou = tf_provFam.getText();
@@ -219,6 +223,8 @@ public class MenuFamilia {
 
                 System.out.println("Familia modificada correctament.");
 
+            } catch (NomBuit e) {
+                System.out.println("Error: " + e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Error en modificar la família: " + e.getMessage());
@@ -226,6 +232,7 @@ public class MenuFamilia {
         } else {
             System.out.println("No s'ha seleccionat cap família per modificar.");
         }
+
     }
 
     @FXML
@@ -256,5 +263,4 @@ public class MenuFamilia {
         System.out.println("Botó 'Productes' presionat");
         App.setRoot("menuReferencia", usuari);
     }
-
 }
