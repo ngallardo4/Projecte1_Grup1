@@ -36,11 +36,11 @@ public class ProveidorLogica {
      * @throws Exception Si hay un error en la validación o al añadir el
      * proveedor.
      */
-    public void afegirProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu, String Telefon, float Descompte, LocalDate Data_Alt, int Qualificacio) throws Exception {
+    public void afegirProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu, String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
 
-        validarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio);
+        validarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, LocalDate.now(), Qualificacio);
 
-        Proveidor proveidor = new Proveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio);
+        Proveidor proveidor = new Proveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
 
         daoProveidor.afegir(proveidor);
     }
@@ -51,11 +51,11 @@ public class ProveidorLogica {
      * @throws Exception Si hay un error en la validación o al modificar el
      * proveedor.
      */
-    public void modificarProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu, String Telefon, float Descompte, LocalDate Data_Alt, int Qualificacio) throws Exception {
+    public void modificarProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu, String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
 
-        validarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio);
+        validarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
 
-        Proveidor proveidorModificat = new Proveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alt, Qualificacio);
+        Proveidor proveidorModificat = new Proveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
 
         // Llamamos al DAO para modificar el proveedor
         daoProveidor.actualitzar(proveidorModificat);
@@ -89,6 +89,7 @@ public class ProveidorLogica {
      */
     private void validarProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu,
             String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
+        
         if (CIF == null || CIF.trim().isEmpty()) {
             throw new Exception("El CIF no pot estar buit.");
         }
@@ -100,6 +101,9 @@ public class ProveidorLogica {
         }
         if (Telefon == null || Telefon.trim().isEmpty()) {
             throw new Exception("El telefon no pot estar buit.");
+        }
+        if (Descompte < 0) {
+            throw new Exception("El descompte no pot ser negatiu.");
         }
         if (Data_Alta == null || Data_Alta.isAfter(LocalDate.now())) {
             throw new Exception("La data d'alta no és vàlida.");
