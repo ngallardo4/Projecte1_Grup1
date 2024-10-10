@@ -195,7 +195,7 @@ public class MenuFamilia {
                 }
                 String descripcioNova = tf_desFam.getText();
                 if (descripcioNova.isEmpty()) {
-                    throw new descripcioBuit("La descripció de la família no pot estar buit.");
+                    throw new descripcioBuit("La descripció de la família no pot estar buida.");
                 }
                 String dataAltaStr = tf_dataltaFam.getText();
                 if (dataAltaStr.isEmpty()) {
