@@ -103,9 +103,8 @@ public class MenuFamilia {
         if (usuari != null) {
             boolean esMagatzem = usuari.isRol();
             btnAfegir.setDisable(!esMagatzem);
-            btnModificar.setDisable(!esMagatzem); // Iniciar deshabilitado hasta que se seleccione una familia
-            btnEliminar.setDisable(!esMagatzem);  // Iniciar deshabilitado hasta que se seleccione una familia
-            btnProducte.setDisable(true); // Siempre habilitado
+            btnModificar.setDisable(true); // Iniciar deshabilitado hasta que se seleccione una familia
+            btnEliminar.setDisable(true);  // Iniciar deshabilitado hasta que se seleccione una familia
         } else {
             desactivarBotons();
         }
@@ -115,7 +114,6 @@ public class MenuFamilia {
         btnAfegir.setDisable(true);
         btnEliminar.setDisable(true);
         btnModificar.setDisable(true);
-        btnProducte.setDisable(true);
     }
 
     @FXML
@@ -154,7 +152,7 @@ public class MenuFamilia {
     @FXML
     public void btnLogo_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Logo' presionat");
-        App.setRoot("menuPrincipal", this.usuari);
+        App.setRoot("menuPrincipal", usuari);
     }
 
     @FXML
@@ -166,7 +164,7 @@ public class MenuFamilia {
     @FXML
     public void btnSortir_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Sortir' presionat");
-        App.setRoot("menuPrincipal", this.usuari); // Pasa el usuario al volver al menú principal
+        App.setRoot("menuPrincipal", usuari); // Pasa el usuario al volver al menú principal
     }
 
     @FXML
@@ -256,7 +254,7 @@ public class MenuFamilia {
     @FXML
     public void btnProducte_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Productes' presionat");
-        App.setRoot("menuReferencia");
+        App.setRoot("menuReferencia", usuari);
     }
 
 }

@@ -11,7 +11,6 @@ package presentacio;
 import aplicacio.App;
 import aplicacio.model.Referencia;
 import aplicacio.model.Usuari;
-import dades.DAOreferenciaImpl;
 import enums.UnitatMesura;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -26,11 +25,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import logica.ReferenciaLogica;
-import logica.UsuariLogica;
 
 public class MenuReferencia {
 // COMENTARIO
@@ -65,6 +62,14 @@ public class MenuReferencia {
         this.familiaId = familiaId;
     }
 
+    private Usuari usuari;  // Variable para guardar el usuario autenticado
+
+    // Método para establecer el usuario autenticado
+    public void setUsuari(Usuari usuari) {
+        this.usuari = usuari;  // Guardar el usuario
+        gestionarPermisos();    // Gestionar los permisos según el rol
+    }
+
     // Mètodes per gestionar els esdeveniments dels botons
     @FXML
     public void initialize() {
@@ -95,10 +100,22 @@ public class MenuReferencia {
         tabViewRef.setOnMouseClicked(this::handleOnMouseClicked);
 
         // Desactivar botons al principi
-        desactivarBotons();
+        gestionarPermisos();
+    }
+
+    private void gestionarPermisos() {
+        if (usuari != null) {
+            boolean esMagatzem = usuari.isRol();
+            btnAfegir.setDisable(!esMagatzem);
+            btnMod.setDisable(true); // Iniciar deshabilitado hasta que se seleccione una familia
+            btnElimi.setDisable(true);  // Iniciar deshabilitado hasta que se seleccione una familia
+        } else {
+            desactivarBotons();
+        }
     }
 
     private void desactivarBotons() {
+        btnAfegir.setDisable(true);
         btnElimi.setDisable(true);
         btnMod.setDisable(true);
     }
@@ -121,13 +138,22 @@ public class MenuReferencia {
                 tfQuantitat.setText(String.valueOf(referenciaSeleccionada.getQuantitat_total()));
                 tfPreu.setText(String.valueOf(referenciaSeleccionada.getPreu_total()));
 
-                // Activar botons
-                btnElimi.setDisable(false);
-                btnMod.setDisable(false);
+                // Verificar los permisos del usuario antes de habilitar los botones
+                if (usuari != null && usuari.isRol()) {
+                    btnElimi.setDisable(false);  // Solo habilitar si tiene permisos
+                    btnMod.setDisable(false); // Solo habilitar si tiene permisos
+                } else {
+                    btnElimi.setDisable(true);   // Deshabilitar si no tiene permisos
+                    btnMod.setDisable(true);  // Deshabilitar si no tiene permisos
+                }
+
+                btnEstoc.setDisable(false); // El botón de productos siempre habilitado
             } else {
-                System.out.println("No se seleccionó ninguna fila.");
                 desactivarBotons();
             }
+        } else {
+            System.out.println("No se seleccionó ninguna fila.");
+            desactivarBotons();
         }
     }
 
@@ -157,7 +183,7 @@ public class MenuReferencia {
     @FXML
     public void btnSortida_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Sortir' presionat");
-        App.setRoot("menuPrincipal");
+        App.setRoot("menuPrincipal", usuari);
     }
 
     @FXML
@@ -295,7 +321,7 @@ public class MenuReferencia {
     @FXML
     public void btnLogo_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Logo' presionat");
-        App.setRoot("menuPrincipal");
+        App.setRoot("menuPrincipal", usuari);
     }
 
 }

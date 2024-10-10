@@ -37,7 +37,7 @@ public class Login {
     private DAOusuariImpl usuariDAO;
     private UsuariLogica usuariLogica; 
     private Usuari usuariAutenticat;
-
+    
     /**
      * Métode per inicialitzar el controlador de la finestra del Login. S'encarrega
      * de carregar el DAO amb el fitxer que porta les credencials correctes i 
