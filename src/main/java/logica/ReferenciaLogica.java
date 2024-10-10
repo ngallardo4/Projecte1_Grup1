@@ -13,6 +13,7 @@ package logica;
 import aplicacio.model.Referencia;
 import dades.DAOreferenciaImpl;
 import enums.UnitatMesura;
+import excepcions.NomBuit;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -62,9 +63,9 @@ public class ReferenciaLogica {
 
     private void validarReferencia(String nom, UnitatMesura uom, int idFamilia, String cifProveidor,
             LocalDate dataAlta, float pesTotal, LocalDate dataCaducitat,
-            int quantitatTotal, float preuTotal) throws Exception {
+            int quantitatTotal, float preuTotal) throws Exception, NomBuit {
         if (nom == null || nom.trim().isEmpty()) {
-            throw new Exception("El nom no pot estar buit.");
+            throw new NomBuit("El nom no pot estar buit.");
         }
         if (uom == null) { //Posible ERROR
             throw new Exception("La unitat de mesura no pot estar buida.");
