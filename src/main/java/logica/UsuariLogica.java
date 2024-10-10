@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package logica;
+
+import aplicacio.model.Usuari;
+import dades.DAOusuariImpl;
 import java.util.regex.Pattern;
 /**
  * descripció: Aquesta classe utilitza l'expressió regular per validar el email
@@ -12,7 +15,12 @@ import java.util.regex.Pattern;
  */
 public class UsuariLogica {
     
-    //Verificar el format del correu
+    private DAOusuariImpl usuariDAO;
+
+    public UsuariLogica(DAOusuariImpl usuariDAO) {
+        this.usuariDAO = usuariDAO;
+    }
+    
     /**
      * Verifica mitjançant una expressió regular si el correu electrònic és vàlid.
      * @param email, El correu electrònic a validar.
@@ -23,4 +31,20 @@ public class UsuariLogica {
         Pattern pattern = Pattern.compile(regex);
         return pattern.matcher(email).matches();
     }
+        
+    /**
+     * Verifica si un usuari existeix i si la contrasenya és correcta.
+     * @param email El correu electrònic de l'usuari.
+     * @param password La contrasenya de l'usuari.
+     * @return true si l'usuari existeix i la contrasenya és correcta, false si 
+     * no es compleixen les condicions.
+     */
+    public boolean verificarUsuari(String email, String password){
+        if(usuariDAO.usuaris.containsKey(email)){
+            Usuari usuari = usuariDAO.usuaris.get(email);
+            return usuari.getPassword().equals(password);
+        }
+        return false;
+    }
+    
 }

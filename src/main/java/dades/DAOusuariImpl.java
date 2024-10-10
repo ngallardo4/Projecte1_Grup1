@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class DAOusuariImpl {
     
-    private Map<String, Usuari> usuaris;
+    public Map<String, Usuari> usuaris;
     private String rutaArxiu = "uspass.txt";
     
     /**
@@ -64,22 +64,7 @@ public class DAOusuariImpl {
             System.out.println("Error a la lectura de l'arxiu: " + e.getMessage());
         }
     }
-    
-    /**
-     * Verifica si un usuari existeix i si la contrasenya és correcta.
-     * @param email El correu electrònic de l'usuari.
-     * @param password La contrasenya de l'usuari.
-     * @return true si l'usuari existeix i la contrasenya és correcta, false si 
-     * no es compleixen les condicions.
-     */
-    public boolean verificarUsuari(String email, String password){
-        if(usuaris.containsKey(email)){
-            Usuari usuari = usuaris.get(email);
-            return usuari.getPassword().equals(password);
-        }
-        return false;
-    }
-    
+
     /**
      * Retorna l'usuari associat amb un correu electrònic que donem.
      * @param email El correu electrònic de l'usuari.
