@@ -4,12 +4,17 @@ import aplicacio.App;
 import aplicacio.model.Familia;
 import aplicacio.model.Usuari;
 import excepcions.NomBuit;
+import excepcions.cifProveidorBuit;
+import excepcions.dataAltaBuit;
+import excepcions.descripcioBuit;
+import excepcions.observacionsBuit;
 import java.io.IOException;
 import java.time.LocalDate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -163,13 +168,8 @@ public class MenuFamilia {
     }
 
     @FXML
-    public void btnAfegir_action(ActionEvent event) throws IOException, NomBuit {
+    public void btnAfegir_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Nova' presionat");
-
-        String nomFamilia = "";
-        if (nomFamilia.isEmpty()) {
-            throw new NomBuit("El nom de la família no pot estar buit.");
-        }
 
         // Crear una nova família amb valors buits (només per al TableView)
         Familia novaFamilia = new Familia(0, "", "", LocalDate.now(), "", "");
@@ -183,22 +183,39 @@ public class MenuFamilia {
     }
 
     @FXML
-    public void btnModificar_action(ActionEvent event) throws IOException, NomBuit {
+    public void btnModificar_action(ActionEvent event) throws IOException, NomBuit, descripcioBuit, dataAltaBuit, cifProveidorBuit, observacionsBuit {
         System.out.println("Botó 'Modificar' presionat");
         Familia familiaSeleccionada = (Familia) TabViewFam.getSelectionModel().getSelectedItem();
 
         if (familiaSeleccionada != null) {
-
             try {
                 String nomNou = tf_nomFam.getText();
                 if (nomNou.isEmpty()) {
                     throw new NomBuit("El nom de la família no pot estar buit.");
                 }
                 String descripcioNova = tf_desFam.getText();
-                LocalDate dataAltaNova = LocalDate.parse(tf_dataltaFam.getText());
+                if (descripcioNova.isEmpty()) {
+                    throw new descripcioBuit("La descripció de la família no pot estar buit.");
+                }
+                String dataAltaStr = tf_dataltaFam.getText();
+                if (dataAltaStr.isEmpty()) {
+                    throw new dataAltaBuit("La data d'alta no pot estar buida.");
+                }
+                LocalDate dataAltaNova;
+                try {
+                    dataAltaNova = LocalDate.parse(dataAltaStr);
+                } catch (Exception e) {
+                    throw new dataAltaBuit("Format de data d'alta no valida.");
+                }
                 String provDefecteNou = tf_provFam.getText();
+                if (provDefecteNou.isEmpty()) {
+                    throw new cifProveidorBuit("El CIF del proveïdor no pot estar buit.");
+                }
                 String observacionsNovas = tf_obvsFam.getText();
-
+                if (observacionsNovas.isEmpty()) {
+                    throw new observacionsBuit("Les observacions no poden estar buides.");
+                }
+                
                 if (familiaSeleccionada.getId() == 0) {
                     // Si l'ID és 0 és una nova família llavors inserim
                     familiaLogica.afegirFamilia(nomNou, descripcioNova, dataAltaNova, provDefecteNou, observacionsNovas);
@@ -225,9 +242,22 @@ public class MenuFamilia {
 
             } catch (NomBuit e) {
                 System.out.println("Error: " + e.getMessage());
+                mostrarError(e.getMessage());
+            } catch (descripcioBuit e) {
+                System.out.println("Error: " + e.getMessage());
+                mostrarError(e.getMessage());
+            } catch (dataAltaBuit e) {
+                System.out.println("Error: " + e.getMessage());
+                mostrarError(e.getMessage());
+            } catch (cifProveidorBuit e) {
+                System.out.println("Error: " + e.getMessage());
+                mostrarError(e.getMessage());
+            } catch (observacionsBuit e) {
+                System.out.println("Error: " + e.getMessage());
+                mostrarError(e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Error en modificar la família: " + e.getMessage());
+                mostrarError("Error en modificar la família: " + e.getMessage());
             }
         } else {
             System.out.println("No s'ha seleccionat cap família per modificar.");
@@ -235,6 +265,14 @@ public class MenuFamilia {
 
     }
 
+    private void mostrarError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null); // No necesitas un encabezado
+        alert.setContentText(mensaje);
+        alert.showAndWait(); // Espera a que el usuario cierre la alerta
+    }
+    
     @FXML
     public void btnEliminar_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Eliminar' presionat");
