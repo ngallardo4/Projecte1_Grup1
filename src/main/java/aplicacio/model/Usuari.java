@@ -45,7 +45,6 @@ public class Usuari {
     //Getters
 
     /**
-     * 
      * @return L'identificador de l'usuari.
      */
     public int getIdUsuari() {
@@ -53,15 +52,13 @@ public class Usuari {
     }
     
     /**
-     * 
      * @return El correu electrònic de l'usuari.
      */
     public String getEmail() {
         return email;
     }
 
-    /**
-     * 
+    /** 
      * @return La contrasenya de l'usuari.
      */
     public String getPassword() {
@@ -69,7 +66,6 @@ public class Usuari {
     }
 
     /**
-     * 
      * @return El nom de l'usuari.
      */
     public String getNom() {
@@ -77,7 +73,6 @@ public class Usuari {
     }
 
     /**
-     * 
      * @return El descompte del treballador.
      */
     public Float getDescompte_treballador() {
@@ -85,7 +80,6 @@ public class Usuari {
     }
 
     /**
-     * 
      * @return La data d'alta de l'usuari.
      */
     public LocalDate getData_alta() {
@@ -93,7 +87,6 @@ public class Usuari {
     }
 
     /**
-     * 
      * @return True si és Responsable de Magatzem o False si és Venedor.
      */
     public boolean isRol() {
