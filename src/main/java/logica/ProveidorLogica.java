@@ -7,6 +7,14 @@ package logica;
 import aplicacio.model.Proveidor;
 import dades.DAOproveidorImpl;
 import enums.EstatProveidor;
+import excepcions.CifInvalid;
+import excepcions.DescompteInvalid;
+import excepcions.EstatInvalid;
+import excepcions.MotiuInactiuInvalid;
+import excepcions.NomBuit;
+import excepcions.QualificacioInvalid;
+import excepcions.TelefonInvalid;
+import excepcions.dataAltaBuit;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -88,32 +96,37 @@ public class ProveidorLogica {
      * @throws Exception Si hay un error en la validación de los datos.
      */
     private void validarProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu,
-            String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
-        
+            String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws CifInvalid,
+            NomBuit, EstatInvalid, MotiuInactiuInvalid, TelefonInvalid, DescompteInvalid, dataAltaBuit,
+            QualificacioInvalid, Exception {
+
         if (CIF == null || CIF.trim().isEmpty()) {
-            throw new Exception("El CIF no pot estar buit.");
+            throw new CifInvalid("El CIF no pot estar buit.");
+        }
+        if (!CIF.matches("[A-Z][0-9]{8}")) {
+            throw new CifInvalid("El CIF no té un format vàlid."); // Asegúrate de que el regex es el adecuado
         }
         if (Nom == null || Nom.trim().isEmpty()) {
-            throw new Exception("El nom no pot estar buit.");
+            throw new NomBuit("El nom no pot estar buit.");
         }
         if (Estat == null) {
-            throw new Exception("L'estat no pot estar buit.");
+            throw new EstatInvalid("L'estat no pot estar buit.");
         }
         if (Telefon == null || Telefon.trim().isEmpty()) {
-            throw new Exception("El telefon no pot estar buit.");
+            throw new TelefonInvalid("El telefon no pot estar buit.");
         }
         if (Descompte < 0) {
-            throw new Exception("El descompte no pot ser negatiu.");
+            throw new DescompteInvalid("El descompte no pot ser negatiu.");
         }
         if (Data_Alta == null || Data_Alta.isAfter(LocalDate.now())) {
-            throw new Exception("La data d'alta no és vàlida.");
+            throw new dataAltaBuit("La data d'alta no és vàlida.");
         }
         if (Qualificacio < 0) {
-            throw new Exception("La qualificació no pot ser negativa.");
+            throw new QualificacioInvalid("La qualificació no pot ser negativa.");
         }
         // Si el proveedor es inactivo, puede que necesites validar el motivo de inactividad
         if (Estat == EstatProveidor.INACTIU && (MotiuInactiu == null || MotiuInactiu.trim().isEmpty())) {
-            throw new Exception("El motiu d'inactivitat no pot estar buit si el proveidor és inactiu.");
+            throw new MotiuInactiuInvalid("El motiu d'inactivitat no pot estar buit si el proveidor és inactiu.");
         }
     }
 }
