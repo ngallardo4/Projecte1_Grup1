@@ -297,19 +297,11 @@ public class MenuProveidor {
                 System.out.println("Error: " + e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
-                mostrarError("Error en modificar la proveidor: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error en modificar la proveidor: " , e.getMessage());
             }
         } else {
             System.out.println("No se ha seleccionado ningún proveedor para modificar.");
         }
-    }
-
-    private void mostrarError(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null); // No necesitas un encabezado
-        alert.setContentText(mensaje);
-        alert.showAndWait(); // Espera a que el usuario cierre la alerta
     }
     
     @FXML
