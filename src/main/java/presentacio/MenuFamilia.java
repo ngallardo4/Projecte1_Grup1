@@ -8,6 +8,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -16,6 +20,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import logica.FamiliaLogica;
 
 public class MenuFamilia {
@@ -221,17 +226,6 @@ public class MenuFamilia {
     @FXML
     public void btnProducte_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Productes' presionat");
-        Familia familiaSeleccionada = (Familia) TabViewFam.getSelectionModel().getSelectedItem();
-
-        if (familiaSeleccionada != null) {
-            // Passar la ID de la família a la nova vista
-            App.setRoot("menuReferencia"); // Canviem de vista
-
-            // Aquí passes la ID a la nova vista
-            //PantallaReferencia controller = (PantallaReferencia) App.getController("menuReferencia");
-            //controller.setFamiliaId(familiaSeleccionada.getId());
-        } else {
-            System.out.println("No s'ha seleccionat cap família.");
-        }
+        App.setRoot("menuReferencia");
     }
 }

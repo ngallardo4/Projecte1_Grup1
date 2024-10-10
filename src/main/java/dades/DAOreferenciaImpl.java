@@ -10,7 +10,6 @@ import java.sql.*;
 import enums.UnitatMesura;
 import java.util.ArrayList;
 import java.util.List;
-import dades.MyDataSource;
 
 /**
  * Implementación de la interfaz DAOreferencia para manejar operaciones CRUD
@@ -26,13 +25,16 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
      * sobre la entidad {@code Referencia}. Proporciona métodos para obtener,
      * agregar, actualizar y eliminar referencias en la base de datos.
      *
-     * @return 
+     * @param idFamilia
+     * @return
      * @autor Héctor Vico
      */
-    @Override
-    public List<Referencia> obtenirEntitats() {
-        String sql = "SELECT * FROM referencia";
+    public List<Referencia> obtenirEntitats(int idFamilia) {
         List<Referencia> referencies = new ArrayList<>();
+        String sql = "SELECT * FROM referencia";
+        if (idFamilia != 0) {
+            sql = "SELECT * FROM referencias WHERE familia_id = " + idFamilia;
+        }
         try (Connection conn = MyDataSource.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
@@ -193,5 +195,4 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
 
         return referenciesSenseEstoc;
     }
-
 }

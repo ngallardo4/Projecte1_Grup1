@@ -35,7 +35,7 @@ public class App extends Application {
         }
         scene.setRoot(root);
     }
-    
+
     //setRoot per usar sense passar l'usuari per tancar la sessió
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
