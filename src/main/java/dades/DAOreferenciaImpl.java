@@ -33,7 +33,7 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
         List<Referencia> referencies = new ArrayList<>();
         String sql = "SELECT * FROM referencia";
         if (idFamilia != 0) {
-            sql = "SELECT * FROM referencias WHERE familia_id = " + idFamilia;
+            sql = "SELECT * FROM referencia WHERE id_familia = " + idFamilia;
         }
         try (Connection conn = MyDataSource.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 

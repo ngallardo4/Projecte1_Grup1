@@ -181,7 +181,8 @@ public class MenuReferencia {
 
             // Refrescar el TableView
             tabViewRef.refresh();
-
+            tabViewRef.setItems(llistaObservableReferencia);
+            
         } catch (NumberFormatException e) {
             System.out.println("ID familia ha de ser un número.");
         } catch (Exception e) {
