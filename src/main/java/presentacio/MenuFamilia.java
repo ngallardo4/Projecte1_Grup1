@@ -2,6 +2,7 @@ package presentacio;
 
 import aplicacio.App;
 import aplicacio.model.Familia;
+import aplicacio.model.Usuari;
 import java.io.IOException;
 import java.time.LocalDate;
 import javafx.collections.FXCollections;
@@ -52,6 +53,14 @@ public class MenuFamilia {
 
     private ObservableList<Familia> llistaObservableFamilia;
     private FamiliaLogica familiaLogica;
+    private Usuari usuari;  // Variable para guardar el usuario autenticado
+    
+    
+    // Método para establecer el usuario autenticado
+    public void setUsuari(Usuari usuari) {
+        this.usuari = usuari;  // Guardar el usuario
+        gestionarPermisos();    // Gestionar los permisos según el rol
+    }
 
     @FXML
     public void initialize() throws IOException {
@@ -81,11 +90,24 @@ public class MenuFamilia {
         TabViewFam.setItems(llistaObservableFamilia);
         TabViewFam.setOnMouseClicked(this::handleOnMouseClicked);
 
-        // Desactivar botons al principi
-        desactivarBotons();
+        // Gestionar permisos al final
+        gestionarPermisos();
+    }
+
+    private void gestionarPermisos() {
+        if (usuari != null) {
+            boolean esMagatzem = usuari.isRol();
+            btnAfegir.setDisable(!esMagatzem);
+            btnModificar.setDisable(!esMagatzem); // Iniciar deshabilitado hasta que se seleccione una familia
+            btnEliminar.setDisable(!esMagatzem);  // Iniciar deshabilitado hasta que se seleccione una familia
+            btnProducte.setDisable(true); // Siempre habilitado
+        } else {
+            desactivarBotons();
+        }
     }
 
     private void desactivarBotons() {
+        btnAfegir.setDisable(true);
         btnEliminar.setDisable(true);
         btnModificar.setDisable(true);
         btnProducte.setDisable(true);
@@ -105,21 +127,29 @@ public class MenuFamilia {
                 tf_provFam.setText(familiaSeleccionada.getProv_defecte());
                 tf_obvsFam.setText(familiaSeleccionada.getObservacions());
 
-                // Activar botons
-                btnEliminar.setDisable(false);
-                btnModificar.setDisable(false);
-                btnProducte.setDisable(false);
+                // Verificar los permisos del usuario antes de habilitar los botones
+                if (usuari != null && usuari.isRol()) {
+                    btnEliminar.setDisable(false);  // Solo habilitar si tiene permisos
+                    btnModificar.setDisable(false); // Solo habilitar si tiene permisos
+                } else {
+                    btnEliminar.setDisable(true);   // Deshabilitar si no tiene permisos
+                    btnModificar.setDisable(true);  // Deshabilitar si no tiene permisos
+                }
+
+                btnProducte.setDisable(false); // El botón de productos siempre habilitado
             } else {
-                System.out.println("No se seleccionó ninguna fila.");
                 desactivarBotons();
             }
+        } else {
+            System.out.println("No se seleccionó ninguna fila.");
+            desactivarBotons();
         }
     }
 
     @FXML
     public void btnLogo_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Logo' presionat");
-        App.setRoot("menuPrincipal");
+        App.setRoot("menuPrincipal", this.usuari);
     }
 
     @FXML
@@ -131,7 +161,7 @@ public class MenuFamilia {
     @FXML
     public void btnSortir_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Sortir' presionat");
-        App.setRoot("menuPrincipal");
+        App.setRoot("menuPrincipal", this.usuari); // Pasa el usuario al volver al menú principal
     }
 
     @FXML
@@ -221,17 +251,6 @@ public class MenuFamilia {
     @FXML
     public void btnProducte_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Productes' presionat");
-        Familia familiaSeleccionada = (Familia) TabViewFam.getSelectionModel().getSelectedItem();
-
-        if (familiaSeleccionada != null) {
-            // Passar la ID de la família a la nova vista
-            App.setRoot("menuReferencia"); // Canviem de vista
-
-            // Aquí passes la ID a la nova vista
-            //PantallaReferencia controller = (PantallaReferencia) App.getController("menuReferencia");
-            //controller.setFamiliaId(familiaSeleccionada.getId());
-        } else {
-            System.out.println("No s'ha seleccionat cap família.");
-        }
     }
+
 }
