@@ -30,6 +30,7 @@ public class Login {
     private Button btnLogin;
     
     private DAOusuariImpl usuariDAO;
+    private UsuariLogica usuariLogica; 
     private Usuari usuariAutenticat; // Variable per emmagatzemar l'usuari autenticat
 
     //Métode per inicialitzar el controlador
@@ -37,6 +38,7 @@ public class Login {
     public void initialize(){
         String rutaArxiu = "uspass.txt";
         usuariDAO = new DAOusuariImpl(rutaArxiu);
+        usuariLogica = new UsuariLogica(usuariDAO); // Inicialitzem UsuariLogica amb el DAO
         
         //Acció que realitzarà el botó Confirmar
         btnLogin.setOnAction(this::verificarLogin);
@@ -52,8 +54,8 @@ public class Login {
             return;
         }
         
-        //Verificar l'usuari amb DAOusuariImpl
-        if(usuariDAO.verificarUsuari(email, password)){
+        //Verificar l'usuari amb UsuariLogica
+        if(usuariLogica.verificarUsuari(email, password)){
             usuariAutenticat = usuariDAO.getUsuari(email);
             mostrarMissatge("Login correcte. ", "Benvingut!");
             handleLogin(event);
