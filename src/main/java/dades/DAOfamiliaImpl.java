@@ -105,8 +105,7 @@ public class DAOfamiliaImpl implements DAOinterface<Familia>, DAOinterfaceLlista
      * @param familia la família amb les noves dades.
      */
     @Override
-    public void actualitzar(Familia familia
-    ) {
+    public void actualitzar(Familia familia) {
         String updateSQL = "UPDATE familia SET nom = ?, descripcio = ?, prov_defecte = ?, observacions = ? WHERE id = ?";
         try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(updateSQL)) {
 
@@ -135,8 +134,7 @@ public class DAOfamiliaImpl implements DAOinterface<Familia>, DAOinterfaceLlista
      * @param familia la família a eliminar.
      */
     @Override
-    public void eliminar(Familia familia
-    ) {
+    public void eliminar(Familia familia) {
         String deleteSQL = "DELETE FROM familia WHERE id = ?";
         try (Connection conn = MyDataSource.getConnection()) {
             try (PreparedStatement stmt = conn.prepareStatement(deleteSQL)) {

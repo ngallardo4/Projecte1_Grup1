@@ -16,7 +16,7 @@ import enums.UnitatMesura;
 
 import java.time.LocalDate;
 import java.util.List;
-
+// COMENTARIO
 public class ReferenciaLogica {
 
     private final DAOreferenciaImpl daoReferencia;

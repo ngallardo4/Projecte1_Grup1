@@ -36,7 +36,7 @@
                 </HBox>
                 <HBox alignment="TOP_RIGHT" fillHeight="false" prefHeight="130.0" prefWidth="242.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Button fx:id="tancarSessioBtn" mnemonicParsing="false" text="Tancar Sessió">
+                        <Button fx:id="tancarSessioBtn" onAction="#handleTancarSessio" mnemonicParsing="false" text="Tancar Sessió">
                             <cursor>
                                 <Cursor fx:constant="HAND" />
                             </cursor>

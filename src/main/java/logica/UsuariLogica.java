@@ -17,6 +17,11 @@ public class UsuariLogica {
     
     private DAOusuariImpl usuariDAO;
 
+    /**
+     * Constructor de la classe UsuariLogica, que inicialitza l'objecte amb una 
+     * instància de DAOusuariImpl.
+     * @param usuariDAO es farà servir per la gestió dels usuaris.
+     */
     public UsuariLogica(DAOusuariImpl usuariDAO) {
         this.usuariDAO = usuariDAO;
     }

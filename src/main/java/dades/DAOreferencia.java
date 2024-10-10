@@ -11,7 +11,7 @@ import java.util.List;
  * @author Héctor Vico
  */
 public interface DAOreferencia<T> {
-    
+
     List<T> obtenirReferenciesSenseEstoc();
 
 }

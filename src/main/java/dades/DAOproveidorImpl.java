@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,18 +34,18 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor>, DAOinterfaceLl
      */
     @Override
     public void afegir(Proveidor proveidor) {
-        String sql = "INSERT INTO referencia (nom, UOM, id_familia, cif_proveidor, data_alta, pes_total, data_caducitat, quantitat_total, preu_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO proveidor (cif, nom, Estat, motiuInactiu, telefon, descompte, data_alta, qualificacio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = MyDataSource.getConnection(); // Cambiar el PreparedStatement para que devuelva las claves generadas
                  PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             // Configurar los parámetros de la sentencia SQL
             stmt.setString(1, proveidor.getCIF());
-            stmt.setString(1, proveidor.getNom());
-            stmt.setString(2, proveidor.getEstat().name());
-            stmt.setString(3, proveidor.getMotiuInactiu());
-            stmt.setString(4, proveidor.getTelefon());
-            stmt.setDate(5, Date.valueOf(proveidor.getData_Alt()));
+            stmt.setString(2, proveidor.getNom());
+            stmt.setString(3, proveidor.getEstat().name());
+            stmt.setString(4, proveidor.getMotiuInactiu());
+            stmt.setString(5, proveidor.getTelefon());
             stmt.setFloat(6, proveidor.getDescompte());
+            stmt.setTimestamp(7, Timestamp.valueOf(proveidor.getData_Alta().atStartOfDay()));
             stmt.setInt(8, proveidor.getQualificacio());
 
             // Ejecutar la inserción
@@ -75,7 +76,7 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor>, DAOinterfaceLl
      */
     @Override
     public List<Proveidor> obtenirEntitats() {
-        String sql = "SELECT * FROM referencia";
+        String sql = "SELECT * FROM proveidor";
         List<Proveidor> proveidors = new ArrayList<>();
         try (Connection conn = MyDataSource.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -101,16 +102,16 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor>, DAOinterfaceLl
 
     @Override
     public void actualitzar(Proveidor proveidor) {
-        String sql = "UPDATE referencia SET nom = ?, UOM = ?, id_familia = ?, cif_proveidor = ?, data_alta = ?, pes_total = ?, data_caducitat = ?, quantitat_total = ?, preu_total = ? WHERE id = ?";
+        String sql = "UPDATE proveidor SET CIF= ?, Nom = ?, Estat = ?, MotiuInactiu = ?, Telefon = ?, Descompte = ?, Data_Alta = ?, Qualificacio = ? WHERE cif = ?";
         try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, proveidor.getCIF());
-            stmt.setString(1, proveidor.getNom());
-            stmt.setString(2, proveidor.getEstat().name());
-            stmt.setString(3, proveidor.getMotiuInactiu());
-            stmt.setString(4, proveidor.getTelefon());
-            stmt.setDate(5, Date.valueOf(proveidor.getData_Alt()));
+            stmt.setString(2, proveidor.getNom());
+            stmt.setString(3, proveidor.getEstat().name());
+            stmt.setString(4, proveidor.getMotiuInactiu());
+            stmt.setString(5, proveidor.getTelefon());
             stmt.setFloat(6, proveidor.getDescompte());
+            stmt.setDate(7, Date.valueOf(proveidor.getData_Alta()));
             stmt.setInt(8, proveidor.getQualificacio());
 
             stmt.executeUpdate();
@@ -126,7 +127,7 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor>, DAOinterfaceLl
      */
     @Override
     public void eliminar(Proveidor proveidor) {
-        String sql = "DELETE FROM referencia WHERE id = ?";
+        String sql = "DELETE FROM proveidor WHERE cif = ?";
         try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, proveidor.getCIF());
