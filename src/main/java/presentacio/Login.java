@@ -64,7 +64,7 @@ public class Login {
         
         //Verificar si es correcte el format
         if(!UsuariLogica.emailValid(email)){
-            mostrarMissatgeError("Correu incorrecte", "El correu no té un format vàlid.");
+            MostrarError.mostrarMissatgeError("Correu incorrecte", "El correu no té un format vàlid.");
             return;
         }
         
@@ -74,7 +74,7 @@ public class Login {
             mostrarMissatge("Login correcte. ", "Benvingut!");
             handleLogin(event);
         }else{
-            mostrarMissatgeError("Login incorrecte", "Nom d'usuari o contrasenya incorrectes.");
+            MostrarError.mostrarMissatgeError("Login incorrecte", "Nom d'usuari o contrasenya incorrectes.");
         }
     }
     
@@ -92,19 +92,6 @@ public class Login {
     }
     
     /**
-     * Aquest mètode serveix per mostrar un missatge d'error a l'usuari.
-     * @param titol, el títol de la finestra d'alerta.
-     * @param missatge, el contingut del missatge que es mostrarà.
-     */
-    private void mostrarMissatgeError(String titol, String missatge){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(titol);
-        alert.setHeaderText(null);
-        alert.setContentText(missatge);
-        alert.showAndWait();
-    }
-    
-    /**
      * Aquest mètode serveix per poder processar la redirecció a la finestra del
      * menú principal.
      * @param event, l'esdeveniment del login correcte.
@@ -114,7 +101,8 @@ public class Login {
         try{
             App.setRoot("menuPrincipal", usuariAutenticat);
         } catch (IOException e){
-            mostrarMissatgeError("Error", "No s'ha pogut obrir el menú principal.");
+            MostrarError.mostrarMissatgeError("Error", "No s'ha pogut obrir el menú principal.");
+            
         }    
     }
 }
