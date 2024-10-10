@@ -39,10 +39,10 @@ public class MenuReferencia {
     private TableColumn colId, colNom, colUOM, colFamilia, colProveidor, colDataAlta, colPes, colDataCaducitat, colQuantitat, colPreu;
 
     @FXML
-    private Button btnLogo, btnTancarSessio, btnAfegir, btnMod, btnElimi, btnEstoc, btnSortida;
+    private Button btnLogo, btnTancarSessio, btnIdFamilia, btnAfegir, btnMod, btnElimi, btnEstoc, btnSortida;
 
     @FXML
-    private TextField tfId, tfNom, tfIdFamilia, tfCifProveidor, tfDataAlta, tfPes, tfDataCaducitat, tfQuantitat, tfPreu;
+    private TextField tfIdFam, tfId, tfNom, tfIdFamilia, tfCifProveidor, tfDataAlta, tfPes, tfDataCaducitat, tfQuantitat, tfPreu;
 
     @FXML
     private ComboBox<UnitatMesura> cbUOM;
@@ -154,6 +154,29 @@ public class MenuReferencia {
         } else {
             System.out.println("No se seleccionó ninguna fila.");
             desactivarBotons();
+        }
+    }
+
+    @FXML
+    public void btnIdFamilia_action(ActionEvent event) {
+        try {
+            // Obtener el ID de familia desde el campo de texto
+            int idFamilia = Integer.parseInt(tfIdFam.getText());
+
+            // Obtener las referencias filtradas por familia
+            List<Referencia> referenciesFiltrades = referenciaLogica.obtenirTotesLesReferencies(idFamilia);
+
+            // Limpiar la lista observable y agregar las referencias filtradas
+            llistaObservableReferencia.clear();
+            llistaObservableReferencia.addAll(referenciesFiltrades);
+
+            // Refrescar el TableView
+            tabViewRef.refresh();
+            
+        } catch (NumberFormatException e) {
+            System.out.println("ID familia ha de ser un número.");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
