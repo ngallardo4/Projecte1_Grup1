@@ -103,9 +103,6 @@ public class ProveidorLogica {
         if (CIF == null || CIF.trim().isEmpty()) {
             throw new CifInvalid("El CIF no pot estar buit.");
         }
-        if (!CIF.matches("[A-Z][0-9]{8}")) {
-            throw new CifInvalid("El CIF no té un format vàlid."); // Asegúrate de que el regex es el adecuado
-        }
         if (Nom == null || Nom.trim().isEmpty()) {
             throw new NomBuit("El nom no pot estar buit.");
         }

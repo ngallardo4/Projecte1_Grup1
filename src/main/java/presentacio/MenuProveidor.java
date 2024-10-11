@@ -197,35 +197,27 @@ public class MenuProveidor {
                 // Validar el nombre del proveedor
                 String nomNou = tfNom.getText();
                 if (nomNou.isEmpty()) {
-                    throw new NomBuit("El nombre del proveidor no pot estar buit.");
+                    throw new NomBuit("El nom del proveidor no pot estar buit.");
                 }
-
                 // Validar el CIF del proveedor
                 String cifNou = tfCif.getText();
-                if (cifNou.isEmpty()) {
-                    throw new CifInvalid("El CIF del proveidor no pot estar buit.");
+                if (cifNou == null || cifNou.trim().isEmpty()) {
+                    throw new CifInvalid("El CIF no pot estar buit.");
                 }
-                if (!cifNou.matches("[A-Z][0-9]{8}")) {
-                    throw new CifInvalid("El CIF no té un format vàlid."); // Asegúrate de que el regex es el adecuado
-                }
-
                 // Validar el estado del proveedor
                 EstatProveidor estatNou = cbEstat.getValue();
                 if (estatNou == null) {
                     throw new EstatInvalid("Has de seleccionar un estat vàlid pel proveidor.");
                 }
-
                 // Validar motivo inactivo (si aplica)
                 if (estatNou == EstatProveidor.INACTIU && (tfMotiuInactiu.getText().isEmpty())) {
-                    throw new MotiuInactiuInvalid("Ha proporcionar un motiu de inactivitat si el proveidor esta inactiu.");
+                    throw new MotiuInactiuInvalid("Ha de proporcionar un motiu de inactivitat si el proveidor esta inactiu.");
                 }
-
                 // Validar el teléfono del proveedor
                 String telefonNou = tfTelefon.getText();
                 if (telefonNou.isEmpty() || !telefonNou.matches("\\d{9}")) {
-                    throw new TelefonInvalid("El telèfon ha tenir 9 dígits..");
+                    throw new TelefonInvalid("El telèfon ha de tenir 9 dígits..");
                 }
-
                 // Validar el descuento
                 String descompteStr = tfDescompte.getText();
                 float descompteNou;
@@ -237,7 +229,6 @@ public class MenuProveidor {
                 } catch (NumberFormatException e) {
                     throw new DescompteInvalid("El descompte ha de ser un número vàlid");
                 }
-
                 // Validar la fecha de alta
                 String dataAltaStr = tfDataAlta.getText();
                 if (dataAltaStr.isEmpty()) {
@@ -249,19 +240,17 @@ public class MenuProveidor {
                 } catch (Exception e) {
                     throw new dataAltaBuit("El format de la data d'alta no és vàlid (AAAA-MM-DD).");
                 }
-
                 // Validar la calificación
                 String qualificacioStr = tfQualificacio.getText();
                 int qualificacioNova;
                 if (qualificacioStr.isEmpty()) {
-                    throw new QualificacioInvalid("La calificación no puede estar vacía.");
+                    throw new QualificacioInvalid("La qualificació no pot estar buida.");
                 }
                 try {
                     qualificacioNova = Integer.parseInt(qualificacioStr);
                 } catch (NumberFormatException e) {
-                    throw new QualificacioInvalid("La calificación debe ser un número entero válido.");
+                    throw new QualificacioInvalid("La qualificació ha de ser un número enter vàlid.");
                 }
-
                 // Si todas las validaciones son correctas, modificar el proveedor
                 proveidorLogica.modificarProveidor(cifNou, nomNou, estatNou, tfMotiuInactiu.getText(),
                         telefonNou, descompteNou, dataAltaNova, qualificacioNova);
@@ -280,30 +269,30 @@ public class MenuProveidor {
                 tabViewProveidor.refresh();
                 System.out.println("Proveidor modificat correctamente.");
             } catch (CifInvalid e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (NomBuit e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (EstatInvalid e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (MotiuInactiuInvalid e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (TelefonInvalid e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (DescompteInvalid e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (dataAltaBuit e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (QualificacioInvalid e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
-                MostrarError.mostrarMissatgeError("Error en modificar el proveidor: " , e.getMessage());
+                MostrarError.mostrarMissatgeError("Error en modificar el proveidor: ", e.getMessage());
             }
         } else {
-            System.out.println("No se ha seleccionado ningún proveidor per a modificar.");
+            System.out.println("No s'ha seleccionat cap proveidor per a modificar.");
         }
     }
-    
+
     @FXML
     public void btnElimi_action(ActionEvent event) throws Exception {
         Proveidor proveidorSeleccionat = tabViewProveidor.getSelectionModel().getSelectedItem();
@@ -338,13 +327,13 @@ public class MenuProveidor {
 
         // Verificar si se ha seleccionado un archivo
         if (file != null) {
-            // Aquí puedes implementar la lógica para importar el archivo
-            System.out.println("Archivo seleccionado: " + file.getAbsolutePath());
-
-            // Puedes llamar a otro método para manejar la importación
-            importarArchivo(file);
+            try {
+                importarArchivo(file);
+            } catch (Exception e) {
+                MostrarError.mostrarMissatgeError("Error de Importación", "Se produjo un error durante la importación: " + e.getMessage());
+            }
         } else {
-            System.out.println("No se ha seleccionado ningún archivo.");
+            MostrarError.mostrarMissatgeError("Archivo no seleccionado", "No se ha seleccionado ningún archivo para importar.");
         }
     }
 
@@ -382,7 +371,7 @@ public class MenuProveidor {
                 System.out.println("Exportación completada. Proveedores exportados: " + llistaObservableProveidor.size());
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Error al escribir el archivo: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error al escribir el archivo: ", e.getMessage());
             }
         }
     }
@@ -410,7 +399,7 @@ public class MenuProveidor {
                     try {
                         estat = EstatProveidor.valueOf(datos[2].trim().toUpperCase());
                     } catch (IllegalArgumentException e) {
-                        System.out.println("Valor de estat inválido: " + datos[2]);
+                        MostrarError.mostrarMissatgeError("Valor de estat inválido: ", datos[2]);
                         continue; // Salta esta fila
                     }
 
@@ -420,7 +409,7 @@ public class MenuProveidor {
                     try {
                         descompte = Float.parseFloat(datos[5].trim());
                     } catch (NumberFormatException e) {
-                        System.out.println("Descuento inválido para el CIF " + cif + ": " + datos[5]);
+                        MostrarError.mostrarMissatgeError("Descuento inválido para el CIF ", cif + ": " + datos[5]);
                         continue; // Salta esta fila
                     }
 
@@ -428,7 +417,7 @@ public class MenuProveidor {
                     try {
                         dataAlta = LocalDate.parse(datos[6].trim());
                     } catch (Exception e) {
-                        System.out.println("Fecha de alta inválida para el CIF " + cif + ": " + datos[6]);
+                        MostrarError.mostrarMissatgeError("Fecha de alta inválida para el CIF ", cif + ": " + datos[6]);
                         continue; // Salta esta fila
                     }
 
@@ -436,7 +425,7 @@ public class MenuProveidor {
                     try {
                         qualificacio = Integer.parseInt(datos[7].trim());
                     } catch (NumberFormatException e) {
-                        System.out.println("Calificación inválida para el CIF " + cif + ": " + datos[7]);
+                        MostrarError.mostrarMissatgeError("Calificación inválida para el CIF ", cif + ": " + datos[7]);
                         continue; // Salta esta fila
                     }
 
@@ -444,7 +433,7 @@ public class MenuProveidor {
                     Proveidor nouProveidor = new Proveidor(cif, nom, estat, motiuInactiu, telefon, descompte, dataAlta, qualificacio);
                     proveidorsImportats.add(nouProveidor);
                 } else {
-                    System.out.println("Fila con datos insuficientes: " + line);
+                    System.out.println("Fila amb dades insuficients: " + line);
                 }
             }
 
@@ -456,7 +445,7 @@ public class MenuProveidor {
                             proveidor.getTelefon(), proveidor.getDescompte(),
                             proveidor.getData_Alta(), proveidor.getQualificacio());
                 } catch (Exception e) {
-                    System.out.println("Error al añadir el proveedor: " + proveidor.getCIF() + " - " + e.getMessage());
+                    MostrarError.mostrarMissatgeError("Error al afegir proveidor", "No s'ha pogut afegir el proveidor amb CIF " + proveidor.getCIF() + ": " + e.getMessage());
                 }
             }
 
@@ -464,14 +453,14 @@ public class MenuProveidor {
             llistaObservableProveidor.addAll(proveidorsImportats);
             tabViewProveidor.setItems(llistaObservableProveidor);
 
-            System.out.println("Importación completada. Proveedores añadidos: " + proveidorsImportats.size());
+            System.out.println("Importació completada. Proveidors afegits: " + proveidorsImportats.size());
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Error al leer el archivo: " + e.getMessage());
+            MostrarError.mostrarMissatgeError("Error al llegir l'archiu: ", e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error inesperado: " + e.getMessage());
+            MostrarError.mostrarMissatgeError("Error inesperat: ", e.getMessage());
         }
     }
 
