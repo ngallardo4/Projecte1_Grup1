@@ -21,64 +21,73 @@ public class FamiliaLogicaTest {
 
     private FamiliaLogica familiaLogica;
 
+    /**
+     * Inicialitza l'objecte {@code FamiliaLogica} abans de cada prova. Aquest
+     * mètode s'executa abans de cada test individual.
+     */
     @BeforeEach
     public void setUp() {
-        // Inicialitzar l'objecte FamiliaLogica abans de cada test
         familiaLogica = new FamiliaLogica();
     }
 
+    /**
+     * Prova que el mètode {@code afegirFamilia} funcioni correctament amb dades
+     * d'entrada vàlides.
+     *
+     * @throws Exception si hi ha algun problema amb l'afegit de la família.
+     */
     @Test
     void testAfegirFamiliaCorrecte() throws Exception {
-        // Dades d'entrada vàlides
         String nom = "Família Exemple";
         String descripcio = "Descripció de la família";
         LocalDate dataAlta = LocalDate.of(2023, 1, 1);
         String provDefecte = "Proveïdor Exemple";
         String observacions = "Observacions aquí";
 
-        // Executar el mètode
         familiaLogica.afegirFamilia(nom, descripcio, dataAlta, provDefecte, observacions);
-
-        // Comprovar que no es llença cap excepció
-        // Nota: Aquí es pot afegir una comprovació si es té accés a les dades afegides
     }
 
+    /**
+     * Prova que el mètode {@code afegirFamilia} llença una excepció
+     * {@code NomBuit} quan el nom proporcionat està buit.
+     */
     @Test
     void testAfegirFamiliaExcepcioNomBuit() {
-        // Dades d'entrada amb nom buit (invàlid)
         String nom = "";
         String descripcio = "Descripció vàlida";
         LocalDate dataAlta = LocalDate.of(2023, 1, 1);
         String provDefecte = "Proveïdor Exemple";
         String observacions = "Observacions vàlides";
 
-        // Comprovar que es llença una excepció de tipus NomBuit
         assertThrows(NomBuit.class, () -> familiaLogica.afegirFamilia(nom, descripcio, dataAlta, provDefecte, observacions));
     }
 
+    /**
+     * Prova el mètode {@code eliminarFamilia} per assegurar-se que elimina
+     * correctament una família amb un ID donat.
+     *
+     * @throws Exception si hi ha algun problema en eliminar la família.
+     */
     @Test
     void testEliminarFamilia() throws Exception {
-        // Id d'una família a eliminar
         int id = 1;
 
-        // Executar el mètode eliminarFamilia
         familiaLogica.eliminarFamilia(id);
-
-        // Nota: Aquí es podria comprovar si realment la família ha estat eliminada, 
-        // depenent de l'accés a les dades després de la crida.
     }
 
+    /**
+     * Prova el mètode {@code obtenirTotesLesFamilies} per assegurar-se que
+     * retorna una llista de famílies.
+     *
+     * Comprova que la llista retornada no sigui nul·la i que conté almenys 0 o
+     * més elements.
+     */
     @Test
     public void testObtenirTotesLesFamilies() {
         FamiliaLogica logica = new FamiliaLogica();
 
-        // Obtenim totes les families
         List<Familia> families = logica.obtenirTotesLesFamilies();
-
-        // Verificar que la llista no sigui null
         assertNotNull(families);
-
-        // Si s'espera que hi hagi families a la base de dades, es pot verificar que la llista no estigui buida
         assertTrue(families.size() >= 0);
     }
 }

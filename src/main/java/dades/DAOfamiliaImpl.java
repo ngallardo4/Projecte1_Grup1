@@ -26,7 +26,7 @@ public class DAOfamiliaImpl implements DAOinterface<Familia>, DAOinterfaceLlista
     /**
      * Afegeix una nova família a la base de dades.
      *
-     * @param familia la familia a afegir.
+     * @param familia La família a afegir.
      */
     @Override
     public void afegir(Familia familia) {
@@ -34,30 +34,27 @@ public class DAOfamiliaImpl implements DAOinterface<Familia>, DAOinterfaceLlista
         String insertSQL = "INSERT INTO familia (id, nom, descripcio, data_alta, prov_defecte, observacions) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = MyDataSource.getConnection()) {
-            // Obtenim l'últim ID
-            int seguentId = 1; // Per defecte si no hi ha registres
+            int seguentId = 1;
             try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(obtenirMaxIdSQL)) {
                 if (rs.next()) {
-                    seguentId = rs.getInt(1) + 1; // Suma 1 al màxim ID trobat
+                    seguentId = rs.getInt(1) + 1;
                 }
             }
 
-            // Inserim la nova família amb el següent ID
             try (PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
-                stmt.setInt(1, seguentId); // Assignem el següent ID disponible
+                stmt.setInt(1, seguentId);
                 stmt.setString(2, familia.getNom());
                 stmt.setString(3, familia.getDescripcio());
                 stmt.setDate(4, Date.valueOf(familia.getData_alta()));
                 stmt.setString(5, familia.getProv_defecte());
                 stmt.setString(6, familia.getObservacions());
 
-                int rowsAffected = stmt.executeUpdate(); // Executem la inserció
+                int rowsAffected = stmt.executeUpdate();
 
                 if (rowsAffected == 0) {
                     throw new SQLException("Error: No s'ha pogut inserir la família.");
                 }
 
-                // Actualitzem l'objecte família amb el nou ID
                 familia.setId(seguentId);
                 System.out.println("Família afegida amb ID: " + seguentId);
 
@@ -69,10 +66,10 @@ public class DAOfamiliaImpl implements DAOinterface<Familia>, DAOinterfaceLlista
     }
 
     /**
-     * Obté totes les families de la base de dades.
+     * Obté totes les famílies de la base de dades.
      *
-     * @return una llista d'objectes {@code Familia} que representen totes les
-     * families.
+     * @return Una llista d'objectes {@code Familia} que representen totes les
+     * famílies.
      */
     @Override
     public List<Familia> obtenirEntitats() {
@@ -102,7 +99,7 @@ public class DAOfamiliaImpl implements DAOinterface<Familia>, DAOinterfaceLlista
     /**
      * Actualitza les dades d'una família existent a la base de dades.
      *
-     * @param familia la família amb les noves dades.
+     * @param familia La família amb les noves dades.
      */
     @Override
     public void actualitzar(Familia familia) {
