@@ -30,6 +30,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
@@ -43,6 +44,7 @@ import javafx.stage.Window;
 import logica.ProveidorLogica;
 
 /**
+ * Controlador per gestionar el menú de proveïdors.
  *
  * @author danie
  */
@@ -67,68 +69,82 @@ public class MenuProveidor {
     private ProveidorLogica proveidorLogica;
     private Usuari usuari;
 
+    /**
+     * Assigna un usuari al menú i gestiona els permisos.
+     *
+     * @param usuari Usuari que accedeix al menú.
+     */
     public void setUsuari(Usuari usuari) {
-        this.usuari = usuari;  // Guardar el usuario
-        gestionarPermisos();    // Gestionar los permisos según el rol
+        this.usuari = usuari;
+        gestionarPermisos();
     }
 
+    /**
+     * Inicialitza el menú de proveïdors.
+     */
     @FXML
     public void initialize() {
         llistaObservableProveidor = FXCollections.observableArrayList();
         proveidorLogica = new ProveidorLogica();
 
-        // Rellenar el ComboBox con los valores de EstatProveidor
         cbEstat.setItems(FXCollections.observableArrayList(EstatProveidor.values()));
 
         try {
             llistaObservableProveidor.addAll(proveidorLogica.obtenirTotsElsProveidors());
         } catch (Exception e) {
-            e.printStackTrace(); // Manejo de errores
+            e.printStackTrace();
         }
 
-        // Configurar las columnas con el modelo Proveidor
         colCif.setCellValueFactory(new PropertyValueFactory<>("CIF"));
         colNom.setCellValueFactory(new PropertyValueFactory<>("Nom"));
         colEstat.setCellValueFactory(new PropertyValueFactory<>("Estat"));
         colMotiuInactiu.setCellValueFactory(new PropertyValueFactory<>("MotiuInactiu"));
-        colTelefon.setCellValueFactory(new PropertyValueFactory<>("Telefon"));
+        colTelefon.setCellValueFactory(new PropertyValueFactory<>("Telèfon"));
         colDescompte.setCellValueFactory(new PropertyValueFactory<>("Descompte"));
         colDataAlta.setCellValueFactory(new PropertyValueFactory<>("Data_Alta"));
-        colQualificacio.setCellValueFactory(new PropertyValueFactory<>("Qualificacio"));
+        colQualificacio.setCellValueFactory(new PropertyValueFactory<>("Qualificació"));
 
-        // Asignar la lista observable al TableView
         tabViewProveidor.setItems(llistaObservableProveidor);
         tabViewProveidor.setOnMouseClicked(this::handleOnMouseClicked);
 
-        // Desactivar botones al inicio
         desactivarBotons();
         btnAfegir.setDisable(false);
     }
 
+    /**
+     * Gestiona els permisos dels botons en funció del rol de l'usuari.
+     */
     private void gestionarPermisos() {
         if (usuari != null) {
             boolean esMagatzem = usuari.isRol();
             btnAfegir.setDisable(!esMagatzem);
-            btnMod.setDisable(!esMagatzem); // Iniciar deshabilitado hasta que se seleccione una familia
-            btnElimi.setDisable(!esMagatzem);  // Iniciar deshabilitado hasta que se seleccione una familia
+            btnMod.setDisable(!esMagatzem);
+            btnElimi.setDisable(!esMagatzem);
 
         } else {
             desactivarBotons();
         }
     }
 
+    /**
+     * Desactiva els botons de modificar i eliminar.
+     */
     private void desactivarBotons() {
         btnElimi.setDisable(true);
         btnMod.setDisable(true);
     }
 
+    /**
+     * Gestor d'esdeveniments per a fer clics en el TableView.
+     *
+     * @param ev Esdeveniment del mouse.
+     */
     @FXML
     private void handleOnMouseClicked(MouseEvent ev) {
         if (ev.getButton() == MouseButton.PRIMARY) {
             Proveidor proveidorSeleccionat = tabViewProveidor.getSelectionModel().getSelectedItem();
 
             if (proveidorSeleccionat != null) {
-                // Rellenar los campos con la información del proveedor seleccionado
                 tfNom.setText(proveidorSeleccionat.getNom());
                 tfCif.setText(proveidorSeleccionat.getCIF());
                 cbEstat.setValue(proveidorSeleccionat.getEstat());
@@ -138,13 +154,12 @@ public class MenuProveidor {
                 tfDataAlta.setText(proveidorSeleccionat.getData_Alta().toString());
                 tfQualificacio.setText(String.valueOf(proveidorSeleccionat.getQualificacio()));
 
-                // Verificar los permisos del usuario antes de habilitar los botones
                 if (usuari != null && usuari.isRol()) {
-                    btnElimi.setDisable(false);  // Solo habilitar si tiene permisos
-                    btnMod.setDisable(false); // Solo habilitar si tiene permisos
+                    btnElimi.setDisable(false);
+                    btnMod.setDisable(false);
                 } else {
-                    btnElimi.setDisable(true);   // Deshabilitar si no tiene permisos
-                    btnMod.setDisable(true);  // Deshabilitar si no tiene permisos
+                    btnElimi.setDisable(true);
+                    btnMod.setDisable(true);
                 }
             } else {
                 desactivarBotons();
@@ -152,39 +167,73 @@ public class MenuProveidor {
         }
     }
 
+    /**
+     * Acció per al botó 'Logo'.
+     *
+     * @param event Esdeveniment d'acció.
+     * @throws IOException Si hi ha un error d'entrada/sortida.
+     */
     @FXML
     public void btnLogo_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Logo' presionat");
         App.setRoot("menuPrincipal", this.usuari);
     }
 
+    /**
+     * Acció per al botó 'Sortida'.
+     *
+     * @param event Esdeveniment d'acció.
+     * @throws IOException Si hi ha un error d'entrada/sortida.
+     */
     @FXML
     public void btnSortida_action(ActionEvent event) throws IOException {
         App.setRoot("menuPrincipal", this.usuari);
     }
 
+    /**
+     * Acció per al botó 'Tancar'.
+     *
+     * @param event Esdeveniment d'acció.
+     * @throws IOException Si hi ha un error d'entrada/sortida.
+     */
     @FXML
     public void btnTancar_action(ActionEvent event) throws IOException {
         App.setRoot("iniciSessio");
     }
 
+    /**
+     * Acció per al botó 'Afegir'.
+     *
+     * @param event Esdeveniment d'acció.
+     */
     @FXML
     public void btnAfegir_action(ActionEvent event) {
         System.out.println("Botó 'Afegir' presionat");
 
-        EstatProveidor estat = cbEstat.getValue(); // Valor del ComboBox
-
-        // Crear una nueva referencia con todos los valores
+        EstatProveidor estat = cbEstat.getValue();
         Proveidor nouProveidor = new Proveidor("", "", estat, "", "", 0.0f, LocalDate.now(), 0);
 
-        // Afegir la nova referència a la llista observable
         llistaObservableProveidor.add(nouProveidor);
 
-        // Actualitzar el TableView
         tabViewProveidor.setItems(llistaObservableProveidor);
         tabViewProveidor.getSelectionModel().select(nouProveidor);
     }
 
+    /**
+     * Acció per al botó 'Modificar'.
+     *
+     * @param event Esdeveniment d'acció.
+     * @throws IOException Si hi ha un error d'entrada/sortida.
+     * @throws CifInvalid Excepció per un CIF no vàlid.
+     * @throws NomBuit Excepció per un nom buit.
+     * @throws TelefonInvalid Excepció per un telèfon no vàlid.
+     * @throws QualificacioInvalid Excepció per una qualificació no vàlida.
+     * @throws DescompteInvalid Excepció per un descompte no vàlid.
+     * @throws EstatInvalid Excepció per un estat no vàlid.
+     * @throws MotiuInactiuInvalid Excepció per un motiu inactiu no vàlid.
+     * @throws dataAltaBuit Excepció per data alta buida.
+     */
+    @FXML
     public void btnMod_action(ActionEvent event) throws IOException, CifInvalid, NomBuit, EstatInvalid, MotiuInactiuInvalid,
             TelefonInvalid, DescompteInvalid, dataAltaBuit, QualificacioInvalid {
 
@@ -193,79 +242,58 @@ public class MenuProveidor {
 
         if (proveidorSeleccionat != null) {
             try {
-                // Validar el nombre del proveedor
                 String nomNou = tfNom.getText();
                 if (nomNou.isEmpty()) {
-                    throw new NomBuit("El nombre del proveedor no puede estar vacío.");
+                    throw new NomBuit("El nom del proveïdor no pot estar buit.");
                 }
-
-                // Validar el CIF del proveedor
                 String cifNou = tfCif.getText();
-                if (cifNou.isEmpty()) {
-                    throw new CifInvalid("El CIF del proveedor no puede estar vacío.");
+                if (cifNou == null || cifNou.trim().isEmpty()) {
+                    throw new CifInvalid("El CIF no pot estar buit.");
                 }
-                if (!cifNou.matches("[A-Z][0-9]{8}")) {
-                    throw new CifInvalid("El CIF no té un format vàlid."); // Asegúrate de que el regex es el adecuado
-                }
-
-                // Validar el estado del proveedor
                 EstatProveidor estatNou = cbEstat.getValue();
                 if (estatNou == null) {
-                    throw new EstatInvalid("Debe seleccionar un estado válido para el proveedor.");
+                    throw new EstatInvalid("Has de seleccionar un estat vàlid pel proveïdor");
                 }
-
-                // Validar motivo inactivo (si aplica)
                 if (estatNou == EstatProveidor.INACTIU && (tfMotiuInactiu.getText().isEmpty())) {
-                    throw new MotiuInactiuInvalid("Debe proporcionar un motivo de inactividad si el proveedor está inactivo.");
+                    throw new MotiuInactiuInvalid("Ha de proporcionar un motiu d'inactivitat si el proveïdor està inactiu.");
                 }
-
-                // Validar el teléfono del proveedor
                 String telefonNou = tfTelefon.getText();
                 if (telefonNou.isEmpty() || !telefonNou.matches("\\d{9}")) {
-                    throw new TelefonInvalid("El teléfono debe tener 9 dígitos.");
+                    throw new TelefonInvalid("El telèfon ha de tenir 9 dígits.");
                 }
-
-                // Validar el descuento
                 String descompteStr = tfDescompte.getText();
                 float descompteNou;
                 if (descompteStr.isEmpty()) {
-                    throw new DescompteInvalid("El descuento no puede estar vacío.");
+                    throw new DescompteInvalid("El descompte no pot estar buit.");
                 }
                 try {
                     descompteNou = Float.parseFloat(descompteStr);
                 } catch (NumberFormatException e) {
-                    throw new DescompteInvalid("El descuento debe ser un número válido.");
+                    throw new DescompteInvalid("El descompte ha de ser un número vàlid.");
                 }
-
-                // Validar la fecha de alta
                 String dataAltaStr = tfDataAlta.getText();
                 if (dataAltaStr.isEmpty()) {
-                    throw new dataAltaBuit("La fecha de alta no puede estar vacía.");
+                    throw new dataAltaBuit("La data d'alta no pot estar buida.");
                 }
                 LocalDate dataAltaNova;
                 try {
                     dataAltaNova = LocalDate.parse(dataAltaStr);
                 } catch (Exception e) {
-                    throw new dataAltaBuit("El formato de la fecha de alta no es válido (YYYY-MM-DD).");
+                    throw new dataAltaBuit("El format de la data d'alta no és vàlid (AAAA-MM-DD).");
                 }
-
-                // Validar la calificación
                 String qualificacioStr = tfQualificacio.getText();
                 int qualificacioNova;
                 if (qualificacioStr.isEmpty()) {
-                    throw new QualificacioInvalid("La calificación no puede estar vacía.");
+                    throw new QualificacioInvalid("La qualificació no pot estar buida.");
                 }
                 try {
                     qualificacioNova = Integer.parseInt(qualificacioStr);
                 } catch (NumberFormatException e) {
-                    throw new QualificacioInvalid("La calificación debe ser un número entero válido.");
+                    throw new QualificacioInvalid("La qualificació ha de ser un número enter vàlid.");
                 }
-
-                // Si todas las validaciones son correctas, modificar el proveedor
                 proveidorLogica.modificarProveidor(cifNou, nomNou, estatNou, tfMotiuInactiu.getText(),
                         telefonNou, descompteNou, dataAltaNova, qualificacioNova);
 
-                // Actualizar proveedor en la lista observable
                 proveidorSeleccionat.setCIF(cifNou);
                 proveidorSeleccionat.setNom(nomNou);
                 proveidorSeleccionat.setEstat(estatNou);
@@ -275,84 +303,93 @@ public class MenuProveidor {
                 proveidorSeleccionat.setData_Alta(dataAltaNova);
                 proveidorSeleccionat.setQualificacio(qualificacioNova);
 
-                // Refrescar el TableView para mostrar los cambios
                 tabViewProveidor.refresh();
-                System.out.println("Proveedor modificado correctamente.");
+                System.out.println("Proveïdor modificat correctamente.");
             } catch (CifInvalid e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (NomBuit e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (EstatInvalid e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (MotiuInactiuInvalid e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (TelefonInvalid e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (DescompteInvalid e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (dataAltaBuit e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (QualificacioInvalid e) {
-                System.out.println("Error: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error: ", e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Error en modificar el proveedor: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error en modificar el proveïdor: ", e.getMessage());
             }
         } else {
-            System.out.println("No se ha seleccionado ningún proveedor para modificar.");
+            System.out.println("No s'ha seleccionat cap proveidor per a modificar.");
         }
     }
 
+    /**
+     * Acció per al botó 'Eliminar'.
+     *
+     * @param event Esdeveniment d'acció.
+     * @throws IOException Si hi ha un error d'entrada/sortida.
+     */
     @FXML
     public void btnElimi_action(ActionEvent event) throws Exception {
         Proveidor proveidorSeleccionat = tabViewProveidor.getSelectionModel().getSelectedItem();
 
         if (proveidorSeleccionat != null) {
-            // Eliminar el proveedor de la base de datos y de la lista observable
             proveidorLogica.eliminarProveidor(proveidorSeleccionat.getCIF());
             llistaObservableProveidor.remove(proveidorSeleccionat);
 
-            // Refrescar el TableView
             tabViewProveidor.refresh();
         }
     }
 
+    /**
+     * Acció per al botó 'Importar'.
+     *
+     * @param event Esdeveniment d'acció.
+     * @throws IOException Si hi ha un error d'entrada/sortida.
+     */
     @FXML
     public void btnImportar_action(ActionEvent event) {
-        // Acción simple para probar el botón
         System.out.println("El botón 'Importar' ha sido presionado.");
 
-        // Crear un objeto FileChooser
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleccionar archivo a importar");
+        fileChooser.setTitle("Seleccionar arxiu a importar");
 
-        // Establecer extensiones de archivo aceptadas (opcional)
         FileChooser.ExtensionFilter extFilter
-                = new FileChooser.ExtensionFilter("Archivos CSV (*.csv)", "*.csv");
+                = new FileChooser.ExtensionFilter("Arxius CSV (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
 
-        // Abrir el diálogo para seleccionar un archivo
         Window stage = ((Node) event.getSource()).getScene().getWindow();
         File file = fileChooser.showOpenDialog(stage);
 
-        // Verificar si se ha seleccionado un archivo
         if (file != null) {
-            // Aquí puedes implementar la lógica para importar el archivo
-            System.out.println("Archivo seleccionado: " + file.getAbsolutePath());
-
-            // Puedes llamar a otro método para manejar la importación
-            importarArchivo(file);
+            try {
+                importarArchivo(file);
+            } catch (Exception e) {
+                MostrarError.mostrarMissatgeError("Error de Importació", "S'ha produït un error durant la importació: " + e.getMessage());
+            }
         } else {
-            System.out.println("No se ha seleccionado ningún archivo.");
+            MostrarError.mostrarMissatgeError("Arxiu no seleccionat", "No s'ha seleccionat cap arxiu per importar.");
         }
     }
 
+    /**
+     * Acció per al botó 'Exportar'.
+     *
+     * @param event Esdeveniment d'acció.
+     * @throws IOException Si hi ha un error d'entrada/sortida.
+     */
     @FXML
     public void btnExportar_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Exportar' presionat");
-        // Crear un archivo CSV y mostrar un diálogo para elegir la ubicación
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar Proveedores");
+        fileChooser.setTitle("Guardar Proveïdors");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
         File file = fileChooser.showSaveDialog(null);
 
@@ -362,12 +399,11 @@ public class MenuProveidor {
                 bw.write("CIF,Nom,Estat,Motiu Inactiu,Telefon,Descompte,Data Alta,Qualificació");
                 bw.newLine();
 
-                // Escribir los datos de cada proveedor
                 for (Proveidor proveidor : llistaObservableProveidor) {
                     String line = String.join(",",
                             proveidor.getCIF(),
                             proveidor.getNom(),
-                            proveidor.getEstat().name(), // Guardar el enum como un String
+                            proveidor.getEstat().name(),
                             proveidor.getMotiuInactiu(),
                             proveidor.getTelefon(),
                             String.valueOf(proveidor.getDescompte()),
@@ -378,14 +414,32 @@ public class MenuProveidor {
                     bw.newLine();
                 }
 
-                System.out.println("Exportación completada. Proveedores exportados: " + llistaObservableProveidor.size());
+                System.out.println("Exportació completada. Proveïdors exportats: " + llistaObservableProveidor.size());
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Error al escribir el archivo: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error al escriure l'arxiu: ", e.getMessage());
             }
         }
     }
 
+    /**
+     * Importa proveïdors des d'un fitxer CSV especificat.
+     *
+     * Llegeix les dades del fitxer, processa cada línia per crear objectes
+     * {@link Proveidor} i afegeix aquests objectes a la llista observable de
+     * proveïdors. Si es troben errors en les dades (com formats incorrectes o
+     * valors invàlids), es mostraran missatges d'error.
+     *
+     * @param filePath El fitxer CSV que conté la informació dels proveïdors a
+     * importar. Ha de tenir el format correcte amb les següents columnes: CIF,
+     * Nom, Estat, Motiu Inactiu, Telèfon, Descompte, Data Alta, Qualificació.
+     *
+     * @throws IOException Si hi ha un error d'entrada/sortida durant la lectura
+     * del fitxer.
+     *
+     * @throws Exception Si es produeix un error inesperat durant el procés
+     * d'importació.
+     */
     public void importarArchivo(File filePath) {
 
         List<Proveidor> proveidorsImportats = new ArrayList<>();
@@ -393,15 +447,12 @@ public class MenuProveidor {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
 
-            // Leer la primera línea si contiene encabezados
-            br.readLine(); // Si tienes encabezados en el CSV, puedes descomentar esto
+            br.readLine();
 
             while ((line = br.readLine()) != null) {
-                // Suponemos que los campos están separados por comas
                 String[] datos = line.split(",");
 
-                // Asegúrate de que hay suficientes datos en la fila
-                if (datos.length >= 8) { // Ajusta esto según la cantidad de campos
+                if (datos.length >= 8) {
                     String cif = datos[0].trim();
                     String nom = datos[1].trim();
 
@@ -409,8 +460,8 @@ public class MenuProveidor {
                     try {
                         estat = EstatProveidor.valueOf(datos[2].trim().toUpperCase());
                     } catch (IllegalArgumentException e) {
-                        System.out.println("Valor de estat inválido: " + datos[2]);
-                        continue; // Salta esta fila
+                        MostrarError.mostrarMissatgeError("Valor d'estat invàlid: ", datos[2]);
+                        continue;
                     }
 
                     String motiuInactiu = datos[3].trim();
@@ -419,35 +470,33 @@ public class MenuProveidor {
                     try {
                         descompte = Float.parseFloat(datos[5].trim());
                     } catch (NumberFormatException e) {
-                        System.out.println("Descuento inválido para el CIF " + cif + ": " + datos[5]);
-                        continue; // Salta esta fila
+                        MostrarError.mostrarMissatgeError("Descompte invàlid per al CIF", cif + ": " + datos[5]);
+                        continue;
                     }
 
                     LocalDate dataAlta;
                     try {
                         dataAlta = LocalDate.parse(datos[6].trim());
                     } catch (Exception e) {
-                        System.out.println("Fecha de alta inválida para el CIF " + cif + ": " + datos[6]);
-                        continue; // Salta esta fila
+                        MostrarError.mostrarMissatgeError("Data d'alta invàlida per al CIF ", cif + ": " + datos[6]);
+                        continue;
                     }
 
                     int qualificacio;
                     try {
                         qualificacio = Integer.parseInt(datos[7].trim());
                     } catch (NumberFormatException e) {
-                        System.out.println("Calificación inválida para el CIF " + cif + ": " + datos[7]);
-                        continue; // Salta esta fila
+                        MostrarError.mostrarMissatgeError("Qualificació invàlida per al CIF ", cif + ": " + datos[7]);
+                        continue;
                     }
 
-                    // Crear un nuevo proveedor y añadirlo a la lista
                     Proveidor nouProveidor = new Proveidor(cif, nom, estat, motiuInactiu, telefon, descompte, dataAlta, qualificacio);
                     proveidorsImportats.add(nouProveidor);
                 } else {
-                    System.out.println("Fila con datos insuficientes: " + line);
+                    System.out.println("Fila amb dades insuficients: " + line);
                 }
             }
 
-            // Aquí puedes añadir cada proveedor a la base de datos
             for (Proveidor proveidor : proveidorsImportats) {
                 try {
                     proveidorLogica.afegirProveidor(proveidor.getCIF(), proveidor.getNom(),
@@ -455,22 +504,21 @@ public class MenuProveidor {
                             proveidor.getTelefon(), proveidor.getDescompte(),
                             proveidor.getData_Alta(), proveidor.getQualificacio());
                 } catch (Exception e) {
-                    System.out.println("Error al añadir el proveedor: " + proveidor.getCIF() + " - " + e.getMessage());
+                    MostrarError.mostrarMissatgeError("Error a l'afegir proveïdor", "No s'ha pogut afegir el proveïdor amb CIF " + proveidor.getCIF() + ": " + e.getMessage());
                 }
             }
 
-            // Actualizar la lista observable y la tabla
             llistaObservableProveidor.addAll(proveidorsImportats);
             tabViewProveidor.setItems(llistaObservableProveidor);
 
-            System.out.println("Importación completada. Proveedores añadidos: " + proveidorsImportats.size());
+            System.out.println("Importació completada. Proveïdors afegits:" + proveidorsImportats.size());
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Error al leer el archivo: " + e.getMessage());
+            MostrarError.mostrarMissatgeError("Error al llegir l'arxiu: ", e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error inesperado: " + e.getMessage());
+            MostrarError.mostrarMissatgeError("Error inesperat: ", e.getMessage());
         }
     }
 
