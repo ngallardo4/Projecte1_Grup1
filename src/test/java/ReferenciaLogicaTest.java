@@ -2,86 +2,164 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+import enums.UnitatMesura;
+import excepcions.IdFamiliaBuit;
+import excepcions.NomBuit;
+import excepcions.UomBuit;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import logica.ReferenciaLogica;
+
+import static org.junit.jupiter.api.Assertions.*;
 /**
  *
  * @author Héctor Vico
  */
-import aplicacio.model.Referencia;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
-import java.util.List;
-import logica.ReferenciaLogica;
-import enums.UnitatMesura;
-import logica.ProveidorLogica;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 public class ReferenciaLogicaTest {
 
     private ReferenciaLogica referenciaLogica;
 
     @BeforeEach
-    public void setUp() {
-        // Inicialitzem la lògica i el DAO
+    void setUp() {
         referenciaLogica = new ReferenciaLogica();
     }
 
     @Test
-    public void testAfegirProveidor() throws Exception {
-        // Crear una instancia de ProveidorLogica
-        ReferenciaLogica logica = new ReferenciaLogica();
-
-        // Añadir un proveedor
-        //logica.afegirReferencia("Producte Test", UnitatMesura.KG.toString(), 1, "CIF123", LocalDate.now(), LocalDate.now().plusDays(30), 10.5f, 0, 20.0f);
-
-        // Recuperar la lista de proveedores
-        //List<Referencia> proveidors = logica.obtenirTotesLesReferencies();
-
-        // Imprimir los proveedores recuperados
-        System.out.println("Producte recuperat despres de la inserción:");
-        //proveidors.forEach(p -> System.out.println(p.getId()));
+    void testAfegirReferencia_ValidInput() {
+        try {
+            referenciaLogica.afegirReferencia(
+                "Referencia 1",
+                UnitatMesura.KG,
+                1,
+                "CIF1234",
+                LocalDate.now(),
+                10.0f,
+                LocalDate.now().plusDays(10),
+                100,
+                15.0f
+            );
+        } catch (Exception e) {
+            fail("No debería lanzar ninguna excepción: " + e.getMessage());
+        }
     }
 
-    // Test para modificarReferencia()
     @Test
-    public void testModificarReferencia() throws Exception {
-        ReferenciaLogica referenciaLogica = new ReferenciaLogica();
-
-        // Añadir una referencia para modificar
-        LocalDate dataAlta = LocalDate.now();
-        LocalDate dataCaducitat = LocalDate.now().plusDays(30);
-
-        /*referenciaLogica.afegirReferencia("Producte Modificar", UnitatMesura.KG,
-                1, "CIF123", dataAlta, dataCaducitat,
-                10.0f, 0, 20.0f);
-*/
-  /*      // Obtener la referencia añadida
-        Referencia referencia = referenciaLogica.obtenirTotesLesReferencies().stream()
-                .filter(r -> r.getCif_proveidor().equals("CIF123"))
-                .findFirst().orElse(null);
-
-        assertNotNull(referencia, "La referencia debería haberse añadido correctamente.");
-
-        // Modificar la referencia
-        referenciaLogica.modificarReferencia(
-                referencia.getId(), "Producte Modificat", UnitatMesura.KG,
-                1, "CIF456", dataAlta, 15.0f, dataCaducitat, 4, 30.0f);
-
-        // Verificar la referencia modificada
-        Referencia referenciaModificada = referenciaLogica.obtenirTotesLesReferencies().stream()
-                .filter(r -> r.getCif_proveidor().equals("CIF456"))
-                .findFirst().orElse(null);
-
-        assertNotNull(referenciaModificada, "La referencia debería existir después de la modificación.");
-        assertEquals("Producte Modificat", referenciaModificada.getNom(), "El nombre debería haber sido actualizado.");
-        assertEquals("CIF456", referenciaModificada.getCif_proveidor(), "El CIF debería haber sido actualizado.");
-        assertEquals(15.0f, referenciaModificada.getPes_total(), "El peso total debería haber sido actualizado.");
-        assertEquals(4, referenciaModificada.getQuantitat_total(), "La cantidad total debería haber sido actualizada.");
-        assertEquals(30.0f, referenciaModificada.getPreu_total(), "El precio total debería haber sido actualizado.");
-*/
+    void testAfegirReferencia_NomBuit() {
+        Exception exception = assertThrows(NomBuit.class, () -> {
+            referenciaLogica.afegirReferencia("", UnitatMesura.KG, 1, "CIF1234", LocalDate.now(), 10.0f, LocalDate.now().plusDays(10), 100, 15.0f);
+        });
+        assertEquals("El nom no pot estar buit.", exception.getMessage());
     }
 
+    @Test
+    void testAfegirReferencia_UomBuit() {
+        Exception exception = assertThrows(UomBuit.class, () -> {
+            referenciaLogica.afegirReferencia("Referencia 1", null, 1, "CIF1234", LocalDate.now(), 10.0f, LocalDate.now().plusDays(10), 100, 15.0f);
+        });
+        assertEquals("La unitat de mesura no pot estar buida.", exception.getMessage());
+    }
+
+    @Test
+    void testAfegirReferencia_IdFamiliaBuit() {
+        Exception exception = assertThrows(IdFamiliaBuit.class, () -> {
+            referenciaLogica.afegirReferencia("Referencia 1", UnitatMesura.KG, 0, "CIF1234", LocalDate.now(), 10.0f, LocalDate.now().plusDays(10), 100, 15.0f);
+        });
+        assertEquals("L'ID de família ha de ser major que 0.", exception.getMessage());
+    }
+
+    @Test
+    void testModificarReferencia_ValidInput() {
+        try {
+            referenciaLogica.afegirReferencia(
+                "Referencia 1",
+                UnitatMesura.KG,
+                1,
+                "CIF1234",
+                LocalDate.now(),
+                10.0f,
+                LocalDate.now().plusDays(10),
+                100,
+                15.0f
+            );
+
+            referenciaLogica.modificarReferencia(
+                1,
+                "Referencia 1 Modificada",
+                UnitatMesura.L,
+                1,
+                "CIF5678",
+                LocalDate.now(),
+                20.0f,
+                LocalDate.now().plusDays(20),
+                200,
+                30.0f
+            );
+        } catch (Exception e) {
+            fail("No debería lanzar ninguna excepción: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testModificarReferencia_NomBuit() {
+        Exception exception = assertThrows(NomBuit.class, () -> {
+            referenciaLogica.modificarReferencia(1, "", UnitatMesura.KG, 1, "CIF1234", LocalDate.now(), 10.0f, LocalDate.now().plusDays(10), 100, 15.0f);
+        });
+        assertEquals("El nom no pot estar buit.", exception.getMessage());
+    }
+
+    @Test
+    void testEliminarReferencia_ValidInput() {
+        try {
+            referenciaLogica.afegirReferencia(
+                "Referencia 1",
+                UnitatMesura.KG,
+                1,
+                "CIF1234",
+                LocalDate.now(),
+                10.0f,
+                LocalDate.now().plusDays(10),
+                100,
+                15.0f
+            );
+
+            referenciaLogica.eliminarReferencia(1);
+        } catch (Exception e) {
+            fail("No debería lanzar ninguna excepción: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testObtenirTotesLesReferencies_ValidIdFamilia() {
+        try {
+            referenciaLogica.afegirReferencia(
+                "Referencia 1",
+                UnitatMesura.KG,
+                1,
+                "CIF1234",
+                LocalDate.now(),
+                10.0f,
+                LocalDate.now().plusDays(10),
+                100,
+                15.0f
+            );
+
+            var referencias = referenciaLogica.obtenirTotesLesReferencies(1);
+            assertNotNull(referencias);
+            assertFalse(referencias.isEmpty());
+        } catch (Exception e) {
+            fail("No debería lanzar ninguna excepción: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testObtenirReferenciesSenseEstoc() {
+        var referenciasSinEstoc = referenciaLogica.obtenirReferenciesSenseEstoc();
+        assertNotNull(referenciasSinEstoc);
+        // Comprobar que se devuelven las referencias correctas
+    }
 }
+
+
