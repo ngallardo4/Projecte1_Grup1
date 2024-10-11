@@ -12,23 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementación de la interfaz DAOreferencia para manejar operaciones CRUD
- * sobre la entidad {@code Referencia}. Proporciona métodos para obtener,
- * agregar, actualizar y eliminar referencias en la base de datos.
+ * Implementació de la interfície DAO per gestionar objectes de tipus 
+ * {@link Referencia} en la base de dades. Aquesta classe proporciona 
+ * funcionalitats per afegir, actualitzar, eliminar i obtenir referències, 
+ * així com referències sense estoc.
  *
  * @autor Héctor Vico
  */
 public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferencia<Referencia> {
 
-    /**
-     * Implementación de la interfaz DAOreferencia para manejar operaciones CRUD
-     * sobre la entidad {@code Referencia}. Proporciona métodos para obtener,
-     * agregar, actualizar y eliminar referencias en la base de datos.
-     *
-     * @param idFamilia
-     * @return
-     * @autor Héctor Vico
-     */
     public List<Referencia> obtenirEntitats(int idFamilia) {
         List<Referencia> referencies = new ArrayList<>();
         String sql = "SELECT * FROM referencia";
@@ -59,11 +51,7 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
         return referencies;
     }
 
-    /**
-     * Agrega una nueva referencia a la base de datos.
-     *
-     * @param referencia la {@code Referencia} que se va a agregar.
-     */
+
     @Override
     public void afegir(Referencia referencia) {
         String sql = "INSERT INTO referencia (nom, UOM, id_familia, cif_proveidor, data_alta, pes_total, data_caducitat, quantitat_total, preu_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -102,13 +90,7 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
         }
     }
 
-    /**
-     * Actualiza una referencia existente en la base de datos.
-     *
-     * @param referencia la {@code Referencia} que contiene los datos
-     * actualizados.
-     * @throws java.lang.Exception
-     */
+    
     @Override
     public void actualitzar(Referencia referencia){
         String sql = "UPDATE referencia SET nom = ?, UOM = ?, id_familia = ?, cif_proveidor = ?, data_alta = ?, pes_total = ?, data_caducitat = ?, quantitat_total = ?, preu_total = ? WHERE id = ?";
@@ -131,11 +113,6 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
         }
     }
 
-    /**
-     * Elimina una referencia de la base de datos.
-     *
-     * @param referencia la {@code Referencia} que se va a eliminar.
-     */
     @Override
     public void eliminar(Referencia referencia) {
         String sql = "DELETE FROM referencia WHERE id = ?";
@@ -149,12 +126,6 @@ public class DAOreferenciaImpl implements DAOinterface<Referencia>, DAOreferenci
         }
     }
 
-    /**
-     * Obtiene todas las referencias que no tienen stock.
-     *
-     * @return una lista de {@code Referencia} que no tienen cantidad
-     * disponible.
-     */
     @Override
     public List<Referencia> obtenirReferenciesSenseEstoc() {
         List<Referencia> referenciesSenseEstoc = new ArrayList<>();
