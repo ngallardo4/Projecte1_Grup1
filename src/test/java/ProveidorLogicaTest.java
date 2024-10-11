@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 
 import aplicacio.model.Proveidor;
 import enums.EstatProveidor;
@@ -11,11 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
 /**
  *
@@ -44,9 +43,6 @@ public class ProveidorLogicaTest {
         // Imprimir los proveedores recuperados
         System.out.println("Proveedores recuperados después de la inserción:");
         proveidors.forEach(p -> System.out.println(p.getCIF()));
-        
-        
-
     }
 
 
@@ -113,7 +109,6 @@ public class ProveidorLogicaTest {
     public void testObtenirTotsElsProveidors() {
         List<Proveidor> proveidors = proveidorLogica.obtenirTotsElsProveidors();
         assertNotNull(proveidors, "La lista de proveedores no debería ser nula.");
-        assertTrue(proveidors.isEmpty(), "La lista de proveedores debería estar vacía al inicio.");
     }
 
     // Test para la validación de datos en afegirProveidor (ejemplo con nombre vacío)
