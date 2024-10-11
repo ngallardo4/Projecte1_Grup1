@@ -120,7 +120,6 @@ public class MenuProveidor {
             btnAfegir.setDisable(!esMagatzem);
             btnMod.setDisable(true);
             btnElimi.setDisable(true);
-            btnExportar.setDisable(true);
             btnImportar.setDisable(true);
 
         } else {
@@ -135,7 +134,6 @@ public class MenuProveidor {
         btnAfegir.setDisable(true);
         btnElimi.setDisable(true);
         btnMod.setDisable(true);
-        btnExportar.setDisable(true);
         btnImportar.setDisable(true);
 
     }
@@ -163,14 +161,13 @@ public class MenuProveidor {
                 if (usuari != null && usuari.isRol()) {
                     btnElimi.setDisable(false);
                     btnMod.setDisable(false);
-                    btnExportar.setDisable(false);
                     btnImportar.setDisable(false);
                 } else {
                     btnElimi.setDisable(true);
                     btnMod.setDisable(true);
-                    btnExportar.setDisable(true);
                     btnImportar.setDisable(true);
                 }
+                btnExportar.setDisable(false);
             } else {
                 desactivarBotons();
             }
