@@ -6,39 +6,30 @@ package dades;
 
 import aplicacio.model.Proveidor;
 import enums.EstatProveidor;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementación del DAO (Data Access Object) para la entidad Proveidor. Esta
- * clase gestiona las operaciones CRUD (Crear, Leer, Actualizar, Eliminar) para
- * los proveedores en la base de datos.
+ * descripció: Implementació del DAO (Data Access Object) per la classe
+ * Proveidor. Aquesta classe gestiona les operacions CRUD (Crear, Llegir,
+ * Actualitzar, Eliminar) per als proveïdors a la base de dades.
  *
  * @author danie
+ * @version 10/2024.1
  */
 public class DAOproveidorImpl implements DAOinterface<Proveidor>, DAOinterfaceLlista<Proveidor> {
 
     /**
-     * Añade un nuevo proveedor a la base de datos.
+     * Afegeix un nou proveïdor a la base de dades.
      *
-     * @param proveidor El objeto Proveidor que se desea añadir.
+     * @param proveidor l'objecte Proveidor que es vol afegir.
      */
     @Override
     public void afegir(Proveidor proveidor) {
         String sql = "INSERT INTO proveidor (cif, nom, Estat, motiuInactiu, telefon, descompte, data_alta, qualificacio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = MyDataSource.getConnection(); // Cambiar el PreparedStatement para que devuelva las claves generadas
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            // Configurar los parámetros de la sentencia SQL
+        try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, proveidor.getCIF());
             stmt.setString(2, proveidor.getNom());
             stmt.setString(3, proveidor.getEstat().name());
@@ -47,27 +38,23 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor>, DAOinterfaceLl
             stmt.setFloat(6, proveidor.getDescompte());
             stmt.setTimestamp(7, Timestamp.valueOf(proveidor.getData_Alta().atStartOfDay()));
             stmt.setInt(8, proveidor.getQualificacio());
-
-            // Ejecutar la inserción
-            int result = stmt.executeUpdate();
-            System.out.println("Resultado de la inserción: " + result);
+            stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Obtiene todos los proveedores de la base de datos.
+     * Obté tots els proveïdors de la base de dades.
      *
-     * @return Una lista de objetos Proveidor que representan todos los
-     * proveedores.
+     * @return una llista d'objectes Proveidor que representen tots els
+     * proveïdors.
      */
     @Override
     public List<Proveidor> obtenirEntitats() {
         String sql = "SELECT * FROM proveidor";
         List<Proveidor> proveidors = new ArrayList<>();
         try (Connection conn = MyDataSource.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-
             while (rs.next()) {
                 EstatProveidor estat = EstatProveidor.valueOf(rs.getString("Estat"));
                 Proveidor pro = new Proveidor(
@@ -88,11 +75,15 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor>, DAOinterfaceLl
         return proveidors;
     }
 
+    /**
+     * Actualitza un proveïdor existent a la base de dades.
+     *
+     * @param proveidor l'objecte Proveidor amb la informació actualitzada.
+     */
     @Override
     public void actualitzar(Proveidor proveidor) {
         String sql = "UPDATE proveidor SET Nom = ?, Estat = ?, MotiuInactiu = ?, Telefon = ?, Descompte = ?, Data_Alta = ?, Qualificacio = ? WHERE CIF = ?";
         try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, proveidor.getNom());
             stmt.setString(2, proveidor.getEstat().name());
             stmt.setString(3, proveidor.getMotiuInactiu());
@@ -100,8 +91,7 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor>, DAOinterfaceLl
             stmt.setFloat(5, proveidor.getDescompte());
             stmt.setDate(6, Date.valueOf(proveidor.getData_Alta()));
             stmt.setInt(7, proveidor.getQualificacio());
-            stmt.setString(8, proveidor.getCIF()); // Ahora el CIF es el último parámetro
-
+            stmt.setString(8, proveidor.getCIF());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,17 +99,15 @@ public class DAOproveidorImpl implements DAOinterface<Proveidor>, DAOinterfaceLl
     }
 
     /**
-     * Elimina un proveedor de la base de datos.
+     * Elimina un proveïdor de la base de dades.
      *
-     * @param proveidor El objeto Proveidor que se desea eliminar.
+     * @param proveidor l'objecte Proveidor que es vol eliminar.
      */
     @Override
     public void eliminar(Proveidor proveidor) {
         String sql = "DELETE FROM proveidor WHERE cif = ?";
         try (Connection conn = MyDataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, proveidor.getCIF());
-
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
