@@ -143,16 +143,16 @@ public class MenuReferencia {
                 tfQuantitat.setText(String.valueOf(referenciaSeleccionada.getQuantitat_total()));
                 tfPreu.setText(String.valueOf(referenciaSeleccionada.getPreu_total()));
 
-                // Verificar los permisos del usuario antes de habilitar los botones
+                // Verificar els permisos del usuari abants d'habilitar els botones
                 if (usuari != null && usuari.isRol()) {
-                    btnElimi.setDisable(false);  // Solo habilitar si tiene permisos
-                    btnMod.setDisable(false); // Solo habilitar si tiene permisos
+                    btnElimi.setDisable(false);  
+                    btnMod.setDisable(false); 
                 } else {
-                    btnElimi.setDisable(true);   // Deshabilitar si no tiene permisos
-                    btnMod.setDisable(true);  // Deshabilitar si no tiene permisos
+                    btnElimi.setDisable(true); 
+                    btnMod.setDisable(true);  
                 }
 
-                btnEstoc.setDisable(false); // El botón de productos siempre habilitado
+                btnEstoc.setDisable(false); 
             } else {
                 desactivarBotons();
             }
@@ -165,17 +165,13 @@ public class MenuReferencia {
     @FXML
     public void btnIdFamilia_action(ActionEvent event) {
         try {
-            // Obtener el ID de familia desde el campo de texto
             int idFamilia = Integer.parseInt(tfIdFam.getText());
 
-            // Obtener las referencias filtradas por familia
             List<Referencia> referenciesFiltrades = referenciaLogica.obtenirTotesLesReferencies(idFamilia);
 
-            // Limpiar la lista observable y agregar las referencias filtradas
             llistaObservableReferencia.clear();
             llistaObservableReferencia.addAll(referenciesFiltrades);
 
-            // Refrescar el TableView
             tabViewRef.refresh();
             tabViewRef.setItems(llistaObservableReferencia);
             
@@ -204,13 +200,10 @@ public class MenuReferencia {
 
         UnitatMesura uomSeleccionada = cbUOM.getValue();
 
-        // Crear una nova referència amb el valor seleccionat
         Referencia novaReferencia = new Referencia(0, "", uomSeleccionada, 0, "", LocalDate.now(), 0.0f, LocalDate.now(), 0, 0.0f);
 
-        // Afegir la nova referència a la llista observable
         llistaObservableReferencia.add(novaReferencia);
 
-        // Actualitzar el TableView
         tabViewRef.setItems(llistaObservableReferencia);
         tabViewRef.getSelectionModel().select(novaReferencia);
     }
@@ -314,17 +307,13 @@ public class MenuReferencia {
                 }
 
                 if (referenciaSeleccionada.getId() == 0) {
-                    // Si l'ID és 0 és una nova família llavors inserim
                     referenciaLogica.afegirReferencia(nomNou, uomNova, idFamiliaNou, cifProveidorNou, dataAltaNova, pesNou, dataCaducitatNova, quantitatNova, preuNou);
-                    // Actualitzem l'objecte seleccionat per fer-lo coincidir amb la nova família
                     System.out.println("Nova família afegida amb ID: " + referenciaSeleccionada.getId());
                 } else {
-                    // Si l'ID és diferent de 0 ja existeix i fem una actualització
                     referenciaLogica.modificarReferencia(referenciaSeleccionada.getId(), nomNou, uomNova, idFamiliaNou, cifProveidorNou, dataAltaNova, pesNou, dataCaducitatNova, quantitatNova, preuNou);
                     System.out.println("Família modificada correctament.");
                 }
 
-                // Actualizar els valors de la familia a la llista observable (TableView)
                 referenciaSeleccionada.setNom(nomNou);
                 referenciaSeleccionada.setUom(uomNova);
                 referenciaSeleccionada.setId_familia(idFamiliaNou);
@@ -335,7 +324,6 @@ public class MenuReferencia {
                 referenciaSeleccionada.setQuantitat_total(quantitatNova);
                 referenciaSeleccionada.setPreu_total(preuNou);
 
-                // Refrescar el TableView per mostrar els canvis
                 tabViewRef.refresh();
                 tabViewRef.setItems(llistaObservableReferencia);
 
@@ -371,9 +359,9 @@ public class MenuReferencia {
     private void mostrarError(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
-        alert.setHeaderText(null); // No necesitas un encabezado
+        alert.setHeaderText(null); 
         alert.setContentText(mensaje);
-        alert.showAndWait(); // Espera a que el usuario cierre la alerta
+        alert.showAndWait(); 
     }
 
     @FXML
@@ -383,11 +371,11 @@ public class MenuReferencia {
 
         if (referenciaSeleccionada != null) {
             try {
-                // Eliminar de la base de dades
+                // Elimina de la base de dades
                 referenciaLogica.eliminarReferencia(referenciaSeleccionada.getId());
                 System.out.println("Familia eliminada de la base de dades.");
 
-                // Eliminar de la llista observable
+                // Elimina de la llista observable
                 llistaObservableReferencia.remove(referenciaSeleccionada);
                 tabViewRef.setItems(llistaObservableReferencia);
 
@@ -404,7 +392,6 @@ public class MenuReferencia {
         System.out.println("Botó 'Estoc' presionat");
 
         if (!estocMode) {
-            // Mostrar solo productos sin stock
             try {
                 List<Referencia> referenciesSenseEstoc = referenciaLogica.obtenirReferenciesSenseEstoc();
                 llistaObservableReferencia.clear();
@@ -416,7 +403,6 @@ public class MenuReferencia {
                 e.printStackTrace();
             }
         } else {
-            // Restaurar la lista completa
             try {
                 List<Referencia> totesLesReferencies = referenciaLogica.obtenirTotesLesReferencies(familiaId);
                 llistaObservableReferencia.clear();
