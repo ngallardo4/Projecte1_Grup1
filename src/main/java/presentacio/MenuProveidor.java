@@ -197,13 +197,13 @@ public class MenuProveidor {
                 // Validar el nombre del proveedor
                 String nomNou = tfNom.getText();
                 if (nomNou.isEmpty()) {
-                    throw new NomBuit("El nombre del proveedor no puede estar vacío.");
+                    throw new NomBuit("El nombre del proveidor no pot estar buit.");
                 }
 
                 // Validar el CIF del proveedor
                 String cifNou = tfCif.getText();
                 if (cifNou.isEmpty()) {
-                    throw new CifInvalid("El CIF del proveedor no puede estar vacío.");
+                    throw new CifInvalid("El CIF del proveidor no pot estar buit.");
                 }
                 if (!cifNou.matches("[A-Z][0-9]{8}")) {
                     throw new CifInvalid("El CIF no té un format vàlid."); // Asegúrate de que el regex es el adecuado
@@ -212,42 +212,42 @@ public class MenuProveidor {
                 // Validar el estado del proveedor
                 EstatProveidor estatNou = cbEstat.getValue();
                 if (estatNou == null) {
-                    throw new EstatInvalid("Debe seleccionar un estado válido para el proveedor.");
+                    throw new EstatInvalid("Has de seleccionar un estat vàlid pel proveidor.");
                 }
 
                 // Validar motivo inactivo (si aplica)
                 if (estatNou == EstatProveidor.INACTIU && (tfMotiuInactiu.getText().isEmpty())) {
-                    throw new MotiuInactiuInvalid("Debe proporcionar un motivo de inactividad si el proveedor está inactivo.");
+                    throw new MotiuInactiuInvalid("Ha proporcionar un motiu de inactivitat si el proveidor esta inactiu.");
                 }
 
                 // Validar el teléfono del proveedor
                 String telefonNou = tfTelefon.getText();
                 if (telefonNou.isEmpty() || !telefonNou.matches("\\d{9}")) {
-                    throw new TelefonInvalid("El teléfono debe tener 9 dígitos.");
+                    throw new TelefonInvalid("El telèfon ha tenir 9 dígits..");
                 }
 
                 // Validar el descuento
                 String descompteStr = tfDescompte.getText();
                 float descompteNou;
                 if (descompteStr.isEmpty()) {
-                    throw new DescompteInvalid("El descuento no puede estar vacío.");
+                    throw new DescompteInvalid("El descompte no pot estar buit.");
                 }
                 try {
                     descompteNou = Float.parseFloat(descompteStr);
                 } catch (NumberFormatException e) {
-                    throw new DescompteInvalid("El descuento debe ser un número válido.");
+                    throw new DescompteInvalid("El descompte ha de ser un número vàlid");
                 }
 
                 // Validar la fecha de alta
                 String dataAltaStr = tfDataAlta.getText();
                 if (dataAltaStr.isEmpty()) {
-                    throw new dataAltaBuit("La fecha de alta no puede estar vacía.");
+                    throw new dataAltaBuit("La data d'alta no pot estar buida.");
                 }
                 LocalDate dataAltaNova;
                 try {
                     dataAltaNova = LocalDate.parse(dataAltaStr);
                 } catch (Exception e) {
-                    throw new dataAltaBuit("El formato de la fecha de alta no es válido (YYYY-MM-DD).");
+                    throw new dataAltaBuit("El format de la data d'alta no és vàlid (AAAA-MM-DD).");
                 }
 
                 // Validar la calificación
@@ -278,7 +278,7 @@ public class MenuProveidor {
 
                 // Refrescar el TableView para mostrar los cambios
                 tabViewProveidor.refresh();
-                System.out.println("Proveedor modificado correctamente.");
+                System.out.println("Proveidor modificat correctamente.");
             } catch (CifInvalid e) {
                 System.out.println("Error: " + e.getMessage());
             } catch (NomBuit e) {
@@ -297,10 +297,10 @@ public class MenuProveidor {
                 System.out.println("Error: " + e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
-                MostrarError.mostrarMissatgeError("Error en modificar la proveidor: " , e.getMessage());
+                MostrarError.mostrarMissatgeError("Error en modificar el proveidor: " , e.getMessage());
             }
         } else {
-            System.out.println("No se ha seleccionado ningún proveedor para modificar.");
+            System.out.println("No se ha seleccionado ningún proveidor per a modificar.");
         }
     }
     
