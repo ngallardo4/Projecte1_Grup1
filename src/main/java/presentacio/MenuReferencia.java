@@ -5,6 +5,10 @@
 package presentacio;
 
 /**
+ * Classe per gestionar les referències en l'aplicació. Aquesta classe maneja
+ * els esdeveniments de la interfície d'usuari per a la gestió de referències,
+ * com afegir, modificar i eliminar referències, així com la seva visualització.
+ * També gestiona els permisos dels usuaris.
  *
  * @author Héctor Vico
  */
@@ -63,21 +67,41 @@ public class MenuReferencia {
 
     private int familiaId;
 
+    /**
+     * Obté l'ID de la família actualment seleccionada.
+     *
+     * @return ID de la família.
+     */
     public int getFamiliaId() {
         return familiaId;
     }
 
+    /**
+     * Estableix l'ID de la família per carregar les referències.
+     *
+     * @param familiaId ID de la família.
+     */
     public void setFamiliaId(int familiaId) {
         this.familiaId = familiaId;
     }
 
-    private Usuari usuari;  
+    private Usuari usuari;
 
+    /**
+     * Estableix l'usuari que està operant i gestiona els permisos en funció del
+     * seu rol.
+     *
+     * @param usuari Usuari que està utilitzant l'aplicació.
+     */
     public void setUsuari(Usuari usuari) {
         this.usuari = usuari;
-        gestionarPermisos();    
+        gestionarPermisos();
     }
 
+    /**
+     * Inicialitza el controlador de la interfície, carregant les referències de
+     * la base de dades i assignant els valors als camps de la taula.
+     */
     @FXML
     public void initialize() {
         llistaObservableReferencia = FXCollections.observableArrayList();
@@ -88,7 +112,7 @@ public class MenuReferencia {
         try {
             llistaObservableReferencia.addAll(referenciaLogica.obtenirTotesLesReferencies(familiaId));
         } catch (Exception e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
 
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -108,23 +132,37 @@ public class MenuReferencia {
         gestionarPermisos();
     }
 
+    /**
+     * Gestiona els permisos d'usuari per habilitar o deshabilitar botons
+     * d'acord amb el seu rol.
+     */
     private void gestionarPermisos() {
         if (usuari != null) {
             boolean esMagatzem = usuari.isRol();
             btnAfegir.setDisable(!esMagatzem);
             btnMod.setDisable(true);
-            btnElimi.setDisable(true);  
+            btnElimi.setDisable(true);
         } else {
             desactivarBotons();
         }
     }
 
+    /**
+     * Desactiva tots els botons d'acció de la interfície.
+     */
     private void desactivarBotons() {
         btnAfegir.setDisable(true);
         btnElimi.setDisable(true);
         btnMod.setDisable(true);
     }
 
+    /**
+     * Gestiona l'esdeveniment de clic en la taula, omplint els camps de la
+     * interfície amb les dades de la referència seleccionada i habilitant o
+     * deshabilitant botons segons els permisos de l'usuari.
+     *
+     * @param ev Esdeveniment de clic de ratolí.
+     */
     @FXML
     private void handleOnMouseClicked(MouseEvent ev) {
         if (ev.getButton() == MouseButton.PRIMARY) {
@@ -132,6 +170,15 @@ public class MenuReferencia {
 
             if (referenciaSeleccionada != null) {
                 System.out.println("Referencia seleccionada: " + referenciaSeleccionada.toString());
+
+                if (estocMode) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Información del Proveidor");
+                    alert.setHeaderText("Referencia seleccionada");
+                    alert.setContentText("El CIF del proveidor es: " + referenciaSeleccionada.getCif_proveidor());
+                    alert.showAndWait();  // Mostrar el popup y esperar que el usuario lo cierre
+                }
+
                 tfId.setText(String.valueOf(referenciaSeleccionada.getId()));
                 tfNom.setText(referenciaSeleccionada.getNom());
                 cbUOM.setValue(referenciaSeleccionada.getUom());
@@ -145,14 +192,14 @@ public class MenuReferencia {
 
                 // Verificar els permisos del usuari abants d'habilitar els botones
                 if (usuari != null && usuari.isRol()) {
-                    btnElimi.setDisable(false);  
-                    btnMod.setDisable(false); 
+                    btnElimi.setDisable(false);
+                    btnMod.setDisable(false);
                 } else {
-                    btnElimi.setDisable(true); 
-                    btnMod.setDisable(true);  
+                    btnElimi.setDisable(true);
+                    btnMod.setDisable(true);
                 }
 
-                btnEstoc.setDisable(false); 
+                btnEstoc.setDisable(false);
             } else {
                 desactivarBotons();
             }
@@ -162,6 +209,11 @@ public class MenuReferencia {
         }
     }
 
+    /**
+     * Acció del botó per filtrar les referències per ID de família.
+     * 
+     * @param event Esdeveniment d'acció del botó.
+     */
     @FXML
     public void btnIdFamilia_action(ActionEvent event) {
         try {
@@ -174,7 +226,7 @@ public class MenuReferencia {
 
             tabViewRef.refresh();
             tabViewRef.setItems(llistaObservableReferencia);
-            
+
         } catch (NumberFormatException e) {
             System.out.println("ID familia ha de ser un número.");
         } catch (Exception e) {
@@ -209,9 +261,9 @@ public class MenuReferencia {
     }
 
     @FXML
-    public void btnMod_action(ActionEvent event) throws IOException, NomBuit, UomBuit, IdFamiliaBuit, cifProveidorBuit, dataAltaBuit, 
-        pesTotalBuit, dataCaducitatBuit, quantitatTotalBuit, preuTotalBuit {
-        
+    public void btnMod_action(ActionEvent event) throws IOException, NomBuit, UomBuit, IdFamiliaBuit, cifProveidorBuit, dataAltaBuit,
+            pesTotalBuit, dataCaducitatBuit, quantitatTotalBuit, preuTotalBuit {
+
         System.out.println("Botó 'Modificar' presionat");
         Referencia referenciaSeleccionada = (Referencia) tabViewRef.getSelectionModel().getSelectedItem();
 
@@ -330,38 +382,30 @@ public class MenuReferencia {
                 System.out.println("Familia modificada correctament.");
 
             } catch (NomBuit e) {
-                mostrarError(e.getMessage());
+                MostrarError.mostrarMissatgeError("Nom Buit", e.getMessage());
             } catch (UomBuit e) {
-                mostrarError(e.getMessage());
+                MostrarError.mostrarMissatgeError("Uom Buit", e.getMessage());
             } catch (IdFamiliaBuit e) {
-                mostrarError(e.getMessage());
+                MostrarError.mostrarMissatgeError("IdFamilia Buit", e.getMessage());
             } catch (cifProveidorBuit e) {
-                mostrarError(e.getMessage());
+                MostrarError.mostrarMissatgeError("cifProveïdor Buit", e.getMessage());
             } catch (dataAltaBuit e) {
-                mostrarError(e.getMessage());
+                MostrarError.mostrarMissatgeError("dataAlta Buit", e.getMessage());
             } catch (dataCaducitatBuit e) {
-                mostrarError(e.getMessage());
+                MostrarError.mostrarMissatgeError("dataCaducitat Buit", e.getMessage());
             } catch (pesTotalBuit e) {
-                mostrarError(e.getMessage());
+                MostrarError.mostrarMissatgeError("pesTotal Buit", e.getMessage());
             } catch (quantitatTotalBuit e) {
-                mostrarError(e.getMessage());
+                MostrarError.mostrarMissatgeError("quantitatTotal Buit", e.getMessage());
             } catch (preuTotalBuit e) {
-                mostrarError(e.getMessage());
+                MostrarError.mostrarMissatgeError("preuTotal Buit", e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
-                mostrarError("Error en modificar la referencia: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error", "Error en modificar la referencia: " + e.getMessage());
             }
         } else {
             System.out.println("No s'ha seleccionat cap família per modificar.");
         }
-    }
-    
-    private void mostrarError(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null); 
-        alert.setContentText(mensaje);
-        alert.showAndWait(); 
     }
 
     @FXML
