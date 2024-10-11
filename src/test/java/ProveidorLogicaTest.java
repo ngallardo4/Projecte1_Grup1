@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 import aplicacio.model.Proveidor;
 import enums.EstatProveidor;
 import java.time.LocalDate;
@@ -17,121 +16,127 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
+ * Classe de test per la lògica dels proveïdors.
  *
  * @author danie
  */
 public class ProveidorLogicaTest {
+
     private ProveidorLogica proveidorLogica;
 
     @BeforeEach
     public void setUp() {
-        proveidorLogica = new ProveidorLogica(); // Instancia de la lógica de proveedores
+        proveidorLogica = new ProveidorLogica();
     }
 
-    // Test para afegirProveidor()
+    /**
+     * Test per afegir un proveïdor.
+     *
+     * @throws Exception si hi ha un error en l'afegiment del proveïdor
+     */
     @Test
     public void testAfegirProveidor() throws Exception {
-        // Crear una instancia de ProveidorLogica
         ProveidorLogica logica = new ProveidorLogica();
 
-        // Añadir un proveedor
-        logica.afegirProveidor("CIF123", "Proveedor Test", EstatProveidor.ACTIU, null, "123456789", 10.5f, LocalDate.now(), 5);
+        logica.afegirProveidor("CIF123", "Proveidor Test", EstatProveidor.ACTIU, null, "123456789", 10.5f, LocalDate.now(), 5);
 
-        // Recuperar la lista de proveedores
         List<Proveidor> proveidors = logica.obtenirTotsElsProveidors();
 
-        // Imprimir los proveedores recuperados
-        System.out.println("Proveedores recuperados después de la inserción:");
+        System.out.println("Proveïdors recuperats després de la inserció:");
         proveidors.forEach(p -> System.out.println(p.getCIF()));
     }
 
-
-    // Test para afegirProveidor() con datos inválidos
+    /**
+     * Test per afegir un proveïdor amb dades invàlides.
+     */
     @Test
     public void testAfegirProveidorInvalido() {
         LocalDate dataAlta = LocalDate.now();
 
-        Exception excepcion = assertThrows(Exception.class, () -> {
+        Exception excepcio = assertThrows(Exception.class, () -> {
             proveidorLogica.afegirProveidor("", "Proveidor 1", EstatProveidor.ACTIU, null, "123456789", 10.0f, dataAlta, 5);
         });
-        assertEquals("El CIF no pot estar buit.", excepcion.getMessage(), "El error debería indicar que el CIF no puede estar vacío.");
+        assertEquals("El CIF no pot estar buit.", excepcio.getMessage(), "L'error hauria d'indicar que el CIF no pot estar buit.");
     }
 
-    // Test para modificarProveidor()
+    /**
+     * Test per modificar un proveïdor.
+     *
+     * @throws Exception si hi ha un error en la modificació del proveïdor
+     */
     public void testModificarProveidor() throws Exception {
-        // Crear una instancia de ProveidorLogica
         ProveidorLogica proveidorLogica = new ProveidorLogica();
 
-        // Añadir primero un proveedor para modificar
         LocalDate dataAlta = LocalDate.now();
         proveidorLogica.afegirProveidor("CIF456", "Proveidor Modificar", EstatProveidor.ACTIU, null, "123456789", 10.0f, dataAlta, 5);
 
-        // Verificar que el proveedor ha sido añadido correctamente
         List<Proveidor> proveidors = proveidorLogica.obtenirTotsElsProveidors();
         Proveidor proveidor = proveidors.stream().filter(p -> p.getCIF().equals("CIF456")).findFirst().orElse(null);
 
-        // Aquí aseguramos que el proveedor ha sido añadido antes de intentar modificarlo
-        assertNotNull(proveidor, "El proveedor debería haberse añadido correctamente.");
+        assertNotNull(proveidor, "El proveïdor hauria d'haver estat afegit correctament.");
 
-        // Modificar el proveedor
         proveidorLogica.modificarProveidor("CIF456", "Proveidor Modificat", EstatProveidor.ACTIU, null, "987654321", 15.0f, dataAlta, 4);
 
-        // Recuperar la lista de proveedores actualizados
         List<Proveidor> proveidorsActualitzats = proveidorLogica.obtenirTotsElsProveidors();
 
-        // Verificar que el proveedor ha sido modificado correctamente
         Proveidor proveidorModificat = proveidorsActualitzats.stream().filter(p -> p.getCIF().equals("CIF456")).findFirst().orElse(null);
-        assertNotNull(proveidorModificat, "El proveedor debería existir después de la modificación.");
+        assertNotNull(proveidorModificat, "El proveïdor hauria d'existir després de la modificació.");
 
-        // Verificar que los campos se han actualizado
-        assertEquals("Proveidor Modificat", proveidorModificat.getNom(), "El nombre del proveedor debería haber sido actualizado.");
-        assertEquals("987654321", proveidorModificat.getTelefon(), "El teléfono del proveedor debería haber sido actualizado.");
-        assertEquals(15.0f, proveidorModificat.getDescompte(), "El descuento del proveedor debería haber sido actualizado.");
-        assertEquals(4, proveidorModificat.getQualificacio(), "La cualificación del proveedor debería haber sido actualizada.");
+        assertEquals("Proveidor Modificat", proveidorModificat.getNom(), "El nom del proveïdor hauria d'haver estat actualitzat.");
+        assertEquals("987654321", proveidorModificat.getTelefon(), "El telèfon del proveïdor hauria d'haver estat actualitzat.");
+        assertEquals(15.0f, proveidorModificat.getDescompte(), "El descompte del proveïdor hauria d'haver estat actualitzat.");
+        assertEquals(4, proveidorModificat.getQualificacio(), "La qualificació del proveïdor hauria d'haver estat actualitzada.");
     }
 
-
-
-    // Test para eliminarProveidor()
+    /**
+     * Test per eliminar un proveïdor.
+     *
+     * @throws Exception si hi ha un error en l'eliminació del proveïdor
+     */
     @Test
     public void testEliminarProveidorSimple() throws Exception {
-        // Asegúrate de que existe un proveedor en la base de datos con CIF_TEST antes de ejecutar el test
         proveidorLogica.eliminarProveidor("CIF_TEST");
 
-        // Verificar que el proveedor ha sido eliminado
         List<Proveidor> proveidors = proveidorLogica.obtenirTotsElsProveidors();
         assertFalse(proveidors.stream().anyMatch(p -> p.getCIF().equals("CIF_TEST")),
-                "El proveedor debería haberse eliminado.");
+                "El proveïdor hauria d'haver estat eliminat.");
     }
 
-    // Test para obtener todos los proveedores
+    /**
+     * Test per obtenir tots els proveïdors.
+     */
     @Test
     public void testObtenirTotsElsProveidors() {
         List<Proveidor> proveidors = proveidorLogica.obtenirTotsElsProveidors();
-        assertNotNull(proveidors, "La lista de proveedores no debería ser nula.");
+        assertNotNull(proveidors, "La llista de proveïdors no hauria de ser nul·la.");
     }
 
-    // Test para la validación de datos en afegirProveidor (ejemplo con nombre vacío)
+    /**
+     * Test per la validació de dades en afegir un proveïdor (exemple amb nom
+     * buit).
+     */
     @Test
     public void testAfegirProveidorNombreVacio() {
         LocalDate dataAlta = LocalDate.now();
 
-        Exception excepcion = assertThrows(Exception.class, () -> {
+        Exception excepcio = assertThrows(Exception.class, () -> {
             proveidorLogica.afegirProveidor("CIF123", "", EstatProveidor.ACTIU, null, "123456789", 10.0f, dataAlta, 5);
         });
-        assertEquals("El nom no pot estar buit.", excepcion.getMessage(),
-                "El error debería indicar que el nombre no puede estar vacío.");
+        assertEquals("El nom no pot estar buit.", excepcio.getMessage(),
+                "L'error hauria d'indicar que el nom no pot estar buit.");
     }
 
-    // Test para afegirProveidor con estado inactivo y motivo vacío
+    /**
+     * Test per afegir un proveïdor amb estat inactiu i motiu buit.
+     */
     @Test
     public void testAfegirProveidorInactiuMotivoVacio() {
         LocalDate dataAlta = LocalDate.now();
 
-        Exception excepcion = assertThrows(Exception.class, () -> {
+        Exception excepcio = assertThrows(Exception.class, () -> {
             proveidorLogica.afegirProveidor("CIF123", "Proveidor Inactiu", EstatProveidor.INACTIU, "", "123456789", 10.0f, dataAlta, 5);
         });
-        assertEquals("El motiu d'inactivitat no pot estar buit si el proveidor és inactiu.", excepcion.getMessage(),
-                "El error debería indicar que el motivo de inactividad no puede estar vacío.");
+        assertEquals("El motiu d'inactivitat no pot estar buit si el proveïdor és inactiu.", excepcio.getMessage(),
+                "L'error hauria d'indicar que el motiu d'inactivitat no pot estar buit.");
     }
 }

@@ -2,9 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package logica;
-
-import aplicacio.model.Proveidor;
+package logica;import aplicacio.model.Proveidor;
 import dades.DAOproveidorImpl;
 import enums.EstatProveidor;
 import excepcions.CifInvalid;
@@ -19,84 +17,122 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * La clase {@code ProveidorLogica} maneja la lógica de negocio relacionada con
- * los proveedores. Proporciona métodos para añadir, modificar, eliminar y
- * obtener proveedores, así como para validar los datos del proveedor.
+ * La classe {@code ProveidorLogica} gestiona la lògica de negoci relacionada amb
+ * els proveïdors. Proporciona mètodes per afegir, modificar, eliminar i obtenir
+ * proveïdors, així com per validar les dades del proveïdor.
  *
  * @author danie
+ * @version 10/2024.1
  */
 public class ProveidorLogica {
 
     private final DAOproveidorImpl daoProveidor;
 
     /**
-     * Crea una nueva instancia de {@code ProveidorLogica} e inicializa el DAO
-     * de proveedores.
+     * Crea una nova instància de {@code ProveidorLogica} i inicialitza el DAO
+     * de proveïdors.
      */
     public ProveidorLogica() {
-        // Inicializamos el DAO
+        // Inicialitzem el DAO
         daoProveidor = new DAOproveidorImpl();
     }
 
     /**
-     * Añade un nuevo proveedor al sistema.
+     * Afegeix un nou proveïdor al sistema.
      *
-     * @throws Exception Si hay un error en la validación o al añadir el
-     * proveedor.
+     * @param CIF identificador únic per cada proveïdor.
+     * @param Nom el nom del proveïdor.
+     * @param Estat l'estat en què es troba el proveïdor (Actiu o Inactiu).
+     * @param MotiuInactiu motiu d'inactivitat si el proveïdor està inactiu.
+     * @param Telefon telèfon de contacte del proveïdor.
+     * @param Descompte descompte aplicat al proveïdor.
+     * @param Data_Alta data d'alta del proveïdor al sistema.
+     * @param Qualificacio qualificació del proveïdor.
+     * @throws Exception Si hi ha un error en la validació o en l'addició del proveïdor.
      */
-    public void afegirProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu, String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
+    public void afegirProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu,
+                                 String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
 
         validarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, LocalDate.now(), Qualificacio);
 
         Proveidor proveidor = new Proveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
 
         daoProveidor.afegir(proveidor);
+        System.out.println("S'ha afegit correctament el proveïdor: " + Nom + " amb CIF: " + CIF);
     }
 
     /**
-     * Modifica un proveedor existente en el sistema.
+     * Modifica un proveïdor existent en el sistema.
      *
-     * @throws Exception Si hay un error en la validación o al modificar el
-     * proveedor.
+     * @param CIF identificador únic del proveïdor que es vol modificar.
+     * @param Nom el nou nom del proveïdor.
+     * @param Estat el nou estat del proveïdor (Actiu o Inactiu).
+     * @param MotiuInactiu nou motiu d'inactivitat si el proveïdor està inactiu.
+     * @param Telefon el nou telèfon de contacte del proveïdor.
+     * @param Descompte el nou descompte aplicat al proveïdor.
+     * @param Data_Alta la nova data d'alta del proveïdor al sistema.
+     * @param Qualificacio la nova qualificació del proveïdor.
+     * @throws Exception Si hi ha un error en la validació o en la modificació del proveïdor.
      */
-    public void modificarProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu, String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
+    public void modificarProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu,
+                                    String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws Exception {
 
         validarProveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
 
         Proveidor proveidorModificat = new Proveidor(CIF, Nom, Estat, MotiuInactiu, Telefon, Descompte, Data_Alta, Qualificacio);
 
-        // Llamamos al DAO para modificar el proveedor
+        // Cridem al DAO per modificar el proveïdor
         daoProveidor.actualitzar(proveidorModificat);
+        System.out.println("S'ha modificat correctament el proveïdor: " + Nom + " amb CIF: " + CIF);
     }
 
     /**
-     * Elimina un proveedor existente del sistema.
+     * Elimina un proveïdor existent del sistema.
      *
-     * @param CIF El CIF del proveedor a eliminar.
-     * @throws Exception Si hay un error al eliminar el proveedor.
+     * @param CIF El CIF del proveïdor a eliminar.
+     * @throws Exception Si hi ha un error en l'eliminació del proveïdor.
      */
     public void eliminarProveidor(String CIF) throws Exception {
         Proveidor proveidorAEliminar = new Proveidor(CIF, null, null, null, null, 0.0f, null, 0);
-        // Llamamos al DAO para eliminarlo
+        // Cridem al DAO per eliminar-lo
         daoProveidor.eliminar(proveidorAEliminar);
+        System.out.println("S'ha eliminat correctament el proveïdor amb CIF: " + CIF);
     }
 
     /**
-     * Obtiene todos los proveedores registrados en el sistema.
+     * Obtén tots els proveïdors registrats en el sistema.
      *
-     * @return Una lista de proveedores.
+     * @return Una llista de proveïdors.
      */
     public List<Proveidor> obtenirTotsElsProveidors() {
-        return daoProveidor.obtenirEntitats();
+        List<Proveidor> proveidors = daoProveidor.obtenirEntitats();
+        System.out.println("S'han obtingut " + proveidors.size() + " proveïdors del sistema.");
+        return proveidors;
     }
 
     /**
-     * Valida los datos del proveedor.
+     * Valida les dades del proveïdor.
      *
-     * @throws Exception Si hay un error en la validación de los datos.
+     * @param CIF identificador únic per cada proveïdor.
+     * @param Nom el nom del proveïdor.
+     * @param Estat l'estat en què es troba el proveïdor.
+     * @param MotiuInactiu motiu d'inactivitat si el proveïdor està inactiu.
+     * @param Telefon telèfon de contacte del proveïdor.
+     * @param Descompte descompte aplicat al proveïdor.
+     * @param Data_Alta data d'alta del proveïdor al sistema.
+     * @param Qualificacio qualificació del proveïdor.
+     * @throws CifInvalid si el CIF és nul o buit.
+     * @throws NomBuit si el nom és nul o buit.
+     * @throws EstatInvalid si l'estat és nul.
+     * @throws MotiuInactiuInvalid si el motiu d'inactivitat és nul o buit quan l'estat és inactiu.
+     * @throws TelefonInvalid si el telèfon és nul o buit.
+     * @throws DescompteInvalid si el descompte és negatiu.
+     * @throws dataAltaBuit si la data d'alta és nul·la o no és vàlida.
+     * @throws QualificacioInvalid si la qualificació és negativa.
+     * @throws Exception si hi ha un error en la validació de les dades.
      */
     private void validarProveidor(String CIF, String Nom, EstatProveidor Estat, String MotiuInactiu,
-            String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws CifInvalid,
+                                   String Telefon, float Descompte, LocalDate Data_Alta, int Qualificacio) throws CifInvalid,
             NomBuit, EstatInvalid, MotiuInactiuInvalid, TelefonInvalid, DescompteInvalid, dataAltaBuit,
             QualificacioInvalid, Exception {
 
@@ -110,7 +146,7 @@ public class ProveidorLogica {
             throw new EstatInvalid("L'estat no pot estar buit.");
         }
         if (Telefon == null || Telefon.trim().isEmpty()) {
-            throw new TelefonInvalid("El telefon no pot estar buit.");
+            throw new TelefonInvalid("El telèfon no pot estar buit.");
         }
         if (Descompte < 0) {
             throw new DescompteInvalid("El descompte no pot ser negatiu.");
@@ -121,9 +157,8 @@ public class ProveidorLogica {
         if (Qualificacio < 0) {
             throw new QualificacioInvalid("La qualificació no pot ser negativa.");
         }
-        // Si el proveedor es inactivo, puede que necesites validar el motivo de inactividad
         if (Estat == EstatProveidor.INACTIU && (MotiuInactiu == null || MotiuInactiu.trim().isEmpty())) {
-            throw new MotiuInactiuInvalid("El motiu d'inactivitat no pot estar buit si el proveidor és inactiu.");
+            throw new MotiuInactiuInvalid("El motiu d'inactivitat no pot estar buit si el proveïdor és inactiu.");
         }
     }
 }
