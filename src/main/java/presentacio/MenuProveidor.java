@@ -8,6 +8,14 @@ import aplicacio.App;
 import aplicacio.model.Proveidor;
 import aplicacio.model.Usuari;
 import enums.EstatProveidor;
+import excepcions.CifInvalid;
+import excepcions.DescompteInvalid;
+import excepcions.EstatInvalid;
+import excepcions.MotiuInactiuInvalid;
+import excepcions.NomBuit;
+import excepcions.QualificacioInvalid;
+import excepcions.TelefonInvalid;
+import excepcions.dataAltaBuit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,6 +30,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
@@ -41,16 +50,16 @@ import logica.ProveidorLogica;
 public class MenuProveidor {
 
     @FXML
-    private TableView<Proveidor>tabViewProveidor;
+    private TableView<Proveidor> tabViewProveidor;
 
     @FXML
-    private TableColumn colNom, colCif, colMotiuInactiu, colTelefon ,colEstat,colQualificacio, colDescompte,colDataAlta;
+    private TableColumn colNom, colCif, colMotiuInactiu, colTelefon, colEstat, colQualificacio, colDescompte, colDataAlta;
 
     @FXML
-    private Button btnLogo ,btnAfegir, btnMod, btnElimi, btnTancar, btnSortida, btnExportar, btnImportar;
+    private Button btnLogo, btnAfegir, btnMod, btnElimi, btnTancar, btnSortida, btnExportar, btnImportar;
 
     @FXML
-    private TextField tfNom, tfCif, tfMotiuInactiu, tfTelefon, tfQualificacio, tfDescompte, tfDataAlta;
+    private TextField tfCif, tfNom, tfMotiuInactiu, tfTelefon, tfQualificacio, tfDescompte, tfDataAlta;
 
     @FXML
     private ComboBox<EstatProveidor> cbEstat;
@@ -58,12 +67,12 @@ public class MenuProveidor {
     private ObservableList<Proveidor> llistaObservableProveidor;
     private ProveidorLogica proveidorLogica;
     private Usuari usuari;
-    
+
     public void setUsuari(Usuari usuari) {
         this.usuari = usuari;  // Guardar el usuario
         gestionarPermisos();    // Gestionar los permisos según el rol
     }
-    
+
     @FXML
     public void initialize() {
         llistaObservableProveidor = FXCollections.observableArrayList();
@@ -71,7 +80,7 @@ public class MenuProveidor {
 
         // Rellenar el ComboBox con los valores de EstatProveidor
         cbEstat.setItems(FXCollections.observableArrayList(EstatProveidor.values()));
-        
+
         try {
             llistaObservableProveidor.addAll(proveidorLogica.obtenirTotsElsProveidors());
         } catch (Exception e) {
@@ -87,7 +96,6 @@ public class MenuProveidor {
         colDescompte.setCellValueFactory(new PropertyValueFactory<>("Descompte"));
         colDataAlta.setCellValueFactory(new PropertyValueFactory<>("Data_Alta"));
         colQualificacio.setCellValueFactory(new PropertyValueFactory<>("Qualificacio"));
-        
 
         // Asignar la lista observable al TableView
         tabViewProveidor.setItems(llistaObservableProveidor);
@@ -109,7 +117,7 @@ public class MenuProveidor {
             desactivarBotons();
         }
     }
-    
+
     private void desactivarBotons() {
         btnElimi.setDisable(true);
         btnMod.setDisable(true);
@@ -130,7 +138,7 @@ public class MenuProveidor {
                 tfDescompte.setText(String.valueOf(proveidorSeleccionat.getDescompte()));
                 tfDataAlta.setText(proveidorSeleccionat.getData_Alta().toString());
                 tfQualificacio.setText(String.valueOf(proveidorSeleccionat.getQualificacio()));
-                
+
                 // Verificar los permisos del usuario antes de habilitar los botones
                 if (usuari != null && usuari.isRol()) {
                     btnElimi.setDisable(false);  // Solo habilitar si tiene permisos
@@ -144,13 +152,13 @@ public class MenuProveidor {
             }
         }
     }
-    
+
     @FXML
     public void btnLogo_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Logo' presionat");
         App.setRoot("menuPrincipal", this.usuari);
     }
-    
+
     @FXML
     public void btnSortida_action(ActionEvent event) throws IOException {
         App.setRoot("menuPrincipal", this.usuari);
@@ -166,11 +174,10 @@ public class MenuProveidor {
         System.out.println("Botó 'Afegir' presionat");
 
         EstatProveidor estat = cbEstat.getValue(); // Valor del ComboBox
-        
-       // Crear una nueva referencia con todos los valores
-       Proveidor nouProveidor = new Proveidor("", "", estat, "", "", 0.0f, LocalDate.now(), 0);
 
-       
+        // Crear una nueva referencia con todos los valores
+        Proveidor nouProveidor = new Proveidor("", "", estat, "", "", 0.0f, LocalDate.now(), 0);
+
         // Afegir la nova referència a la llista observable
         llistaObservableProveidor.add(nouProveidor);
 
@@ -179,58 +186,124 @@ public class MenuProveidor {
         tabViewProveidor.getSelectionModel().select(nouProveidor);
     }
 
-    @FXML
-    public void btnMod_action(ActionEvent event) throws IOException {
+    public void btnMod_action(ActionEvent event) throws IOException, CifInvalid, NomBuit, EstatInvalid, MotiuInactiuInvalid,
+            TelefonInvalid, DescompteInvalid, dataAltaBuit, QualificacioInvalid {
+
         System.out.println("Botó 'Modificar' presionat");
         Proveidor proveidorSeleccionat = (Proveidor) tabViewProveidor.getSelectionModel().getSelectedItem();
 
         if (proveidorSeleccionat != null) {
             try {
-                String cifNou = tfCif.getText();
+                // Validar el nombre del proveedor
                 String nomNou = tfNom.getText();
-                EstatProveidor estatNou = cbEstat.getValue();  // Obtener el valor del ComboBox para UOM
-                String motiuInactiuNou = tfMotiuInactiu.getText();
-                String telefonNou = tfTelefon.getText();
-                float descompteNou = Float.parseFloat(tfDescompte.getText());
-                LocalDate dataAltaNova = LocalDate.parse(tfDataAlta.getText());
-                int qualificacioNova = Integer.parseInt(tfQualificacio.getText());
-
-                if (proveidorSeleccionat.getCIF().equals(cifNou)) {
-                    // Modificar el proveedor existente
-                    proveidorLogica.modificarProveidor(cifNou, nomNou, estatNou, motiuInactiuNou, telefonNou, descompteNou, dataAltaNova, qualificacioNova);
-                    System.out.println("Proveidor modificat correctament.");
-                } else {
-                    // Si es un proveedor nuevo, agregarlo
-                    proveidorLogica.afegirProveidor(cifNou, nomNou, estatNou, motiuInactiuNou, telefonNou, descompteNou, dataAltaNova,qualificacioNova);
-                    System.out.println("Nou proveidor afegit amb CIF: " + cifNou);
+                if (nomNou.isEmpty()) {
+                    throw new NomBuit("El nombre del proveidor no pot estar buit.");
                 }
-            
 
-                // Actualizar els valors de la familia a la llista observable (TableView)
+                // Validar el CIF del proveedor
+                String cifNou = tfCif.getText();
+                if (cifNou.isEmpty()) {
+                    throw new CifInvalid("El CIF del proveidor no pot estar buit.");
+                }
+                if (!cifNou.matches("[A-Z][0-9]{8}")) {
+                    throw new CifInvalid("El CIF no té un format vàlid."); // Asegúrate de que el regex es el adecuado
+                }
+
+                // Validar el estado del proveedor
+                EstatProveidor estatNou = cbEstat.getValue();
+                if (estatNou == null) {
+                    throw new EstatInvalid("Has de seleccionar un estat vàlid pel proveidor.");
+                }
+
+                // Validar motivo inactivo (si aplica)
+                if (estatNou == EstatProveidor.INACTIU && (tfMotiuInactiu.getText().isEmpty())) {
+                    throw new MotiuInactiuInvalid("Ha proporcionar un motiu de inactivitat si el proveidor esta inactiu.");
+                }
+
+                // Validar el teléfono del proveedor
+                String telefonNou = tfTelefon.getText();
+                if (telefonNou.isEmpty() || !telefonNou.matches("\\d{9}")) {
+                    throw new TelefonInvalid("El telèfon ha tenir 9 dígits..");
+                }
+
+                // Validar el descuento
+                String descompteStr = tfDescompte.getText();
+                float descompteNou;
+                if (descompteStr.isEmpty()) {
+                    throw new DescompteInvalid("El descompte no pot estar buit.");
+                }
+                try {
+                    descompteNou = Float.parseFloat(descompteStr);
+                } catch (NumberFormatException e) {
+                    throw new DescompteInvalid("El descompte ha de ser un número vàlid");
+                }
+
+                // Validar la fecha de alta
+                String dataAltaStr = tfDataAlta.getText();
+                if (dataAltaStr.isEmpty()) {
+                    throw new dataAltaBuit("La data d'alta no pot estar buida.");
+                }
+                LocalDate dataAltaNova;
+                try {
+                    dataAltaNova = LocalDate.parse(dataAltaStr);
+                } catch (Exception e) {
+                    throw new dataAltaBuit("El format de la data d'alta no és vàlid (AAAA-MM-DD).");
+                }
+
+                // Validar la calificación
+                String qualificacioStr = tfQualificacio.getText();
+                int qualificacioNova;
+                if (qualificacioStr.isEmpty()) {
+                    throw new QualificacioInvalid("La calificación no puede estar vacía.");
+                }
+                try {
+                    qualificacioNova = Integer.parseInt(qualificacioStr);
+                } catch (NumberFormatException e) {
+                    throw new QualificacioInvalid("La calificación debe ser un número entero válido.");
+                }
+
+                // Si todas las validaciones son correctas, modificar el proveedor
+                proveidorLogica.modificarProveidor(cifNou, nomNou, estatNou, tfMotiuInactiu.getText(),
+                        telefonNou, descompteNou, dataAltaNova, qualificacioNova);
+
+                // Actualizar proveedor en la lista observable
                 proveidorSeleccionat.setCIF(cifNou);
                 proveidorSeleccionat.setNom(nomNou);
                 proveidorSeleccionat.setEstat(estatNou);
-                proveidorSeleccionat.setMotiuInactiu(motiuInactiuNou);
+                proveidorSeleccionat.setMotiuInactiu(tfMotiuInactiu.getText());
                 proveidorSeleccionat.setTelefon(telefonNou);
                 proveidorSeleccionat.setDescompte(descompteNou);
                 proveidorSeleccionat.setData_Alta(dataAltaNova);
                 proveidorSeleccionat.setQualificacio(qualificacioNova);
 
-                // Refrescar el TableView per mostrar els canvis
+                // Refrescar el TableView para mostrar los cambios
                 tabViewProveidor.refresh();
-                tabViewProveidor.setItems(llistaObservableProveidor);
-
-                System.out.println("Proveidor modificat correctament.");
-
+                System.out.println("Proveidor modificat correctamente.");
+            } catch (CifInvalid e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (NomBuit e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (EstatInvalid e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (MotiuInactiuInvalid e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (TelefonInvalid e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (DescompteInvalid e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (dataAltaBuit e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (QualificacioInvalid e) {
+                System.out.println("Error: " + e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Error en modificar el proveidor: " + e.getMessage());
+                MostrarError.mostrarMissatgeError("Error en modificar el proveidor: " , e.getMessage());
             }
         } else {
-            System.out.println("No s'ha seleccionat cap proveidor per modificar.");
+            System.out.println("No se ha seleccionado ningún proveidor per a modificar.");
         }
     }
-
+    
     @FXML
     public void btnElimi_action(ActionEvent event) throws Exception {
         Proveidor proveidorSeleccionat = tabViewProveidor.getSelectionModel().getSelectedItem();
@@ -244,9 +317,9 @@ public class MenuProveidor {
             tabViewProveidor.refresh();
         }
     }
-    
+
     @FXML
-     public void btnImportar_action(ActionEvent event) {
+    public void btnImportar_action(ActionEvent event) {
         // Acción simple para probar el botón
         System.out.println("El botón 'Importar' ha sido presionado.");
 
@@ -255,8 +328,8 @@ public class MenuProveidor {
         fileChooser.setTitle("Seleccionar archivo a importar");
 
         // Establecer extensiones de archivo aceptadas (opcional)
-        FileChooser.ExtensionFilter extFilter = 
-            new FileChooser.ExtensionFilter("Archivos CSV (*.csv)", "*.csv");
+        FileChooser.ExtensionFilter extFilter
+                = new FileChooser.ExtensionFilter("Archivos CSV (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
 
         // Abrir el diálogo para seleccionar un archivo
@@ -274,7 +347,7 @@ public class MenuProveidor {
             System.out.println("No se ha seleccionado ningún archivo.");
         }
     }
-    
+
     @FXML
     public void btnExportar_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Exportar' presionat");
@@ -293,14 +366,14 @@ public class MenuProveidor {
                 // Escribir los datos de cada proveedor
                 for (Proveidor proveidor : llistaObservableProveidor) {
                     String line = String.join(",",
-                        proveidor.getCIF(),
-                        proveidor.getNom(),
-                        proveidor.getEstat().name(), // Guardar el enum como un String
-                        proveidor.getMotiuInactiu(),
-                        proveidor.getTelefon(),
-                        String.valueOf(proveidor.getDescompte()),
-                        proveidor.getData_Alta().toString(),
-                        String.valueOf(proveidor.getQualificacio())
+                            proveidor.getCIF(),
+                            proveidor.getNom(),
+                            proveidor.getEstat().name(), // Guardar el enum como un String
+                            proveidor.getMotiuInactiu(),
+                            proveidor.getTelefon(),
+                            String.valueOf(proveidor.getDescompte()),
+                            proveidor.getData_Alta().toString(),
+                            String.valueOf(proveidor.getQualificacio())
                     );
                     bw.write(line);
                     bw.newLine();
@@ -313,9 +386,9 @@ public class MenuProveidor {
             }
         }
     }
-    
-    public void importarArchivo(File filePath){
-        
+
+    public void importarArchivo(File filePath) {
+
         List<Proveidor> proveidorsImportats = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -379,9 +452,9 @@ public class MenuProveidor {
             for (Proveidor proveidor : proveidorsImportats) {
                 try {
                     proveidorLogica.afegirProveidor(proveidor.getCIF(), proveidor.getNom(),
-                                                      proveidor.getEstat(), proveidor.getMotiuInactiu(),
-                                                      proveidor.getTelefon(), proveidor.getDescompte(),
-                                                      proveidor.getData_Alta(), proveidor.getQualificacio());
+                            proveidor.getEstat(), proveidor.getMotiuInactiu(),
+                            proveidor.getTelefon(), proveidor.getDescompte(),
+                            proveidor.getData_Alta(), proveidor.getQualificacio());
                 } catch (Exception e) {
                     System.out.println("Error al añadir el proveedor: " + proveidor.getCIF() + " - " + e.getMessage());
                 }
@@ -401,5 +474,5 @@ public class MenuProveidor {
             System.out.println("Error inesperado: " + e.getMessage());
         }
     }
-    
+
 }
