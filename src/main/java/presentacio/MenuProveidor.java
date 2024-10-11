@@ -99,16 +99,16 @@ public class MenuProveidor {
         colNom.setCellValueFactory(new PropertyValueFactory<>("Nom"));
         colEstat.setCellValueFactory(new PropertyValueFactory<>("Estat"));
         colMotiuInactiu.setCellValueFactory(new PropertyValueFactory<>("MotiuInactiu"));
-        colTelefon.setCellValueFactory(new PropertyValueFactory<>("Telèfon"));
+        colTelefon.setCellValueFactory(new PropertyValueFactory<>("Telefon"));
         colDescompte.setCellValueFactory(new PropertyValueFactory<>("Descompte"));
         colDataAlta.setCellValueFactory(new PropertyValueFactory<>("Data_Alta"));
-        colQualificacio.setCellValueFactory(new PropertyValueFactory<>("Qualificació"));
+        colQualificacio.setCellValueFactory(new PropertyValueFactory<>("Qualificacio"));
 
         tabViewProveidor.setItems(llistaObservableProveidor);
         tabViewProveidor.setOnMouseClicked(this::handleOnMouseClicked);
 
-        desactivarBotons();
-        btnAfegir.setDisable(false);
+        gestionarPermisos();
+
     }
 
     /**
@@ -118,8 +118,10 @@ public class MenuProveidor {
         if (usuari != null) {
             boolean esMagatzem = usuari.isRol();
             btnAfegir.setDisable(!esMagatzem);
-            btnMod.setDisable(!esMagatzem);
-            btnElimi.setDisable(!esMagatzem);
+            btnMod.setDisable(true);
+            btnElimi.setDisable(true);
+            btnExportar.setDisable(true);
+            btnImportar.setDisable(true);
 
         } else {
             desactivarBotons();
@@ -130,8 +132,12 @@ public class MenuProveidor {
      * Desactiva els botons de modificar i eliminar.
      */
     private void desactivarBotons() {
+        btnAfegir.setDisable(true);
         btnElimi.setDisable(true);
         btnMod.setDisable(true);
+        btnExportar.setDisable(true);
+        btnImportar.setDisable(true);
+
     }
 
     /**
@@ -157,9 +163,13 @@ public class MenuProveidor {
                 if (usuari != null && usuari.isRol()) {
                     btnElimi.setDisable(false);
                     btnMod.setDisable(false);
+                    btnExportar.setDisable(false);
+                    btnImportar.setDisable(false);
                 } else {
                     btnElimi.setDisable(true);
                     btnMod.setDisable(true);
+                    btnExportar.setDisable(true);
+                    btnImportar.setDisable(true);
                 }
             } else {
                 desactivarBotons();
@@ -176,7 +186,7 @@ public class MenuProveidor {
     @FXML
     public void btnLogo_action(ActionEvent event) throws IOException {
         System.out.println("Botó 'Logo' presionat");
-        App.setRoot("menuPrincipal", this.usuari);
+        App.setRoot("menuPrincipal", usuari);
     }
 
     /**
@@ -187,7 +197,7 @@ public class MenuProveidor {
      */
     @FXML
     public void btnSortida_action(ActionEvent event) throws IOException {
-        App.setRoot("menuPrincipal", this.usuari);
+        App.setRoot("menuPrincipal", usuari);
     }
 
     /**
